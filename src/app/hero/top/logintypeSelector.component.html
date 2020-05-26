@@ -1,0 +1,34 @@
+<h2>無料アカウント作成</h2>
+<mat-divider></mat-divider>
+<div style="margin-top: 8px; margin-bottom: 8px;">
+  <p>Googleアカウントをお持ちの方はこちらが便利です。</p>
+  <div class="selectNode" style="width: max-content;">
+    <button color="primary" mat-raised-button (click)="googleLogin()">Googleアカウントで作成</button>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div tyle="margin-top: 8px; margin-bottom: 8px;">
+  <!--mat-form-field appearance="fill">
+    <mat-label>メールアドレス</mat-label>
+    <input matInput placeholder="xyz@example.com" [formControl]="email" required>
+    <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+    <mat-label>パスワード</mat-label>
+    <input matInput placeholder="xyz@example.com" [formControl]="email" required>
+    <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field-->
+
+  <!--form>
+    <div class="radioArea">
+      <p>メールアドレスとパスワードでアカウントを作成する方はこちら</p>
+      <mat-radio-group aria-labelledby="radio-group-label" class="example-radio-group" formControlName="data.select">
+        <mat-radio-button class="radio-button" checked="checked" [value]="0">Googl アカウント</mat-radio-button><br>
+        <mat-radio-button class="radio-button" [value]="1">その他email</mat-radio-button><br>
+      </mat-radio-group>
+    </div>
+
+  </form-->
+</div>
+<div class="selectGroupe">
+  <button color="primary" class="selectNode" mat-raised-button (click)="cancel()">Cancel</button>
+  <button color="primary" class="selectNode" mat-raised-button (click)="ok()">OK</button>
+</div>

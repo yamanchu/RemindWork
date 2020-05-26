@@ -1,0 +1,39 @@
+<mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
+  <mat-toolbar-row>
+    <button *ngIf="!menuControl.pcMode" (click)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="appStyle">{{menuControl.title}}</span>
+    <!--span class="topMenuStyle" *ngIf="pcMode">{{title}}1</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}2</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}3</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}4</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}5</span-->
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="sideNavi-container">
+  <!-- サイドメニュー -->
+  <mat-sidenav [mode]="menuControl.sideNaviMode" [(opened)]="menuControl.showSideMenu">
+    サイドメニュー
+  </mat-sidenav>
+  <!-- メイン コンテンツ -->
+  <mat-sidenav-content>
+    <div class="mainTitleBlock">
+      <h1 class="centerText mainTitle mat-display-3">Remind Work</h1>
+      <div class="centerBlock">
+        <button mat-raised-button color="accent" class="centerBlock" (click)="GetStart()" matTooltip="無料登録">
+          はじめる
+        </button>
+      </div>
+      <h2 class="centerText">忘却曲線で効果的な学習</h2>
+      <div class="centerBlockMin">
+        暗記・学習サイクルのリマインダー。<br>
+        暗記したい項目数を登録して復習結果を記録することで自分の忘却曲線を作成。<br>
+        復習回数に応じて間隔をカスタマイズ可能。<br>
+      </div><br><br>
+      <div style="text-align: right;margin-right: 5%;">
+        <a href="https://twitter.com/GuhawYamanchu" target="_blank">@GuhawYamanchu</a>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

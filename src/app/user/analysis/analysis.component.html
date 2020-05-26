@@ -1,0 +1,42 @@
+<mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
+  <mat-toolbar-row>
+    <button *ngIf="!menuControl.pcMode" (click)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <!--span class="appStyle">{{menuControl.title}}</span-->
+    <mat-icon class="hamburgerMargin" matListIcon>timeline</mat-icon>
+    <span class="topMenuStyle">分析</span>
+    <!--span class="topMenuStyle" *ngIf="pcMode">{{title}}2</span>
+	<span class="topMenuStyle" *ngIf="pcMode">{{title}}3</span>
+	<span class="topMenuStyle" *ngIf="pcMode">{{title}}4</span>
+	<span class="topMenuStyle" *ngIf="pcMode">{{title}}5</span-->
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="sideNavi-container">
+  <!-- サイドメニュー -->
+  <mat-sidenav [mode]="menuControl.sideNaviMode" [(opened)]="menuControl.showSideMenu">
+    <mat-nav-list>
+      <mat-list-item routerLink="/user-main">
+        <mat-icon matListIcon>view_agenda</mat-icon>
+        <h4 matLine>復習リスト</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item routerLink="/analysis">
+        <mat-icon matListIcon>timeline</mat-icon>
+        <h4 matLine>分析</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item routerLink="/interval">
+        <mat-icon matListIcon>repeat</mat-icon>
+        <h4 matLine>復習間隔</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+  <!-- メイン コンテンツ -->
+  <mat-sidenav-content>
+    <div class="mainSection">
+      メイン コンテンツ
+      </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

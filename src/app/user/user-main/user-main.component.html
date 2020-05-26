@@ -1,0 +1,154 @@
+<mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
+  <mat-toolbar-row>
+    <button *ngIf="!menuControl.pcMode" (click)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <!--span class="appStyle">{{menuControl.title}}</span-->
+    <mat-icon class="hamburgerMargin" matListIcon>view_agenda</mat-icon>
+    <span class="topMenuStyle">復習リスト</span>
+    <!--span class="topMenuStyle" *ngIf="pcMode">{{title}}2</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}3</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}4</span>
+    <span class="topMenuStyle" *ngIf="pcMode">{{title}}5</span-->
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="sideNavi-container">
+  <!-- サイドメニュー -->
+  <mat-sidenav [mode]="menuControl.sideNaviMode" [(opened)]="menuControl.showSideMenu">
+    <mat-nav-list>
+      <mat-list-item routerLink="/user-main">
+        <mat-icon matListIcon>view_agenda</mat-icon>
+        <h4 matLine>復習リスト</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item routerLink="/analysis">
+        <mat-icon matListIcon>timeline</mat-icon>
+        <h4 matLine>分析</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item routerLink="/interval">
+        <mat-icon matListIcon>repeat</mat-icon>
+        <h4 matLine>復習間隔</h4>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+  <!-- メイン コンテンツ -->
+  <mat-sidenav-content>
+    <div class="mainSection">
+      <mat-card class="cardStyle">
+        <mat-card-header>
+          <mat-card-title>
+            Title
+          </mat-card-title>
+          <mat-card-subtitle>項目数:10</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  詳細
+                </mat-panel-title>
+                <mat-panel-description>
+                  復習回数：1
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div style="background-color: cornflowerblue;">
+                <svg viewBox="-10 -10 630 230">
+                  <defs>
+                    <!-- arrowhead marker definition -->
+                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4"
+                      orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" />
+                    </marker>
+
+                    <!-- simple dot marker definition -->
+                    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+                      <circle cx="5" cy="5" r="4" fill="red" />
+                    </marker>
+                  </defs>
+                  <line x1="0" y1="0" x2="400" y2="100" stroke-width="3" stroke="#F44D61" />
+                  <line x1="0" y1="210" x2="610" y2="210" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
+                  <line x1="0" y1="210" x2="0" y2="0" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
+                </svg>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-form-field>
+            <mat-label>Point</mat-label>
+            <input matInput type="number" min="0">
+          </mat-form-field>/10
+          <button mat-button>LIKE</button>
+        </mat-card-actions>
+      </mat-card>
+      <mat-card *ngIf="addMode">
+        <mat-card-header>
+          <mat-card-title>
+            新規登録
+          </mat-card-title>
+          <mat-card-subtitle>学習内容を登録します。</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <form style="width: 100%;">
+            <mat-form-field style="width: 100%;">
+              <input type="text"
+                     placeholder="教科"
+                     aria-label="Number"
+                     matInput
+                     [formControl]="myControl"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+          <mat-form-field style="width: 100%;">
+            <mat-chip-list #subjectAreaList aria-label="SubjectArea selection" >
+              <mat-chip color="primary" *ngFor="let item of subjectAreas" selected="true" removable="true"
+                (removed)="removeSubjectArea(item)">
+                {{item.name}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="教科を入力" [matChipInputFor]="subjectAreaList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="addSubjectAreas($event)">
+            </mat-chip-list>
+          </mat-form-field>
+          <mat-form-field style="width: 100%;">
+            <mat-chip-list #subjectList aria-label="Subject selection" >
+              <mat-chip color="primary" *ngFor="let item of subject" selected="true" removable="true"
+                (removed)="removeSubject(item)">
+                {{item.name}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="科目を入力" [matChipInputFor]="subjectList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="addSubject($event)">
+            </mat-chip-list>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-form-field>
+            <mat-label>Point</mat-label>
+            <input matInput type="number" min="0">
+          </mat-form-field>/10
+          <div class="rightButtonPosition">
+            <button style="margin-top: 4px;" color="primary" mat-raised-button>
+              登録
+            </button>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+      <div class="fabPosition">
+        <button mat-fab mat-elevation-z8 [disabled]="addMode" (click)="StartAddMode()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

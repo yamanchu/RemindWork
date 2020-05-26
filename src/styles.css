@@ -1,0 +1,116 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.toolbar {
+  z-index:999;
+  }
+
+  @media screen and (max-width: 600px){
+    .hamburgerMargin {
+      margin-left: 8px;
+    }
+
+    .appStyle{
+      font-family: 'Fredericka the Great', cursive;
+      margin-left: 4px;
+      margin-right: 4px;
+      text-decoration: none;
+    }
+
+    .sideNavi-container {
+      z-index:8;
+      height: 100%;
+    }
+
+    .fabPosition {
+      z-index:7;
+      /*vertical-align: bottom;*/
+      position: fixed;
+      left: auto;
+      top: auto;
+      bottom: 24px;
+      right: 24px;
+    }
+  }
+
+
+  @media screen and (min-width: 600px){
+    .hamburgerMargin {
+      margin-left: 16px;
+    }
+    .appStyle{
+      font-size: 28pt;
+      font-family: 'Fredericka the Great', cursive;
+      margin-left: 16px;
+      margin-right: 16px;
+      text-decoration: none;
+    }
+
+    .sideNavi-container {
+      z-index:8;
+      height: 100%;
+    }
+
+    .fabPosition {
+      z-index:7;
+      /*vertical-align: bottom;*/
+      position: fixed;
+      left: auto;
+      top: auto;
+      bottom: 48px;
+      right: 48px;
+    }
+  }
+
+  .mainSection {
+    margin: 8px;
+  }
+
+  #appStyleLink {
+    text-decoration: none; /* リンクの下線を出さない */
+   }
+   #appStyleLink:link {
+    color: white; /* 色の指定をリセット */
+   }
+   #appStyleLink:visited {
+    color: white; /* 色の指定をリセット */
+   }
+   #appStyleLink:hover {
+    color: white; /* 色の指定をリセット */
+   }
+
+   a{
+    text-decoration: none;
+    color: black;
+  }
+  a:visited{
+    text-decoration: none;
+    color: black; /* 色の指定をリセット */
+  }
+
+  a:hover{
+    text-decoration: none;
+    color: black; /* 色の指定をリセット */
+  }
+
+.topMenuStyle{
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.mainTitleBlock {
+  padding-top: 8px;
+}
+
+.rightButtonPosition {
+  width: max-content;
+  position: relative;
+  margin-top: 16px;
+  margin-left: auto;
+  right: 0px;
+}
