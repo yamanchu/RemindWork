@@ -39,7 +39,7 @@
                 {{item.data.name}}
               </mat-panel-title>
               <ng-container *ngIf="item.isCustomNode">
-                <mat-icon color="primary" style="margin-left: auto; margin-right: 16px;">edit</mat-icon>
+                <mat-icon color="primary" style="margin-left: auto; margin-right: 16px;">bookmark</mat-icon>
               </ng-container>
             </mat-expansion-panel-header>
             <span>説明: {{item.data.description}}</span>
@@ -72,7 +72,7 @@
               <!--tr mat-footer-row *matFooterRowDef="displayedColumns"></tr-->
             </table>
             <div *ngIf="item.isCustomNode" style="margin-top: 16px;">
-              <button mat-icon-button (click)="DeleteCycleButtonEventHandler(item.data.id)">
+              <button mat-icon-button (click)="DeleteCycleButtonEventHandler($event,item.data.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -164,8 +164,8 @@
         </ng-container>
       </mat-accordion>
     </div>
-    <div class="fabPosition">
-      <button mat-fab mat-elevation-z8 [disabled]="addMode" (click)="StartAddMode()">
+    <div class="fabPosition" *ngIf="!addMode">
+      <button mat-fab mat-elevation-z8 (click)="StartAddMode()">
         <mat-icon>add</mat-icon>
       </button>
     </div>

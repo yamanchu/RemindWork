@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../fire/auth.service';
 import { StoreService } from '../fire/store.service';
 import { ICycles, ICycleNode } from '../fire/storeInterfaces/ICycles';
-import { ISubjectAreas, ISubjectArea } from '../fire/storeInterfaces/ITags';
+import { ISubjectAreas, ISubjectArea, ISubject } from '../fire/storeInterfaces/ITags';
 
 import { interval } from 'rxjs';
 
@@ -125,6 +125,43 @@ export class UserService {
       });*/
       this.initialized = true;
     }
+  }
+
+  AddSubject(subjectAreaName: string, inputSubject: ISubject[]) {
+    const index = this.subjectAreaNodeViewModel.findIndex(item => item.data.name === subjectAreaName);
+    const add: ISubject[] = new Array(0);
+    if (index >= 0) {// 既存の教科が入力された
+      const subjects = this.subjectAreaNodeViewModel[index].data.subjects;
+      for (const iterator of inputSubject) {
+        const i = subjects.findIndex(item => item.id === iterator.id);
+        if (i < 0) {
+          const n: ISubject = {
+            id: iterator.id,
+            name: iterator.name,
+          };
+          add.push(n);
+          this.subjectAreaNodeViewModel[index].data.subjects.push(n);
+        }
+      }
+      if (add.length > 0) {
+        const result: ISubjectArea[] = new Array(0);
+        for (const iterator of this.subjectAreaNodeViewModel) {
+          result.push(iterator.data);
+        }
+        this.store.AddSubject(result);
+        // this.store.AddSubject(add, index);
+      }
+    }
+  }
+
+  AddSubjectAres(value: ISubjectArea) {
+    const id = this.auth.TryGetUID();
+    this.store.AddSubjectAres(id, value);
+
+    this.subjectAreaNodeViewModel.push(
+      {
+        data: value,
+      });
   }
 
   AddCustomCycle(value: ICycleNode) {

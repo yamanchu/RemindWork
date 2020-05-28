@@ -21,6 +21,24 @@ export class TagDocumentManager extends AUserDocumentManagerBase<ISubjectAreas> 
 
 
   /**
+   * subjectAreasコレクションにuserドキュメントを追加する
+   *
+   * @param {string} userID
+   * @param {ISubjectArea} value
+   * @returns {Promise<DocumentReference>}
+   * @memberof TagDocumentManager
+   */
+  AddInitiaCustom(userID: string, value: ISubjectArea): Promise<DocumentReference> {
+    return this.angularFireStore
+      .collection(this.defaultCollectionName)
+      .add({
+        author: userID,
+        published: false,
+        subjectArea: [value],
+      });
+  }
+
+  /**
    *
    *
    * @param {IUserTagDocument} docRef
@@ -45,13 +63,13 @@ export class TagDocumentManager extends AUserDocumentManagerBase<ISubjectAreas> 
     }
   }
 
-  AddCustomSubject(docRef: IUserTagDocument, value: ISubject, index: number) {
+  AddCustomSubject(docRef: DocumentReference, value: ISubjectArea[]) {
     if (docRef != null &&
-      docRef.subjectAreas != null) {
-      const key = 'subjectArea[' + index + '].subjects';
-      docRef.subjectAreas.update({
-        key: firestore.FieldValue.arrayUnion(value)
-      });
+      docRef != null) {
+      docRef.set({
+        subjectArea: value
+      }
+      );
     }
   }
 

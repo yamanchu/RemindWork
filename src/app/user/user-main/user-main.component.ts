@@ -1,13 +1,15 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Input, ElementRef, ViewChild } from '@angular/core';
 import { UserService } from '../user.service';
 import { MenuControlService } from 'src/app/menu-control.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { v4 as UUID } from 'uuid';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable, from } from 'rxjs';
+import { map, startWith, find, findIndex, tap } from 'rxjs/operators';
+import { ISubjectArea, ISubject } from '../../fire/storeInterfaces/ITags';
+/*
 export interface IviewSubjectArea {
   id: string;
   name: string;
@@ -17,6 +19,8 @@ export interface IviewSubject {
   id: string;
   name: string;
 }
+*/
+
 
 @Component({
   selector: 'app-user-main',
@@ -25,52 +29,57 @@ export interface IviewSubject {
 })
 export class UserMainComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  // tslint:disable-next-line: variable-name
-  _subjectAreas: IviewSubjectArea[];
-  // tslint:disable-next-line: variable-name
-  _subject: IviewSubject[];
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]>;
+  newWorkInputGroupe: FormGroup;
+  selectableSubject: Observable<ISubject[]>;
+  // selectableSubjectSrc: ISubject[];
+  inputSubject: ISubject[];
+
+  @ViewChild('subjectInput') subjectInput: ElementRef<HTMLInputElement>;
 
   constructor(
     public menuControl: MenuControlService,
-    public user: UserService) { }
+    public user: UserService,
+    private formBuilder: FormBuilder) {
+
+    this.inputSubject = new Array(0);
+
+    this.newWorkInputGroupe = this.formBuilder.group({
+      newSubjectAreas: [''],
+      newSubject: [''],
+    });
+
+    this.selectableSubject =
+      this.newWorkInputGroupe.get('newSubjectAreas').valueChanges.pipe(
+        startWith(''),
+        map(
+          (value: string | null) => {
+            if (value == null) { value = ''; }
+
+            const index = this.user.subjectAreaNodeViewModel.findIndex(item => item.data.name === value);
+            if ((index >= 0) && (this.user.subjectAreaNodeViewModel.length > index)) {
+              const subjects = this.user.subjectAreaNodeViewModel[index].data.subjects;
+              return subjects.slice(0, subjects.length);
+            }
+            else {
+              return null;
+            }
+          })
+      );
+
+  }
 
   addMode = false;
 
-  get subjectAreas(): IviewSubjectArea[] {
-    if (this._subjectAreas == null) {
-      this._subjectAreas = new Array(0);
-    }
-    return this._subjectAreas;
-  }
-
-  get subject(): IviewSubject[] {
-    if (this._subject == null) {
-      this._subject = new Array(0);
-    }
-    return this._subject;
-  }
 
   ngOnInit() {
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();
-      this.filteredOptions = this.myControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+
     }
     else {
       this.user.routerNavigate('');
     }
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private getSubjectArea(id: string): string {
@@ -83,44 +92,10 @@ export class UserMainComponent implements OnInit {
     return ret;
   }
 
-  removeSubjectArea(item: IviewSubjectArea) {
-    const index = this.subjectAreas.indexOf(item);
+  removeSubject(removeItem: ISubject) {
+    const index = this.inputSubject.findIndex(item => item.name === removeItem.name);
     if (index >= 0) {
-      this.subjectAreas.splice(index, 1);
-    }
-  }
-
-  addSubjectAreas(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    // Add our fruit
-    if ((value || '').trim()) {
-
-      const newName = value.trim();
-      const newID = UUID();
-      const index = this.subjectAreas.findIndex(item => item.name === newName);
-      if (index < 0) {
-        if (this.subjectAreas.length > 0) {
-          this.subjectAreas.pop();
-        }
-
-        this.subjectAreas.push(
-          {
-            id: newID,
-            name: newName,
-          });
-      }
-    }
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  removeSubject(item: IviewSubject) {
-    const index = this.subject.indexOf(item);
-    if (index >= 0) {
-      this.subject.splice(index, 1);
+      this.inputSubject.splice(index, 1);
     }
   }
 
@@ -131,20 +106,44 @@ export class UserMainComponent implements OnInit {
     if ((value || '').trim()) {
 
       const newName = value.trim();
-      const newID = UUID();
-      const index = this.subject.findIndex(item => item.name === newName);
-      if (index < 0) {
 
-        this.subject.push(
-          {
-            id: newID,
-            name: newName,
-          });
-      }
+      const newID = UUID();
+      this.inputSubject.push(
+        {
+          id: newID,
+          name: newName,
+        });
     }
+
     // Reset the input value
     if (input) {
       input.value = '';
+    }
+  }
+
+  selectedSubject(event: MatAutocompleteSelectedEvent): void {
+    const select = event.option.value as ISubject;
+    if (select != null) {
+      this.inputSubject.push(select);
+    }
+    this.subjectInput.nativeElement.value = '';
+    this.newWorkInputGroupe.get('newSubject').setValue(null);
+  }
+
+  registerWork() {
+    const inputsubjectArea = this.newWorkInputGroupe.get('newSubjectAreas').value;
+    const index = this.user.subjectAreaNodeViewModel.findIndex(item => item.data.name === inputsubjectArea);
+    if (index >= 0) {// 既存の教科が入力された
+      this.user.AddSubject(inputsubjectArea, this.inputSubject);
+    }
+    else {
+      const newID = UUID();
+      const subjectArea: ISubjectArea = {
+        id: newID,
+        name: inputsubjectArea,
+        subjects: this.inputSubject,
+      };
+      this.user.AddSubjectAres(subjectArea);
     }
   }
 
@@ -155,6 +154,12 @@ export class UserMainComponent implements OnInit {
 
   StartAddMode() {
     if (!this.addMode) {
+      if (this.subjectInput != null) {
+        this.subjectInput.nativeElement.value = '';
+      }
+      if (this.newWorkInputGroupe != null && this.newWorkInputGroupe.get('newSubject') != null) {
+        this.newWorkInputGroupe.get('newSubject').setValue(null);
+      }
       this.addMode = true;
     }
   }

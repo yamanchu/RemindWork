@@ -7,7 +7,7 @@ import { IStoreDocument } from './storeInterfaces/IStoreDocument';
 import { CycleDocumentManager } from './storeModels/CycleDocumentManager';
 import { TagDocumentManager } from './storeModels/TagDocumentManager';
 import { from } from 'rxjs';
-import { ISubjectAreas, IUserTagDocument } from './storeInterfaces/ITags';
+import { ISubjectAreas, ISubjectArea, ISubject, IUserTagDocument } from './storeInterfaces/ITags';
 
 
 
@@ -154,30 +154,78 @@ export class StoreService {
     }
   }
 
+  AddSubject(value: ISubjectArea[]) {
+    this.tagManager.AddCustomSubject(this.userDocument.subjectAreas, value);
+  }
+
+  AddSubjectAres(userID: string, value: ISubjectArea) {
+    if (this.userDocument == null ||
+      this.userDocument.subjectAreas == null) {
+      this.tagManager.AddInitiaCustom(userID, value)
+        .then(
+          docRef => { // docRef:作られたuserドキュメント
+            if (this.userDocument == null) {
+              const userDoc = this.tagManager.CreateUserDocument(userID, docRef);
+              this.userDocument = {
+                author: userDoc.author,
+                published: userDoc.published,
+                cycles: null,
+                subjectAreas: docRef,
+              };
+              this.angularFireStore
+                .collection('users')
+                .add(this.userDocument)　// usersコレクションにUserDocumentを追加
+                .then(
+                  doc => {
+                    this.userDocumentReference = doc;　// 追加されたUserDocumentの参照を保持
+                  });
+            }
+            else {
+              this.userDocument.subjectAreas = docRef;
+              this.userDocumentReference.set({
+                subjectAreas: docRef
+              }, { merge: true });
+            }
+          }).catch(reason => {
+            console.log(reason);
+          });
+    }
+    else {
+      this.tagManager.AddCustom(this.userDocument, value);
+    }
+  }
+
 
   AddCustomCycle(userID: string, value: ICycleNode) {
     if (this.userDocument == null ||
       this.userDocument.cycles == null) {
 
-      this.cycleManager.AddInitiaCustom(userID, value)// cyclesコレクションにcycleドキュメントを追加する
+      this.cycleManager.AddInitiaCustom(userID, value)// cyclesコレクションにuserドキュメントを追加する
         .then(
-          docRef => { // docRef:作られたcycleドキュメント
-
-            const cycleDoc = this.cycleManager.CreateUserDocument(userID, docRef);
+          docRef => { // docRef:作られたuserドキュメント
             // this.userDocument = this.cycleManager.CreateUserDocument(userID, docRef); // cycleドキュメントの参照を保持するUserDocumentを生成
-            this.userDocument = {
-              author: cycleDoc.author,
-              published: cycleDoc.published,
-              cycles: cycleDoc.cycles,
-              subjectAreas: null,
-            };
-            this.angularFireStore
-              .collection('users')
-              .add(this.userDocument)　// usersコレクションにUserDocumentを追加
-              .then(
-                doc => {
-                  this.userDocumentReference = doc;　// 追加されたUserDocumentの参照を保持
-                });
+            if (this.userDocument == null) {
+              const userDoc = this.cycleManager.CreateUserDocument(userID, docRef);
+              this.userDocument = {
+                author: userDoc.author,
+                published: userDoc.published,
+                cycles: docRef,
+                subjectAreas: null,
+              };
+              this.angularFireStore
+                .collection('users')
+                .add(this.userDocument)　// usersコレクションにUserDocumentを追加
+                .then(
+                  doc => {
+                    this.userDocumentReference = doc;　// 追加されたUserDocumentの参照を保持
+                  });
+            }
+            else {
+              this.userDocument.cycles = docRef;
+              this.userDocumentReference.set({
+                cycles: docRef
+              }, { merge: true });
+            }
           }).catch(reason => {
             console.log(reason);
           });

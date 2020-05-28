@@ -29,7 +29,15 @@ export class CycleDocumentManager extends AUserDocumentManagerBase<ICycles> {
     }
   }
 
-  // cyclesコレクションにcycleドキュメントを追加する
+
+  /**
+   * cyclesコレクションにuserドキュメントを追加する
+   *
+   * @param {string} userID
+   * @param {ICycleNode} value
+   * @returns {Promise<DocumentReference>}
+   * @memberof CycleDocumentManager
+   */
   AddInitiaCustom(userID: string, value: ICycleNode): Promise<DocumentReference> {
 
     return this.angularFireStore

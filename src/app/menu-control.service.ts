@@ -9,11 +9,14 @@ export class MenuControlService {
   public showSideMenu = false;
   private bodyWidthLimit = 600;
   public sideNaviMode = 'over'; // over,side,push
+  ViewWidth: number;
+  ViewHeight: number;
 
   constructor() { }
 
   public onResize(width: number, height: number) {
-    const textMenu = this.pcMode;
+    this.ViewWidth = width;
+    this.ViewHeight = height;
     this.pcMode = width >= this.bodyWidthLimit;
 
     if (this.pcMode) {

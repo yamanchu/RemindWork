@@ -91,46 +91,42 @@
           </mat-card-title>
           <mat-card-subtitle>学習内容を登録します。</mat-card-subtitle>
         </mat-card-header>
+
         <mat-card-content>
-          <form style="width: 100%;">
+          <form style="width: 100%;" [formGroup]="newWorkInputGroupe">
             <mat-form-field style="width: 100%;">
-              <input type="text"
-                     placeholder="教科"
-                     aria-label="Number"
-                     matInput
-                     [formControl]="myControl"
-                     [matAutocomplete]="auto">
-              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                  {{option}}
+              <mat-label>教科を入力</mat-label>
+              <input type="text" placeholder="例：英語" aria-label="InputviewSubjectArea " matInput
+                formControlName="newSubjectAreas" [matAutocomplete]="autoSubjectAreas">
+              <mat-autocomplete autoActiveFirstOption #autoSubjectAreas="matAutocomplete">
+                <mat-option *ngFor="let option of user.subjectAreaNodeViewModel" [value]="option.data.name">
+                  {{option.data.name}}
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </form>
-          <mat-form-field style="width: 100%;">
-            <mat-chip-list #subjectAreaList aria-label="SubjectArea selection" >
-              <mat-chip color="primary" *ngFor="let item of subjectAreas" selected="true" removable="true"
-                (removed)="removeSubjectArea(item)">
-                {{item.name}}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip>
-              <input placeholder="教科を入力" [matChipInputFor]="subjectAreaList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                (matChipInputTokenEnd)="addSubjectAreas($event)">
-            </mat-chip-list>
-          </mat-form-field>
-          <mat-form-field style="width: 100%;">
-            <mat-chip-list #subjectList aria-label="Subject selection" >
-              <mat-chip color="primary" *ngFor="let item of subject" selected="true" removable="true"
-                (removed)="removeSubject(item)">
-                {{item.name}}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip>
-              <input placeholder="科目を入力" [matChipInputFor]="subjectList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                (matChipInputTokenEnd)="addSubject($event)">
-            </mat-chip-list>
-          </mat-form-field>
+          <form style="width: 100%;" [formGroup]="newWorkInputGroupe">
+            <mat-form-field style="width: 100%;">
+              <mat-chip-list #subjectAreaList aria-label="SubjectArea selection">
+                <ng-container *ngFor="let item of inputSubject">
+                  <mat-chip selected="true" removable="true" (removed)="removeSubject(item)">
+                    {{item.name}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </ng-container>
+                <input placeholder="科目 又は 分類を入力" #subjectInput formControlName='newSubject'
+                  [matAutocomplete]="autoSubject" [matChipInputFor]="subjectAreaList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addSubject($event)">
+              </mat-chip-list>
+              <mat-autocomplete #autoSubject="matAutocomplete" (optionSelected)="selectedSubject($event)">
+                <mat-option *ngFor="let item of selectableSubject | async" [value]="item"
+                  aria-label="selectableSubject item">
+                  {{item.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
         </mat-card-content>
         <mat-card-actions>
           <mat-form-field>
@@ -138,7 +134,7 @@
             <input matInput type="number" min="0">
           </mat-form-field>/10
           <div class="rightButtonPosition">
-            <button style="margin-top: 4px;" color="primary" mat-raised-button>
+            <button style="margin-top: 4px;" color="primary" mat-raised-button (click)='registerWork()'>
               登録
             </button>
           </div>
