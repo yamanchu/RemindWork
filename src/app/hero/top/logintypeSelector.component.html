@@ -3,7 +3,7 @@
 <div style="margin-top: 8px; margin-bottom: 8px;">
   <p>Googleアカウントをお持ちの方はこちらが便利です。</p>
   <div class="selectNode" style="width: max-content;">
-    <button color="primary" mat-raised-button (click)="googleLogin()">Googleアカウントで作成</button>
+    <button color="primary" mat-raised-button (mouseup)="googleLogin()">Googleアカウントで作成</button>
   </div>
 </div>
 <mat-divider></mat-divider>
@@ -29,6 +29,6 @@
   </form-->
 </div>
 <div class="selectGroupe">
-  <button color="primary" class="selectNode" mat-raised-button (click)="cancel()">Cancel</button>
-  <button color="primary" class="selectNode" mat-raised-button (click)="ok()">OK</button>
+  <button color="primary" class="selectNode" mat-raised-button (mouseup)="cancel()">Cancel</button>
+  <button color="primary" class="selectNode" mat-raised-button (mouseup)="ok()">OK</button>
 </div>

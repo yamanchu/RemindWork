@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
   <mat-toolbar-row>
-    <button *ngIf="!menuControl.pcMode" (click)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
+    <button *ngIf="!menuControl.pcMode" (mouseup)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-icon class="hamburgerMargin" matListIcon>repeat</mat-icon>
@@ -72,7 +72,7 @@
               <!--tr mat-footer-row *matFooterRowDef="displayedColumns"></tr-->
             </table>
             <div *ngIf="item.isCustomNode" style="margin-top: 16px;">
-              <button mat-icon-button (click)="DeleteCycleButtonEventHandler($event,item.data.id)">
+              <button mat-icon-button (mouseup)="DeleteCycleButtonEventHandler($event,item.data.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -97,11 +97,11 @@
               </mat-form-field>
             </form>
             <form [formGroup]="cycleGroupe" style="width: 100%;" name="newCycleCountInput">
-              <button mat-icon-button color="primary" (click)="removeInterval()">
+              <button mat-icon-button color="primary" (mouseup)="removeInterval()">
                 <mat-icon>remove</mat-icon>
               </button>
               <mat-label style="margin-left: 8px;margin-right: 8px;">登録数 {{intervalIndex.length}}</mat-label>
-              <button mat-icon-button color="primary" (click)="addInterval()">
+              <button mat-icon-button color="primary" (mouseup)="addInterval()">
                 <mat-icon>add</mat-icon>
               </button>
             </form>
@@ -149,13 +149,13 @@
             </form>
             <div style="margin-top: 16px;">
               <div style="width: max-content; float: left;">
-                <button mat-icon-button (click)="CancelAddCustomCycle()">
+                <button mat-icon-button (mouseup)="CancelAddCustomCycle()">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
               <div class="rightButtonPosition">
                 <button style="margin-top: 4px;" color="primary" mat-raised-button [disabled]="cycleGroupe.invalid"
-                  (click)="AddCustomCycle()">
+                  (mouseup)="AddCustomCycle()">
                   登録
                 </button>
               </div>
@@ -165,7 +165,7 @@
       </mat-accordion>
     </div>
     <div class="fabPosition" *ngIf="!addMode">
-      <button mat-fab mat-elevation-z8 (click)="StartAddMode()">
+      <button mat-fab mat-elevation-z8 (mouseup)="StartAddMode()">
         <mat-icon>add</mat-icon>
       </button>
     </div>

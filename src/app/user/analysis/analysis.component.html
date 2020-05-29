@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
   <mat-toolbar-row>
-    <button *ngIf="!menuControl.pcMode" (click)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
+    <button *ngIf="!menuControl.pcMode" (mouseup)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
       <mat-icon>menu</mat-icon>
     </button>
     <!--span class="appStyle">{{menuControl.title}}</span-->

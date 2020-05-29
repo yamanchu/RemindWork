@@ -11,6 +11,7 @@ import { map, startWith, find, findIndex, tap } from 'rxjs/operators';
 import { ISubjectArea, ISubject } from '../../fire/storeInterfaces/ITags';
 import { MatDialog } from '@angular/material/dialog';
 import { SubjectAreaDialogComponent, SubjectAreaDialogData } from './subject-area-dialog/subject-area-dialog.component';
+import { SubjectDialogComponent, SubjectDialogData } from './subject-dialog/subject-dialog.component';
 /*
 export interface IviewSubjectArea {
   id: string;
@@ -69,11 +70,7 @@ export class UserMainComponent implements OnInit {
   subjectAreaEdit() {
 
     const inputText = this.newWorkInputGroupe.get('newSubjectAreas').value;
-    const selectIndex = this.user.subjectAreaNodeViewModel.findIndex(item => item.data.name === inputText);
-    let selectItem = null;
-    if (selectIndex >= 0) {
-      selectItem = this.user.subjectAreaNodeViewModel[selectIndex];
-    }
+    const selectItem = this.user.subjectAreaNodeViewModel.find(item => item.data.name === inputText);
 
     const dialog = this.dialog.open(SubjectAreaDialogComponent, {
       data: {
@@ -102,6 +99,32 @@ export class UserMainComponent implements OnInit {
   }
 
   subjectEdit() {
+
+    const inputText = this.newWorkInputGroupe.get('newSubjectAreas').value;
+    const selectItem = this.user.subjectAreaNodeViewModel.find(item => item.data.name === inputText);
+
+    const dialog = this.dialog.open(SubjectDialogComponent, {
+      data: {
+        title: '科目 又は 分類を選択',
+        selected: this.inputSubject.slice(),
+        subjectAreaNodeViewModel: selectItem,
+        result: false,
+      },
+      width: '300px',
+      height: 'auto',
+      maxHeight: this.menuControl.ViewHeight,
+      disableClose: false,
+      /*position: {
+        bottom: posY,
+        left: posX,
+      },*/
+    });
+
+    dialog.afterClosed().subscribe((ret: SubjectDialogData) => {
+      if (ret.result) {
+        this.inputSubject = ret.selected;
+      }
+    });
   }
 
   private getSubjectArea(id: string): string {
@@ -129,12 +152,25 @@ export class UserMainComponent implements OnInit {
 
       const newName = value.trim();
 
-      const newID = UUID();
-      this.inputSubject.push(
-        {
-          id: newID,
-          name: newName,
-        });
+      let findItrem = false;
+      const inputText = this.newWorkInputGroupe.get('newSubjectAreas').value;
+      const selectItem = this.user.subjectAreaNodeViewModel.find(item => item.data.name === inputText);
+
+      if (selectItem != null) {
+        const subjectItem = selectItem.data.subjects.find(item => item.name === newName);
+        if (subjectItem != null) {
+          this.inputSubject.push(subjectItem);
+          findItrem = true;
+        }
+      }
+      if (!findItrem) {
+        const newID = UUID();
+        this.inputSubject.push(
+          {
+            id: newID,
+            name: newName,
+          });
+      }
     }
 
     // Reset the input value

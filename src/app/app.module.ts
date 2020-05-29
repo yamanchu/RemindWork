@@ -30,6 +30,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // Component.Dialog
 import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
@@ -43,6 +44,7 @@ import { TopComponent } from './hero/top/top.component';
 import { UserMainComponent } from './user/user-main/user-main.component';
 import { IntervalComponent } from './user/interval/interval.component';
 import { AnalysisComponent } from './user/analysis/analysis.component';
+import { SubjectDialogComponent } from './user/user-main/subject-dialog/subject-dialog.component';
 
 const routes: Routes = [
   { path: '', component: TopComponent },
@@ -62,6 +64,7 @@ const routes: Routes = [
     LogintypeSelectorComponent,
     MessageDialogComponent,
     SubjectAreaDialogComponent,
+    SubjectDialogComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -79,6 +82,7 @@ const routes: Routes = [
     AngularFireAuthModule,
     AngularFirestoreModule,
     // material
+    MatCheckboxModule,
     MatAutocompleteModule,
     MatChipsModule,
     MatInputModule,

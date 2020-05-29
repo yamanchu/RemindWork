@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
   <mat-toolbar-row>
-    <button *ngIf="!menuControl.pcMode" (click)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
+    <button *ngIf="!menuControl.pcMode" (mouseup)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
       <mat-icon>menu</mat-icon>
     </button>
     <!--span class="appStyle">{{menuControl.title}}</span-->
@@ -103,7 +103,7 @@
                 </mat-form-field>
               </div>
               <div class="inputSelectButton">
-                <button mat-mini-fab color="primary" aria-label="Subject area select" (click)="subjectAreaEdit()">
+                <button mat-mini-fab color="primary" aria-label="Subject area select" (mouseup)="subjectAreaEdit()">
                   <mat-icon>list</mat-icon>
                 </button>
               </div>
@@ -133,7 +133,7 @@
                 </mat-form-field>
               </div>
               <div class="inputSelectButton">
-                <button mat-mini-fab color="primary" aria-label="Subject select" (click)="subjectEdit()">
+                <button mat-mini-fab color="primary" aria-label="Subject select" (mouseup)="subjectEdit()">
                   <mat-icon>list</mat-icon>
                 </button>
               </div>
@@ -146,14 +146,14 @@
             <input matInput type="number" min="0">
           </mat-form-field>/10
           <div class="rightButtonPosition">
-            <button style="margin-top: 4px;" color="primary" mat-raised-button (click)='registerWork()'>
+            <button style="margin-top: 4px;" color="primary" mat-raised-button (mouseup)='registerWork()'>
               登録
             </button>
           </div>
         </mat-card-actions>
       </mat-card>
       <div class="fabPosition">
-        <button mat-fab mat-elevation-z8 [disabled]="addMode" (click)="StartAddMode()">
+        <button mat-fab mat-elevation-z8 [disabled]="addMode" (mouseup)="StartAddMode()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
