@@ -1,0 +1,9 @@
+.subjectArea-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0;
+}
+
+.subjectArea-radio-button {
+  margin: 10px 0;
+}

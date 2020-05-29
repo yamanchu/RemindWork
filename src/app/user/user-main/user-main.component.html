@@ -93,39 +93,51 @@
         </mat-card-header>
 
         <mat-card-content>
-          <form style="width: 100%;" [formGroup]="newWorkInputGroupe">
-            <mat-form-field style="width: 100%;">
-              <mat-label>教科を入力</mat-label>
-              <input type="text" placeholder="例：英語" aria-label="InputviewSubjectArea " matInput
-                formControlName="newSubjectAreas" [matAutocomplete]="autoSubjectAreas">
-              <mat-autocomplete autoActiveFirstOption #autoSubjectAreas="matAutocomplete">
-                <mat-option *ngFor="let option of user.subjectAreaNodeViewModel" [value]="option.data.name">
-                  {{option.data.name}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
+          <form class="maxWidth" [formGroup]="newWorkInputGroupe">
+            <div class="maxWidth">
+              <div class="buttonSportInput">
+                <mat-form-field class="maxWidth">
+                  <mat-label>教科を入力</mat-label>
+                  <input type="text" placeholder="例：英語" aria-label="InputviewSubjectArea " matInput
+                    formControlName="newSubjectAreas">
+                </mat-form-field>
+              </div>
+              <div class="inputSelectButton">
+                <button mat-mini-fab color="primary" aria-label="Subject area select" (click)="subjectAreaEdit()">
+                  <mat-icon>list</mat-icon>
+                </button>
+              </div>
+            </div>
           </form>
-          <form style="width: 100%;" [formGroup]="newWorkInputGroupe">
-            <mat-form-field style="width: 100%;">
-              <mat-chip-list #subjectAreaList aria-label="SubjectArea selection">
-                <ng-container *ngFor="let item of inputSubject">
-                  <mat-chip selected="true" removable="true" (removed)="removeSubject(item)">
-                    {{item.name}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip>
-                </ng-container>
-                <input placeholder="科目 又は 分類を入力" #subjectInput formControlName='newSubject'
-                  [matAutocomplete]="autoSubject" [matChipInputFor]="subjectAreaList"
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                  (matChipInputTokenEnd)="addSubject($event)">
-              </mat-chip-list>
-              <mat-autocomplete #autoSubject="matAutocomplete" (optionSelected)="selectedSubject($event)">
+          <form class="maxWidth" [formGroup]="newWorkInputGroupe">
+            <div class="maxWidth">
+              <div class="buttonSportInput">
+                <mat-form-field class="maxWidth">
+                  <mat-chip-list #subjectAreaList aria-label="SubjectArea selection">
+                    <ng-container *ngFor="let item of inputSubject">
+                      <mat-chip selected="true" removable="true" (removed)="removeSubject(item)">
+                        {{item.name}}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                      </mat-chip>
+                    </ng-container>
+                    <input placeholder="科目 又は 分類を入力" #subjectInput formControlName='newSubject'
+                      [matChipInputFor]="subjectAreaList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addSubject($event)">
+                  </mat-chip-list>
+                  <!--mat-autocomplete #autoSubject="matAutocomplete" (optionSelected)="selectedSubject($event)">
                 <mat-option *ngFor="let item of selectableSubject | async" [value]="item"
                   aria-label="selectableSubject item">
                   {{item.name}}
                 </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
+              </mat-autocomplete-->
+                </mat-form-field>
+              </div>
+              <div class="inputSelectButton">
+                <button mat-mini-fab color="primary" aria-label="Subject select" (click)="subjectEdit()">
+                  <mat-icon>list</mat-icon>
+                </button>
+              </div>
+            </div>
           </form>
         </mat-card-content>
         <mat-card-actions>

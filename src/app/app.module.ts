@@ -34,6 +34,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 // Component.Dialog
 import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
 import { MessageDialogComponent } from './user/message-dialog/message-dialog.component';
+import { SubjectAreaDialogComponent } from './user/user-main/subject-area-dialog/subject-area-dialog.component';
 
 // Component
 import { Route } from '@angular/compiler/src/core';
@@ -60,6 +61,7 @@ const routes: Routes = [
     AnalysisComponent,
     LogintypeSelectorComponent,
     MessageDialogComponent,
+    SubjectAreaDialogComponent,
   ],
   imports: [
     RouterModule.forRoot(

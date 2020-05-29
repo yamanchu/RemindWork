@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+  <mat-radio-group aria-labelledby="subject area radio" class="subjectArea-radio-group" [(ngModel)]="selectedItem">
+    <ng-container *ngFor="let item of data.subjectAreaNodeViewModel">
+      <div style="width: 100%;">
+        <mat-radio-button style="display: inline-block;" class="subjectArea-radio-button" [value]="item">
+          {{item.data.name}}
+        </mat-radio-button>
+        <!--div style="width: max-content; float: right;">
+      <button mat-icon-button>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div-->
+      </div>
+    </ng-container>
+  </mat-radio-group>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div style="width: max-content; margin-left: auto; margin-right: 16px;">
+    <button mat-raised-button color="primary" (click)="onCancelClick()" cdkFocusInitial
+      style="margin-left: auto; margin-right: 16px;">キャンセル</button>
+    <button mat-raised-button color="primary" (click)="onOkClick()">OK</button>
+  </div>
+</mat-dialog-actions>

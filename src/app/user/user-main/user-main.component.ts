@@ -9,6 +9,8 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Observable, from } from 'rxjs';
 import { map, startWith, find, findIndex, tap } from 'rxjs/operators';
 import { ISubjectArea, ISubject } from '../../fire/storeInterfaces/ITags';
+import { MatDialog } from '@angular/material/dialog';
+import { SubjectAreaDialogComponent, SubjectAreaDialogData } from './subject-area-dialog/subject-area-dialog.component';
 /*
 export interface IviewSubjectArea {
   id: string;
@@ -37,6 +39,7 @@ export class UserMainComponent implements OnInit {
   @ViewChild('subjectInput') subjectInput: ElementRef<HTMLInputElement>;
 
   constructor(
+    private dialog: MatDialog,
     public menuControl: MenuControlService,
     public user: UserService,
     private formBuilder: FormBuilder) {
@@ -47,25 +50,6 @@ export class UserMainComponent implements OnInit {
       newSubjectAreas: [''],
       newSubject: [''],
     });
-
-    this.selectableSubject =
-      this.newWorkInputGroupe.get('newSubjectAreas').valueChanges.pipe(
-        startWith(''),
-        map(
-          (value: string | null) => {
-            if (value == null) { value = ''; }
-
-            const index = this.user.subjectAreaNodeViewModel.findIndex(item => item.data.name === value);
-            if ((index >= 0) && (this.user.subjectAreaNodeViewModel.length > index)) {
-              const subjects = this.user.subjectAreaNodeViewModel[index].data.subjects;
-              return subjects.slice(0, subjects.length);
-            }
-            else {
-              return null;
-            }
-          })
-      );
-
   }
 
   addMode = false;
@@ -80,6 +64,44 @@ export class UserMainComponent implements OnInit {
     else {
       this.user.routerNavigate('');
     }
+  }
+
+  subjectAreaEdit() {
+
+    const inputText = this.newWorkInputGroupe.get('newSubjectAreas').value;
+    const selectIndex = this.user.subjectAreaNodeViewModel.findIndex(item => item.data.name === inputText);
+    let selectItem = null;
+    if (selectIndex >= 0) {
+      selectItem = this.user.subjectAreaNodeViewModel[selectIndex];
+    }
+
+    const dialog = this.dialog.open(SubjectAreaDialogComponent, {
+      data: {
+        title: '教科を選択',
+        selected: selectItem,
+        subjectAreaNodeViewModel: this.user.subjectAreaNodeViewModel,
+        result: false,
+      },
+      width: '300px',
+      height: 'auto',
+      maxHeight: this.menuControl.ViewHeight,
+      disableClose: false,
+      /*position: {
+        bottom: posY,
+        left: posX,
+      },*/
+    });
+
+    dialog.afterClosed().subscribe((ret: SubjectAreaDialogData) => {
+      if (ret.result) {
+        this.newWorkInputGroupe
+          .get('newSubjectAreas')
+          .setValue(ret.selected.data.name);
+      }
+    });
+  }
+
+  subjectEdit() {
   }
 
   private getSubjectArea(id: string): string {
