@@ -21,6 +21,7 @@ export interface SubjectAreaDialogData {
 export class SubjectAreaDialogComponent implements OnInit {
   selectedItem: ISubjectAreaNodeViewModel;
   hasData: boolean;
+  deleteMode: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<SubjectAreaDialogComponent>,
@@ -68,5 +69,9 @@ export class SubjectAreaDialogComponent implements OnInit {
     if (delIndex >= 0) {
       this.data.deleteItems.splice(delIndex, 1);
     }
+  }
+
+  deleteModeChange() {
+    this.data.deleteItems.splice(0);
   }
 }

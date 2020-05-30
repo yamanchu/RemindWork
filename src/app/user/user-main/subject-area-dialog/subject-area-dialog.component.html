@@ -1,5 +1,11 @@
 <h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
+  <div *ngIf="hasData" style="width: max-content; margin-left: auto; margin-right: 0;">
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="deleteMode" style="padding-right: 8px;"
+      (change)="deleteModeChange()">
+      削除可能にする
+    </mat-slide-toggle>
+  </div>
   <mat-radio-group aria-labelledby="subject area radio" class="subjectArea-radio-group" [(ngModel)]="selectedItem">
     <ng-container *ngFor="let item of data.subjectAreaNodeViewModel">
       <div style="width: 100%;" *ngIf="item.data.name!==''">
@@ -7,12 +13,12 @@
           [disabled]="data.deleteItems.includes(item.data)">
           {{item.data.name}}
         </mat-radio-button>
-        <div style="width: max-content; float: right;">
+        <div style="width: max-content; float: right;" *ngIf="deleteMode">
           <button *ngIf="!data.deleteItems.includes(item.data)" mat-icon-button (mouseup)="deleteSubjectArea(item)">
             <mat-icon>delete</mat-icon>
           </button>
           <button *ngIf="data.deleteItems.includes(item.data)" mat-icon-button (mouseup)="replaySubjectArea(item)">
-            <mat-icon>replay</mat-icon>
+            <mat-icon>undo</mat-icon>
           </button>
         </div>
       </div>

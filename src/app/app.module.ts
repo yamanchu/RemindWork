@@ -31,6 +31,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
 
 // Component.Dialog
 import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
@@ -82,6 +84,8 @@ const routes: Routes = [
     AngularFireAuthModule,
     AngularFirestoreModule,
     // material
+    MatSelectModule,
+    MatSlideToggleModule,
     MatCheckboxModule,
     MatAutocompleteModule,
     MatChipsModule,

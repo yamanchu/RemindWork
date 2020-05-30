@@ -28,8 +28,10 @@ export class SubjectDialogComponent implements OnInit {
 
   selected: boolean[];
   hasData: boolean;
+  deleteMode: boolean;
 
   ngOnInit(): void {
+    this.deleteMode = false;
     if (this.data.selected == null) {
       this.data.selected = new Array(0);
     }
@@ -97,5 +99,9 @@ export class SubjectDialogComponent implements OnInit {
     if (delIndex >= 0) {
       this.data.deleteItems.splice(delIndex, 1);
     }
+  }
+
+  deleteModeChange() {
+    this.data.deleteItems.splice(0);
   }
 }

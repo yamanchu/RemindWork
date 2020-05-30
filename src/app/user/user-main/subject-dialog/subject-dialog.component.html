@@ -1,5 +1,11 @@
 <h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
+  <div *ngIf="hasData" style="width: max-content; margin-left: auto; margin-right: 0;">
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="deleteMode" style="padding-right: 8px;"
+      (change)="deleteModeChange()">
+      削除可能にする
+    </mat-slide-toggle>
+  </div>
   <div class="subject-check-group ">
     <div style="width: 100%;" *ngIf="hasData">
       <ng-container *ngFor="let item of data.subjectAreaNodeViewModel.data.subjects ; index as i">
@@ -8,12 +14,12 @@
             [disabled]="data.deleteItems.includes(item)">
             {{item.name}}
           </mat-checkbox>
-          <div style=" width: max-content; float: right;">
+          <div style=" width: max-content; float: right;" *ngIf="deleteMode">
             <button *ngIf="!data.deleteItems.includes(item)" mat-icon-button (mouseup)="deleteSubject(item)">
               <mat-icon>delete</mat-icon>
             </button>
             <button *ngIf="data.deleteItems.includes(item)" mat-icon-button (mouseup)="replaySubject(item)">
-              <mat-icon>replay</mat-icon>
+              <mat-icon>undo</mat-icon>
             </button>
           </div>
         </div>
