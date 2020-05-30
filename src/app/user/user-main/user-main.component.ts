@@ -77,6 +77,7 @@ export class UserMainComponent implements OnInit {
         title: '教科を選択',
         selected: selectItem,
         subjectAreaNodeViewModel: this.user.subjectAreaNodeViewModel,
+        deleteItems: null,
         result: false,
       },
       width: '300px',
@@ -91,9 +92,12 @@ export class UserMainComponent implements OnInit {
 
     dialog.afterClosed().subscribe((ret: SubjectAreaDialogData) => {
       if (ret.result) {
-        this.newWorkInputGroupe
-          .get('newSubjectAreas')
-          .setValue(ret.selected.data.name);
+        if (ret.selected != null) {
+          this.newWorkInputGroupe
+            .get('newSubjectAreas')
+            .setValue(ret.selected.data.name);
+        }
+        this.user.DeleteCustomSubjectArea(ret.deleteItems);
       }
     });
   }
@@ -108,6 +112,7 @@ export class UserMainComponent implements OnInit {
         title: '科目 又は 分類を選択',
         selected: this.inputSubject.slice(),
         subjectAreaNodeViewModel: selectItem,
+        deleteItems: null,
         result: false,
       },
       width: '300px',
@@ -123,6 +128,7 @@ export class UserMainComponent implements OnInit {
     dialog.afterClosed().subscribe((ret: SubjectDialogData) => {
       if (ret.result) {
         this.inputSubject = ret.selected;
+        this.user.DeleteCustomSubject(selectItem, ret.deleteItems);
       }
     });
   }

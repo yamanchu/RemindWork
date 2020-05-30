@@ -154,8 +154,8 @@ export class StoreService {
     }
   }
 
-  AddSubject(value: ISubjectArea[]) {
-    this.tagManager.AddCustomSubject(this.userDocument.subjectAreas, value);
+  AddSubjectArea(userID: string, value: ISubjectArea[]) {
+    this.tagManager.AddCustomSubjectArea(userID, this.userDocument.subjectAreas, value);
   }
 
   AddSubjectAres(userID: string, value: ISubjectArea) {

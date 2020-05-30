@@ -1,17 +1,33 @@
 <h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
   <div class="subject-check-group ">
-    <ng-container *ngFor="let item of data.subjectAreaNodeViewModel.data.subjects">
-      <div style="width: 100%;">
-        <mat-checkbox class="subject-check-button" (change)="ckeckedChange($event)" value={{item.id}}>{{item.name}}
-        </mat-checkbox>
-      </div>
+    <div style="width: 100%;" *ngIf="hasData">
+      <ng-container *ngFor="let item of data.subjectAreaNodeViewModel.data.subjects ; index as i">
+        <div style="width: 100%;">
+          <mat-checkbox [(ngModel)]="selected[i]" class="subject-check-button" (change)="ckeckedChange(item, $event)"
+            [disabled]="data.deleteItems.includes(item)">
+            {{item.name}}
+          </mat-checkbox>
+          <div style=" width: max-content; float: right;">
+            <button *ngIf="!data.deleteItems.includes(item)" mat-icon-button (mouseup)="deleteSubject(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button *ngIf="data.deleteItems.includes(item)" mat-icon-button (mouseup)="replaySubject(item)">
+              <mat-icon>replay</mat-icon>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="!hasData">
+      <p>登録済みの科目又は分類が有りません。</p>
+      <p>入力欄に科目又は分類を入力してください</p>
     </ng-container>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <div style="width: max-content; margin-left: auto; margin-right: 16px;">
-    <button mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
+    <button *ngIf="hasData" mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
       style="margin-left: auto; margin-right: 16px;">キャンセル</button>
     <button mat-raised-button color="primary" (mouseup)="onOkClick()">OK</button>
   </div>

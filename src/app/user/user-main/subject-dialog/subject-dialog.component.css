@@ -6,4 +6,5 @@
 
 .subject-check-button {
   margin: 10px 0;
+  display: inline-block;
 }

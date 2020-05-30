@@ -38,13 +38,7 @@ export class TagDocumentManager extends AUserDocumentManagerBase<ISubjectAreas> 
       });
   }
 
-  /**
-   *
-   *
-   * @param {IUserTagDocument} docRef
-   * @param {ISubjectArea} removeItem
-   * @memberof TagDocumentManager
-   */
+  /*
   RemoveCustom(docRef: IUserTagDocument, removeItem: ISubjectArea) {
     if (docRef != null &&
       docRef.subjectAreas != null) {
@@ -52,7 +46,7 @@ export class TagDocumentManager extends AUserDocumentManagerBase<ISubjectAreas> 
         subjectArea: firestore.FieldValue.arrayRemove(removeItem)
       });
     }
-  }
+  }*/
 
   AddCustom(docRef: IUserTagDocument, value: ISubjectArea) {
     if (docRef != null &&
@@ -63,10 +57,11 @@ export class TagDocumentManager extends AUserDocumentManagerBase<ISubjectAreas> 
     }
   }
 
-  AddCustomSubject(docRef: DocumentReference, value: ISubjectArea[]) {
-    if (docRef != null &&
-      docRef != null) {
+  AddCustomSubjectArea(userID: string, docRef: DocumentReference, value: ISubjectArea[]) {
+    if (docRef != null) {
       docRef.set({
+        author: userID,
+        published: false,
         subjectArea: value
       }
       );

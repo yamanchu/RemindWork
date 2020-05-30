@@ -6,4 +6,5 @@
 
 .subjectArea-radio-button {
   margin: 10px 0;
+  display: inline-block;
 }

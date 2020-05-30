@@ -2,22 +2,30 @@
 <mat-dialog-content>
   <mat-radio-group aria-labelledby="subject area radio" class="subjectArea-radio-group" [(ngModel)]="selectedItem">
     <ng-container *ngFor="let item of data.subjectAreaNodeViewModel">
-      <div style="width: 100%;">
-        <mat-radio-button style="display: inline-block;" class="subjectArea-radio-button" [value]="item">
+      <div style="width: 100%;" *ngIf="item.data.name!==''">
+        <mat-radio-button class="subjectArea-radio-button" [value]="item"
+          [disabled]="data.deleteItems.includes(item.data)">
           {{item.data.name}}
         </mat-radio-button>
-        <!--div style="width: max-content; float: right;">
-      <button mat-icon-button>
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div-->
+        <div style="width: max-content; float: right;">
+          <button *ngIf="!data.deleteItems.includes(item.data)" mat-icon-button (mouseup)="deleteSubjectArea(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button *ngIf="data.deleteItems.includes(item.data)" mat-icon-button (mouseup)="replaySubjectArea(item)">
+            <mat-icon>replay</mat-icon>
+          </button>
+        </div>
       </div>
+    </ng-container>
+    <ng-container *ngIf="!hasData">
+      <p>登録済みの教科が有りません。</p>
+      <p>入力欄に教科を入力してください</p>
     </ng-container>
   </mat-radio-group>
 </mat-dialog-content>
 <mat-dialog-actions>
   <div style="width: max-content; margin-left: auto; margin-right: 16px;">
-    <button mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
+    <button *ngIf="hasData" mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
       style="margin-left: auto; margin-right: 16px;">キャンセル</button>
     <button mat-raised-button color="primary" (mouseup)="onOkClick()">OK</button>
   </div>

@@ -36,55 +36,7 @@
   <!-- メイン コンテンツ -->
   <mat-sidenav-content>
     <div class="mainSection">
-      <mat-card class="cardStyle">
-        <mat-card-header>
-          <mat-card-title>
-            Title
-          </mat-card-title>
-          <mat-card-subtitle>項目数:10</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-accordion>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  詳細
-                </mat-panel-title>
-                <mat-panel-description>
-                  復習回数：1
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <div style="background-color: cornflowerblue;">
-                <svg viewBox="-10 -10 630 230">
-                  <defs>
-                    <!-- arrowhead marker definition -->
-                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4"
-                      orient="auto-start-reverse">
-                      <path d="M 0 1 L 10 5 L 0 9 z" />
-                    </marker>
-
-                    <!-- simple dot marker definition -->
-                    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
-                      <circle cx="5" cy="5" r="4" fill="red" />
-                    </marker>
-                  </defs>
-                  <line x1="0" y1="0" x2="400" y2="100" stroke-width="3" stroke="#F44D61" />
-                  <line x1="0" y1="210" x2="610" y2="210" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
-                  <line x1="0" y1="210" x2="0" y2="0" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
-                </svg>
-              </div>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </mat-card-content>
-        <mat-card-actions>
-          <mat-form-field>
-            <mat-label>Point</mat-label>
-            <input matInput type="number" min="0">
-          </mat-form-field>/10
-          <button mat-button>LIKE</button>
-        </mat-card-actions>
-      </mat-card>
-      <mat-card *ngIf="addMode">
+      <mat-card *ngIf="addMode" class="cardStyle">
         <mat-card-header>
           <mat-card-title>
             新規登録
@@ -152,8 +104,58 @@
           </div>
         </mat-card-actions>
       </mat-card>
+
+      <mat-card class="cardStyle">
+        <mat-card-header>
+          <mat-card-title>
+            Title
+          </mat-card-title>
+          <mat-card-subtitle>項目数:10</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  詳細
+                </mat-panel-title>
+                <mat-panel-description>
+                  復習回数：1
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div style="background-color: cornflowerblue;">
+                <svg viewBox="-10 -10 630 230">
+                  <defs>
+                    <!-- arrowhead marker definition -->
+                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4"
+                      orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" />
+                    </marker>
+
+                    <!-- simple dot marker definition -->
+                    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+                      <circle cx="5" cy="5" r="4" fill="red" />
+                    </marker>
+                  </defs>
+                  <line x1="0" y1="0" x2="400" y2="100" stroke-width="3" stroke="#F44D61" />
+                  <line x1="0" y1="210" x2="610" y2="210" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
+                  <line x1="0" y1="210" x2="0" y2="0" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
+                </svg>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-form-field>
+            <mat-label>Point</mat-label>
+            <input matInput type="number" min="0">
+          </mat-form-field>/10
+          <button mat-button>LIKE</button>
+        </mat-card-actions>
+      </mat-card>
+
       <div class="fabPosition">
-        <button mat-fab mat-elevation-z8 [disabled]="addMode" (mouseup)="StartAddMode()">
+        <button mat-fab mat-elevation-z8 *ngIf="!addMode" (mouseup)="StartAddMode()">
           <mat-icon>add</mat-icon>
         </button>
       </div>

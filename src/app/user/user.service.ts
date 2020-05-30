@@ -148,7 +148,8 @@ export class UserService {
         for (const iterator of this.subjectAreaNodeViewModel) {
           result.push(iterator.data);
         }
-        this.store.AddSubject(result);
+        const id = this.auth.TryGetUID();
+        this.store.AddSubjectArea(id, result);
         // this.store.AddSubject(add, index);
       }
     }
@@ -184,6 +185,44 @@ export class UserService {
         this.store.RemoveCustomCycle(this.cycleNodeViewModel[index].data);
         this.cycleNodeViewModel.splice(index, 1);
       }
+    }
+  }
+
+  DeleteCustomSubjectArea(values: ISubjectArea[]) {
+    if (values.length > 0) {
+
+      for (const iterator of values) {
+        const i = this.subjectAreaNodeViewModel.findIndex(item => item.data === iterator);
+        this.subjectAreaNodeViewModel.splice(i, 1);
+      }
+
+      const newSubjectArea: ISubjectArea[] = new Array(0);
+      for (const iterator of this.subjectAreaNodeViewModel) {
+        newSubjectArea.push(iterator.data);
+      }
+      const id = this.auth.TryGetUID();
+      this.store.AddSubjectArea(id, newSubjectArea);
+    }
+  }
+
+  DeleteCustomSubject(subjectAreaNodeViewModel: ISubjectAreaNodeViewModel, subjects: ISubject[]) {
+
+    if ((subjectAreaNodeViewModel != null) &&
+      (subjects.length > 0)) {
+
+      for (const iterator of subjects) {
+        const delIndex = subjectAreaNodeViewModel.data.subjects.indexOf(iterator);
+        if (delIndex >= 0) {
+          subjectAreaNodeViewModel.data.subjects.splice(delIndex, 1);
+        }
+      }
+
+      const newSubjectArea: ISubjectArea[] = new Array(0);
+      for (const iterator of this.subjectAreaNodeViewModel) {
+        newSubjectArea.push(iterator.data);
+      }
+      const id = this.auth.TryGetUID();
+      this.store.AddSubjectArea(id, newSubjectArea);
     }
   }
 }
