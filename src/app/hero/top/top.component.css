@@ -28,3 +28,14 @@
   font-family: 'Fredericka the Great', cursive;
   margin-bottom: 24px;
 }
+
+.startContainer {
+  display: grid;
+  grid-template-columns:　1fr max-content 1fr;
+
+}
+
+.startCenter {
+  grid-column: 2 / 3;
+  width: max-content;
+}

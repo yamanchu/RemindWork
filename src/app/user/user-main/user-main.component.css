@@ -23,13 +23,11 @@
 }
 
 .gridContainer {
-  display: -ms-grid;
   display: grid;
   grid-template-columns: 1fr 48px;
 }
 
 .pointsCycleContainer {
-  display: -ms-grid;
   display: grid;
   grid-template-columns: max-content 1fr;
 }
@@ -41,4 +39,17 @@
 
 .cycle {
   grid-column: 2 / 3;
+}
+
+.actionButtonContainer  {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+}
+
+.ClancelButton  {
+  grid-column: 1 / 2;
+}
+
+.OKButton  {
+  grid-column: 3 / 4;
 }

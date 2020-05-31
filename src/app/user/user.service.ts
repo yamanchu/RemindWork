@@ -127,11 +127,14 @@ export class UserService {
     }
   }
 
-  AddSubject(subjectAreaName: string, inputSubject: ISubject[]) {
+  AddSubject(subjectAreaName: string, inputSubject: ISubject[]): ISubjectArea {
+    let ret: ISubjectArea = null;
+
     const index = this.subjectAreaNodeViewModel.findIndex(item => item.data.name === subjectAreaName);
     const add: ISubject[] = new Array(0);
     if (index >= 0) {// 既存の教科が入力された
-      const subjects = this.subjectAreaNodeViewModel[index].data.subjects;
+      ret = this.subjectAreaNodeViewModel[index].data;
+      const subjects = ret.subjects;
       for (const iterator of inputSubject) {
         const i = subjects.findIndex(item => item.id === iterator.id);
         if (i < 0) {
@@ -140,7 +143,7 @@ export class UserService {
             name: iterator.name,
           };
           add.push(n);
-          this.subjectAreaNodeViewModel[index].data.subjects.push(n);
+          ret.subjects.push(n);
         }
       }
       if (add.length > 0) {
@@ -153,6 +156,7 @@ export class UserService {
         // this.store.AddSubject(add, index);
       }
     }
+    return ret;
   }
 
   AddSubjectAres(value: ISubjectArea) {

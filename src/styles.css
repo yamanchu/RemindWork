@@ -114,3 +114,7 @@ body {
   margin-left: auto;
   right: 0px;
 }
+
+.primaryBackGrandColor {
+  background-color: #3f51b5;
+}

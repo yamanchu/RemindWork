@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, Input, ElementRef, ViewChild } from '@angular/core';
-import { UserService } from '../user.service';
+import { UserService, ICycleNodeViewModel } from '../user.service';
 import { MenuControlService } from 'src/app/menu-control.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -12,6 +12,7 @@ import { ISubjectArea, ISubject } from '../../fire/storeInterfaces/ITags';
 import { MatDialog } from '@angular/material/dialog';
 import { SubjectAreaDialogComponent, SubjectAreaDialogData } from './subject-area-dialog/subject-area-dialog.component';
 import { SubjectDialogComponent, SubjectDialogData } from './subject-dialog/subject-dialog.component';
+import { IWork, IWorkResult } from '../../fire/storeInterfaces/IWork';
 /*
 export interface IviewSubjectArea {
   id: string;
@@ -48,8 +49,12 @@ export class UserMainComponent implements OnInit {
     this.inputSubject = new Array(0);
 
     this.newWorkInputGroupe = this.formBuilder.group({
+      overview: ['', Validators.required],
+      point: [null, [Validators.required, Validators.min(1)]],
+      cycle: [null, [Validators.required]],
       newSubjectAreas: [''],
       newSubject: [''],
+      memo: [''],
     });
   }
 
@@ -194,21 +199,65 @@ export class UserMainComponent implements OnInit {
     this.newWorkInputGroupe.get('newSubject').setValue(null);
   }
 
+  registerWorkCnacel() {
+    this.addMode = false;
+  }
+
   registerWork() {
     const inputsubjectArea = this.newWorkInputGroupe.get('newSubjectAreas').value;
     const index = this.user.subjectAreaNodeViewModel.findIndex(item => item.data.name === inputsubjectArea);
+    let subjectArea: ISubjectArea = null;
+
     if (index >= 0) {// 既存の教科が入力された
-      this.user.AddSubject(inputsubjectArea, this.inputSubject);
+      subjectArea =
+        this.user.AddSubject(inputsubjectArea, this.inputSubject);
+
     }
     else {
       const newID = UUID();
-      const subjectArea: ISubjectArea = {
+      subjectArea = {
         id: newID,
         name: inputsubjectArea,
         subjects: this.inputSubject,
       };
       this.user.AddSubjectAres(subjectArea);
     }
+
+    const registorData = this.GetWork(subjectArea);
+  }
+
+  private GetWork(subjectArea: ISubjectArea): IWork {
+    const newRegistorDataID = UUID();
+    const newRegistorDataCycle = this.newWorkInputGroupe.get('cycle').value as ICycleNodeViewModel;
+    const subjectIDs: string[] = new Array(0);
+    for (const iterator of this.inputSubject) {
+      subjectIDs.push(iterator.id);
+    }
+    const intarval = newRegistorDataCycle.data.intarval[0];
+    let randomDay = Math.ceil(intarval.day
+      + (Math.random() - 1.0) * 2.0 * intarval.margin);
+    if (randomDay < 1) {
+      randomDay = 1;
+    }
+    const now = new Date();
+    const nextDate = new Date(now.setDate(now.getDate() + randomDay));
+    const registorData: IWork = {
+      id: newRegistorDataID,
+      cycleID: newRegistorDataCycle.data.id,
+      overview: this.newWorkInputGroupe.get('overview').value,
+      memo: this.newWorkInputGroupe.get('memo').value,
+      maxPoint: this.newWorkInputGroupe.get('point').value,
+      subjectAreaID: subjectArea.id,
+      subjectID: subjectIDs,
+      registrationDate: new Date(),
+      next: nextDate,
+      result: [{
+        date: new Date(),
+        rate: 0,
+      }],
+      resultOffset: 0,
+    };
+    return registorData;
   }
 
   @HostListener('window:resize', ['$event.target.innerWidth', '$event.target.innerHeight'])
@@ -224,7 +273,9 @@ export class UserMainComponent implements OnInit {
       if (this.newWorkInputGroupe != null && this.newWorkInputGroupe.get('newSubject') != null) {
         this.newWorkInputGroupe.get('newSubject').setValue(null);
       }
+      this.newWorkInputGroupe.get('cycle').setValue(this.user.cycleNodeViewModel[0]);
       this.addMode = true;
+
     }
   }
 }

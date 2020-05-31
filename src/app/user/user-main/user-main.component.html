@@ -41,89 +41,106 @@
           <mat-card-title>
             新規登録
           </mat-card-title>
-          <mat-card-subtitle>学習内容を登録します。</mat-card-subtitle>
+          <!--mat-card-subtitle>学習内容を登録します。</mat-card-subtitle-->
         </mat-card-header>
         <mat-card-content>
           <form class="maxWidth" [formGroup]="newWorkInputGroupe">
             <div>
               <mat-form-field class="maxWidth">
                 <mat-label>学習概要を入力</mat-label>
-                <input type="text" placeholder="例：単語帳 10～12ページ" aria-label="InputWorkOverview" matInput>
+                <input type="text" placeholder="例：単語帳 10～12ページ" aria-label="InputWorkOverview" matInput
+                  formControlName="overview" required="true">
               </mat-form-field>
             </div>
             <div class="pointsCycleContainer">
               <div class="points">
                 <mat-form-field style="width: 64px;">
                   <mat-label>項目数</mat-label>
-                  <input matInput type="number" placeholder="例：10" min="1">
+                  <input matInput type="number" formControlName="point" aria-label="InputWorkPoint" placeholder="例：10"
+                    min="1" required="true">
+                  <mat-error>1以上を入力</mat-error>
                 </mat-form-field>
               </div>
               <div class="cycle">
                 <mat-form-field>
-                  <mat-label>Select an option</mat-label>
-                  <mat-select>
-                    <mat-option>None</mat-option>
-                    <mat-option value="option1">Option 1</mat-option>
-                    <mat-option value="option2">Option 2</mat-option>
-                    <mat-option value="option3">Option 3</mat-option>
+                  <mat-label>復習間隔</mat-label>
+                  <mat-select formControlName="cycle">
+                    <ng-container *ngFor="let item of user.cycleNodeViewModel">
+                      <mat-option [value]="item">{{item.data.name}}</mat-option>
+                    </ng-container>
                   </mat-select>
                 </mat-form-field>
               </div>
             </div>
-            <div class="gridContainer">
-              <div class="buttonSportInput">
-                <mat-form-field class="maxWidth">
-                  <mat-label>教科を入力</mat-label>
-                  <input type="text" placeholder="例：英語" aria-label="InputviewSubjectArea " matInput
-                    formControlName="newSubjectAreas">
-                </mat-form-field>
-              </div>
-              <div class="inputSelectButton">
-                <button mat-mini-fab color="primary" aria-label="Subject area select" (mouseup)="subjectAreaEdit()">
-                  <mat-icon>list</mat-icon>
-                </button>
-              </div>
-            </div>
-            <div class="gridContainer">
-              <div class="buttonSportInput">
-                <mat-form-field class="maxWidth">
-                  <mat-chip-list #subjectAreaList aria-label="SubjectArea selection">
-                    <ng-container *ngFor="let item of inputSubject">
-                      <mat-chip selected="true" removable="true" (removed)="removeSubject(item)">
-                        {{item.name}}
-                        <mat-icon matChipRemove>cancel</mat-icon>
-                      </mat-chip>
-                    </ng-container>
-                    <input placeholder="科目 又は 分類を入力" #subjectInput formControlName='newSubject'
-                      [matChipInputFor]="subjectAreaList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addSubject($event)">
-                  </mat-chip-list>
-                  <!--mat-autocomplete #autoSubject="matAutocomplete" (optionSelected)="selectedSubject($event)">
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    詳細設定
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    (任意)
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="gridContainer">
+                  <div class="buttonSportInput">
+                    <mat-form-field class="maxWidth">
+                      <mat-label>教科を入力</mat-label>
+                      <input type="text" placeholder="例：英語" aria-label="InputviewSubjectArea " matInput
+                        formControlName="newSubjectAreas">
+                    </mat-form-field>
+                  </div>
+                  <div class="inputSelectButton">
+                    <button mat-mini-fab color="primary" aria-label="Subject area select" (mouseup)="subjectAreaEdit()">
+                      <mat-icon>list</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="gridContainer">
+                  <div class="buttonSportInput">
+                    <mat-form-field class="maxWidth">
+                      <mat-chip-list #subjectAreaList aria-label="SubjectArea selection">
+                        <ng-container *ngFor="let item of inputSubject">
+                          <mat-chip selected="true" removable="true" (removed)="removeSubject(item)">
+                            {{item.name}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                          </mat-chip>
+                        </ng-container>
+                        <input placeholder="科目 又は 分類を入力" #subjectInput formControlName='newSubject'
+                          [matChipInputFor]="subjectAreaList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addSubject($event)">
+                      </mat-chip-list>
+                      <!--mat-autocomplete #autoSubject="matAutocomplete" (optionSelected)="selectedSubject($event)">
                 <mat-option *ngFor="let item of selectableSubject | async" [value]="item"
                   aria-label="selectableSubject item">
                   {{item.name}}
                 </mat-option>
               </mat-autocomplete-->
-                </mat-form-field>
-              </div>
-              <div class="inputSelectButton">
-                <button mat-mini-fab color="primary" aria-label="Subject select" (mouseup)="subjectEdit()">
-                  <mat-icon>list</mat-icon>
-                </button>
-              </div>
-            </div>
-            <div>
-              <mat-form-field class="maxWidth">
-                <mat-label>メモ入力</mat-label>
-                <textarea matInput aria-label="InputWorkDeteil"></textarea>
-              </mat-form-field>
-            </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="inputSelectButton">
+                    <button mat-mini-fab color="primary" aria-label="Subject select" (mouseup)="subjectEdit()">
+                      <mat-icon>list</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <mat-form-field class="maxWidth">
+                    <mat-label>メモ入力</mat-label>
+                    <textarea matInput aria-label="InputWorkDeteil"></textarea>
+                  </mat-form-field>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
           </form>
         </mat-card-content>
         <mat-card-actions>
-
-          <div class="rightButtonPosition">
-            <button style="margin-top: 4px;" color="primary" mat-raised-button (mouseup)='registerWork()'>
+          <div class="actionButtonContainer">
+            <button class="ClancelButton" color="primary" mat-raised-button (mouseup)="registerWorkCnacel()">
+              キャンセル
+            </button>
+            <button class="OKButton" color="primary" mat-raised-button (mouseup)='registerWork()'
+              [disabled]="newWorkInputGroupe.invalid">
               登録
             </button>
           </div>
@@ -147,23 +164,28 @@
                   復習回数：1
                 </mat-panel-description>
               </mat-expansion-panel-header>
-              <div style="background-color: cornflowerblue;">
-                <svg viewBox="-10 -10 630 230">
+              <div class="primaryBackGrandColor">
+                <svg viewBox="-10 -10 620 220">
                   <defs>
                     <!-- arrowhead marker definition -->
-                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4"
-                      orient="auto-start-reverse">
-                      <path d="M 0 1 L 10 5 L 0 9 z" />
+                    <marker id="arrowY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
+                      orient="-90deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                      <path d="M 0 1 L 10 5 L 0 9" />
                     </marker>
-
+                    <marker id="arrowX" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
+                      orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                      <path d="M 0 1 L 10 5 L 0 9" />
+                    </marker>
                     <!-- simple dot marker definition -->
                     <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
                       <circle cx="5" cy="5" r="4" fill="red" />
                     </marker>
                   </defs>
-                  <line x1="0" y1="0" x2="400" y2="100" stroke-width="3" stroke="#F44D61" />
-                  <line x1="0" y1="210" x2="610" y2="210" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
-                  <line x1="0" y1="210" x2="0" y2="0" stroke-width="3" stroke="#F44D61" marker-end="url(#arrow)" />
+                  <line x1="0" y1="0" x2="400" y2="100" stroke-width="2" stroke="#ff4081" />
+                  <path d="M0 0 C 100 0 100 100 400 100" fill="transparent" stroke-width="2" stroke="#ff4081" />
+                  <line x1="-1" y1="200" x2="600" y2="200" stroke-width="2" stroke="#ffffff"
+                    marker-end="url(#arrowX)" />
+                  <line x1="0" y1="201" x2="0" y2="0" stroke-width="2" stroke="#ffffff" marker-end="url(#arrowY)" />
                 </svg>
               </div>
             </mat-expansion-panel>
