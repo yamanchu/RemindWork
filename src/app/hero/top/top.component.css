@@ -30,12 +30,17 @@
 }
 
 .startContainer {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 1fr 128px 1fr;
   grid-template-columns:　1fr max-content 1fr;
 
 }
 
 .startCenter {
+  text-align: center;
+  -ms-grid-column: 1;
   grid-column: 2 / 3;
+  width: 128px;
   width: max-content;
 }

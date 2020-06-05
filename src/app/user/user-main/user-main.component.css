@@ -7,12 +7,14 @@
 }
 
 .buttonSportInput{
+  -ms-grid-column: 1;
   grid-column: 1 / 2;
   padding-top: 4px;
   margin-right: 0;
 }
 
 .inputSelectButton{
+  -ms-grid-column: 2;
   grid-column: 2 / 3;
   margin-left: auto;
   margin-right: 0;
@@ -23,33 +25,56 @@
 }
 
 .gridContainer {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 1fr 48px;
   grid-template-columns: 1fr 48px;
 }
 
 .pointsCycleContainer {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 200px 1fr;
   grid-template-columns: max-content 1fr;
 }
 
 .points {
+  -ms-grid-column: 1;
   grid-column: 1 / 2;
   margin-right: 16px;
 }
 
 .cycle {
+  -ms-grid-column: 2;
   grid-column: 2 / 3;
 }
 
 .actionButtonContainer  {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 128px 1fr 128px;
   grid-template-columns: max-content 1fr max-content;
 }
 
 .ClancelButton  {
+  -ms-grid-column: 1;
   grid-column: 1 / 2;
 }
 
 .OKButton  {
+  -ms-grid-column: 3;
   grid-column: 3 / 4;
+}
+
+.done-icon {
+  color: lime;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.done-icon svg {
+  fill: lime;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
 }

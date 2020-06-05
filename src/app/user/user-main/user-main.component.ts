@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, Input, ElementRef, ViewChild } from '@angular/core';
-import { UserService, ICycleNodeViewModel } from '../user.service';
+import { UserService, ICycleNodeViewModel, IWorkNodeViewModel } from '../user.service';
 import { MenuControlService } from 'src/app/menu-control.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -38,6 +38,7 @@ export class UserMainComponent implements OnInit {
   // selectableSubjectSrc: ISubject[];
   inputSubject: ISubject[];
 
+
   @ViewChild('subjectInput') subjectInput: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -65,7 +66,6 @@ export class UserMainComponent implements OnInit {
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();
-
     }
     else {
       this.user.routerNavigate('');
@@ -223,9 +223,22 @@ export class UserMainComponent implements OnInit {
       this.user.AddSubjectAres(subjectArea);
     }
 
-    const registorData = this.GetWork(subjectArea);
+
+    const newTarget = this.user.AddWork(
+      this.newWorkInputGroupe.get('cycle').value,
+      this.inputSubject,
+      subjectArea,
+      UUID(),
+      this.newWorkInputGroupe.get('overview').value,
+      this.newWorkInputGroupe.get('memo').value,
+      this.newWorkInputGroupe.get('point').value);
+
+    this.user.workAll.unshift(newTarget);
+    this.user.workTarget.unshift(newTarget);
+    this.addMode = false;
   }
 
+  /*
   private GetWork(subjectArea: ISubjectArea): IWork {
     const newRegistorDataID = UUID();
     const newRegistorDataCycle = this.newWorkInputGroupe.get('cycle').value as ICycleNodeViewModel;
@@ -237,7 +250,7 @@ export class UserMainComponent implements OnInit {
     let randomDay = Math.ceil(intarval.day
       + (Math.random() - 1.0) * 2.0 * intarval.margin);
     if (randomDay < 1) {
-      randomDay = 1;
+      randomDay = intarval.day;
     }
     const now = new Date();
     const nextDate = new Date(now.setDate(now.getDate() + randomDay));
@@ -259,6 +272,7 @@ export class UserMainComponent implements OnInit {
     };
     return registorData;
   }
+*/
 
   @HostListener('window:resize', ['$event.target.innerWidth', '$event.target.innerHeight'])
   onResize(width: number, height: number) {
@@ -267,13 +281,23 @@ export class UserMainComponent implements OnInit {
 
   StartAddMode() {
     if (!this.addMode) {
+      /*
       if (this.subjectInput != null) {
         this.subjectInput.nativeElement.value = '';
       }
       if (this.newWorkInputGroupe != null && this.newWorkInputGroupe.get('newSubject') != null) {
         this.newWorkInputGroupe.get('newSubject').setValue(null);
-      }
+      }*/
+
+      this.newWorkInputGroupe.get('overview').setValue(null);
+      this.newWorkInputGroupe.get('point').setValue(null);
       this.newWorkInputGroupe.get('cycle').setValue(this.user.cycleNodeViewModel[0]);
+      this.newWorkInputGroupe.get('newSubjectAreas').setValue(null);
+      this.newWorkInputGroupe.get('newSubject').setValue(null);
+      this.newWorkInputGroupe.get('memo').setValue(null);
+
+      this.inputSubject.splice(0);
+
       this.addMode = true;
 
     }

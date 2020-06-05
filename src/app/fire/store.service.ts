@@ -8,8 +8,8 @@ import { CycleDocumentManager } from './storeModels/CycleDocumentManager';
 import { TagDocumentManager } from './storeModels/TagDocumentManager';
 import { from } from 'rxjs';
 import { ISubjectAreas, ISubjectArea, ISubject, IUserTagDocument } from './storeInterfaces/ITags';
-
-
+import { WorkDocumentManager } from './storeModels/WorkDocumentManager';
+import { IWork, IWorkResult } from '../fire/storeInterfaces/IWork';
 
 /*
 export class IntarvalNode implements IIntarvalNode {
@@ -42,6 +42,7 @@ export class StoreService {
   private userDocument: UserDocument = null;
   private cycleManager: CycleDocumentManager;
   private tagManager: TagDocumentManager;
+  private workManager: WorkDocumentManager;
 
   constructor(private angularFireStore: AngularFirestore) {
     if (this.cycleManager == null) {
@@ -50,13 +51,21 @@ export class StoreService {
     if (this.tagManager == null) {
       this.tagManager = new TagDocumentManager(angularFireStore);
     }
+    if (this.workManager == null) {
+      this.workManager = new WorkDocumentManager(angularFireStore);
+    }
   }
 
-  CreateUserData(
+  Load(
     userID: string,
     cycleObserver: ((cycles: ICycles) => void),
-    tagObserver: ((subjectAreas: ISubjectAreas) => void)
+    tagObserver: ((subjectAreas: ISubjectAreas) => void),
+    workObserver: ((work: IWork) => void),
+    readFinishObserver: (() => void)
   ) {
+
+    const wait1 = this.workManager.Load(userID, workObserver);
+
     this.angularFireStore
       .collection('users', ref => ref.where('author', '==', userID))
       .get()
@@ -65,8 +74,11 @@ export class StoreService {
           if (!snapshot.empty) {
             this.userDocumentReference = snapshot.docs[0].ref;
             this.userDocument = snapshot.docs[0].data() as UserDocument;
-            this.cycleManager.Load(this.userDocument.cycles, cycleObserver);
-            this.tagManager.Load(this.userDocument.subjectAreas, tagObserver);
+            const wait2 = this.cycleManager.Load(this.userDocument.cycles, cycleObserver);
+            const wait3 = this.tagManager.Load(this.userDocument.subjectAreas, tagObserver);
+            Promise.all([wait1, wait2, wait3]).then((ret) => {
+              readFinishObserver();
+            });
           }
         });
   }
@@ -85,9 +97,9 @@ export class StoreService {
       .set(this.userDocumentReference);
       .then(() => {
         this.cycles = null;
-      });*/
+      });
 
-  /*
+
   const results = [];
 
   const newCycle = {
@@ -98,7 +110,7 @@ export class StoreService {
     this.angularFireStore
       .collection('cycles')
       .add(newCycle));
-
+/*
   Promise.all(results).then((ret) => {
 
     const c = ret[0] as DocumentReference;
@@ -114,39 +126,14 @@ export class StoreService {
       });
   });
 
-}*/
-
+}
+*/
   GetDefaultCycles(
     observer: ((cycles: ICycles) => void)
   ) {
     this.cycleManager.GetDefault(observer);
-    /*
-    this.angularFireStore
-      .collection('cycles')
-      .doc('common').get()
-      .subscribe(doc => {
-        observer((doc.data() as ICycles));
-      });
-*/
-    /*
-    const getDoc = this.angularFireStore
-      .collection('common').doc('Cycles')
-      .get();
-
-    getDoc.subscribe(doc => {
-      if (doc != null &&
-        doc.exists) {
-        const c = doc.data() as ICycles;
-        if (c != null) {
-          observer(c);
-        }
-      }
-    });
-  */
-
-    // .valueChanges()
-    // .subscribe(observer);
   }
+
 
   RemoveCustomCycle(value: ICycleNode) {
     if (this.userDocument != null) {
@@ -250,4 +237,15 @@ export class StoreService {
         console.error("Error adding document: ", error);
       });*/
   }
+
+  AddWork(value: IWork) {
+    this.workManager.AddWork(value);
+  }
+
+  /*GetWork(
+    userID: string,
+    observer: ((readValue: IWork) => void)
+  ) {
+    this.workManager.GetWork(userID, observer);
+  }*/
 }

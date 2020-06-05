@@ -7,9 +7,9 @@ export abstract class AUserDocumentManagerBase<T> extends AUserDocumentManagerCo
     super(angularFireStore);
   }
 
-  Load(docRef: DocumentReference, observer: ((readValue: T) => void)) {
+  Load(docRef: DocumentReference, observer: ((readValue: T) => void)): any {
     if (docRef != null) {
-      docRef
+      return docRef
         .get()
         .then(
           snapshot => {
@@ -19,6 +19,7 @@ export abstract class AUserDocumentManagerBase<T> extends AUserDocumentManagerCo
             }
           });
     }
+    return null;
   }
 
   protected abstract get defaultCollectionName(): string;

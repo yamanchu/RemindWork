@@ -127,7 +127,7 @@
                 <div>
                   <mat-form-field class="maxWidth">
                     <mat-label>メモ入力</mat-label>
-                    <textarea matInput aria-label="InputWorkDeteil"></textarea>
+                    <textarea matInput formControlName="memo" aria-label="InputWorkDeteil"></textarea>
                   </mat-form-field>
                 </div>
               </mat-expansion-panel>
@@ -146,59 +146,102 @@
           </div>
         </mat-card-actions>
       </mat-card>
-      <mat-card class="cardStyle">
-        <mat-card-header>
-          <mat-card-title>
-            Title
-          </mat-card-title>
-          <mat-card-subtitle>項目数:10</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-accordion>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  詳細
-                </mat-panel-title>
-                <mat-panel-description>
-                  復習回数：1
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <div class="primaryBackGrandColor">
-                <svg viewBox="-10 -10 620 220">
-                  <defs>
-                    <!-- arrowhead marker definition -->
-                    <marker id="arrowY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
-                      orient="-90deg" fill="transparent" stroke="#ffffff" stroke-width="2">
-                      <path d="M 0 1 L 10 5 L 0 9" />
-                    </marker>
-                    <marker id="arrowX" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
-                      orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
-                      <path d="M 0 1 L 10 5 L 0 9" />
-                    </marker>
-                    <!-- simple dot marker definition -->
-                    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
-                      <circle cx="5" cy="5" r="4" fill="red" />
-                    </marker>
-                  </defs>
-                  <line x1="0" y1="0" x2="400" y2="100" stroke-width="2" stroke="#ff4081" />
-                  <path d="M0 0 C 100 0 100 100 400 100" fill="transparent" stroke-width="2" stroke="#ff4081" />
-                  <line x1="-1" y1="200" x2="600" y2="200" stroke-width="2" stroke="#ffffff"
-                    marker-end="url(#arrowX)" />
-                  <line x1="0" y1="201" x2="0" y2="0" stroke-width="2" stroke="#ffffff" marker-end="url(#arrowY)" />
-                </svg>
-              </div>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </mat-card-content>
-        <mat-card-actions>
-          <mat-form-field>
-            <mat-label>Point</mat-label>
-            <input matInput type="number" min="0">
-          </mat-form-field>/10
-          <button mat-button>LIKE</button>
-        </mat-card-actions>
-      </mat-card>
+      <ng-container *ngFor="let item of user.workTarget">
+        <mat-card class="cardStyle">
+          <mat-card-header>
+            <div mat-card-avatar>
+              <mat-icon *ngIf="item.next<user.today" color="accent">update</mat-icon>
+              <mat-icon *ngIf="item.next>=user.today" color="primary">done</mat-icon>
+            </div>
+            <mat-card-title>
+              {{item.data.overview}}
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="item.subjectArea!=null && item.subjectArea.name !== '' ">
+              <span>{{item.subjectArea.name}}</span>
+              <span *ngIf="item.subject!=null && item.subject.length>0">
+                <ng-container *ngFor="let subject of item.subject index as i">
+                  <ng-container *ngIf="i===0"> : </ng-container>
+                  <ng-container *ngIf="i!==0"> / </ng-container>
+                  {{subject.name}}
+                </ng-container>
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span *ngIf="menuControl.pcMode">復習回数：{{item.data.result.length-1}}</span>
+                    <span *ngIf="!menuControl.pcMode">回数：{{item.data.result.length-1}}</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <span *ngIf="menuControl.pcMode">前回：{{item.last | date:"yyyy/MM/dd"}}</span>
+                    <span *ngIf="!menuControl.pcMode">前回：{{item.last | date:"MM/dd"}}</span>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <span *ngIf="item.data.memo!=null && item.data.memo!=''">{{item.data.memo}}</span>
+                <div class="primaryBackGrandColor">
+                  <svg [attr.viewBox]="user.GetView(item).drawBax.area">
+                    <defs>
+                      <!-- arrowhead marker definition -->
+                      <marker id="arrowY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
+                        orient="270deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                        <path d="M 0 1 L 10 5 L 0 9" />
+                      </marker>
+                      <marker id="arrowX" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
+                        orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                        <path d="M 0 1 L 10 5 L 0 9" />
+                      </marker>
+                      <!-- simple dot marker definition -->
+                      <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+                        <circle cx="5" cy="5" r="4" fill="red" />
+                      </marker>
+                    </defs>
+                    <line x1="0" y1="0" x2="400" y2="100" stroke-width="2" stroke="#ff4081" />
+                    <path d="M0 0 C 100 0 100 100 400 100" fill="transparent" stroke-width="2" stroke="#ff4081" />
+                    <line [attr.x1]="user.GetView(item).viewOutline.start.x-1"
+                      [attr.y1]="user.GetView(item).viewOutline.start.y"
+                      [attr.x2]="user.GetView(item).viewOutline.end.x"
+                      [attr.y2]="user.GetView(item).viewOutline.start.y" stroke-width="2" stroke="#ffffff"
+                      marker-end="url(#arrowX)" />
+                    <line [attr.x1]="user.GetView(item).viewOutline.start.x"
+                      [attr.y1]="user.GetView(item).viewOutline.start.y+1"
+                      [attr.x2]="user.GetView(item).viewOutline.start.x"
+                      [attr.y2]="user.GetView(item).viewOutline.end.y" stroke-width="2" stroke="#ffffff"
+                      marker-end="url(#arrowY)" />
+                    <!--line [attr.x1]="user.GetView(item).viewOutline.start.x"
+                      [attr.y1]="user.GetView(item).convertToDrawY(item.data.maxPoint)"
+                      [attr.x2]="user.GetView(item).viewOutline.end.x"
+                      [attr.y2]="user.GetView(item).convertToDrawY(item.data.maxPoint)" stroke-width="1"
+                      stroke="#ffffffd6" stroke-linejoin="round" /-->
+                    <path [attr.d]="user.GetView(item).pointPath(item.data.maxPoint)" fill="transparent"
+                      stroke-width="0.75" stroke="#ffffff" />
+                    <path [attr.d]="user.GetView(item).checkDatePath()" fill="transparent" stroke-width="0.5"
+                      stroke="#ffffff" />
+                    <text [attr.x]="user.GetView(item).checkDate" [attr.y]="user.GetView(item).viewOutline.start.y"
+                      font-size="20" text-anchor="middle" fill="white" font-weight="100"
+                      dominant-baseline="text-before-edge">{{user.GetView(item).viewDate| date:"MM/dd"}}</text>
+                  </svg>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </mat-card-content>
+          <mat-card-actions>
+            <div *ngIf="item.next<user.today">
+              <mat-form-field>
+                <mat-label>Point</mat-label>
+                <input matInput type="number" min="0" [max]="item.data.maxPoint">
+              </mat-form-field>/{{item.data.maxPoint}}
+              <button mat-button>LIKE</button>
+            </div>
+            <div *ngIf="item.next>=user.today">
+              <span>項目数: {{item.data.maxPoint}}</span>
+              <span style="float: right;">次回: {{item.data.next | date:"yyyy/MM/dd"}}</span>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
       <div class="fabPosition">
         <button mat-fab mat-elevation-z8 *ngIf="!addMode" (mouseup)="StartAddMode()">
           <mat-icon>add</mat-icon>
