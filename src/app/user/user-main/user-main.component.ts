@@ -233,7 +233,7 @@ export class UserMainComponent implements OnInit {
       this.newWorkInputGroupe.get('memo').value,
       this.newWorkInputGroupe.get('point').value);
 
-    this.user.workAll.unshift(newTarget);
+    // this.user.workAll.unshift(newTarget);
     this.user.workTarget.unshift(newTarget);
     this.addMode = false;
   }

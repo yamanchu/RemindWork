@@ -46,12 +46,16 @@ export interface IWorkNodeViewModel {
 })
 export class UserService {
 
+  private get refreshTime(): number {
+    return 4;
+  }
+
   constructor(
     private router: Router,
     private auth: AuthService,
     private store: StoreService) { }
 
-  private initialized = false;
+  private initialized: Date = null;
 
   today: Date;
 
@@ -86,6 +90,7 @@ export class UserService {
   }
 
   // tslint:disable-next-line: variable-name
+  /*
   private _workAll: IWorkNodeViewModel[] = null;
 
   get workAll(): IWorkNodeViewModel[] {
@@ -94,6 +99,7 @@ export class UserService {
     }
     return this._workAll;
   }
+*/
 
   // tslint:disable-next-line: variable-name
   private _viewGraph: Map<IWorkNodeViewModel, ViewGraph> = null;
@@ -111,7 +117,7 @@ export class UserService {
 
       let viewDate = endDay;
       if (endDay < today) {
-        viewDate = today;
+        viewDate = this.GetBaseDate(today.getDate(), 1);
       }
       const viewmsec = viewDate.getTime() - startDay.getTime();
       const checkDay = viewmsec / 1000 / 60 / 60 / 24;
@@ -152,7 +158,6 @@ export class UserService {
   }
 
   private setSubjectAreaViewModel(subjectAreas: ISubjectAreas): void {
-
     for (const iterator of subjectAreas.subjectArea) {
       this.subjectAreaNodeViewModel.push(
         {
@@ -189,14 +194,14 @@ export class UserService {
       last: new Date(work.result[work.result.length - 1].date),
     };
 
-    this.workAll.push(workNodeViewModel);
-    if (workNodeViewModel.next < this.today || !environment.production) {
+    // this.workAll.push(workNodeViewModel);
+    if (workNodeViewModel.next <= this.today || workNodeViewModel.last.getTime() === this.today.getTime() /*|| !environment.production*/) {
       this.workTarget.push(workNodeViewModel);
     }
   }
 
   private readFinish() {
-    for (const workNodeViewModel of this.workAll) {
+    for (const workNodeViewModel of this.workTarget) {
 
       const work = workNodeViewModel.data;
 
@@ -224,27 +229,25 @@ export class UserService {
   LoadData() {
 
     // const current = new Date();
-    this.today = new Date();
+    this.today = this.GetBaseDate();
 
-    if (!this.initialized) {
-      this.store.GetDefaultCycles((cycles) => this.setCycleNodeViewModel(cycles));
+    if (this.initialized == null || this.initialized < this.today) {
+
+      this.cycleNodeViewModel.splice(0);
+      this.subjectAreaNodeViewModel.splice(0);
+      this.workTarget.splice(0);
+
+      // this.store.GetDefaultCycles((cycles) => this.setCycleNodeViewModel(cycles));
 
       const uid = this.auth.TryGetUID();
       this.store.Load(uid,
+        this.today.getTime(),
         (cycles) => this.setCycleNodeViewModel(cycles),
         (subjectAreas) => this.setSubjectAreaViewModel(subjectAreas),
         (work) => this.setWorkViewModel(work),
         () => this.readFinish());
 
-      this.initialized = true;
-    }
-    else {
-      this.workTarget.slice(0);
-      for (const iterator of this.workAll) {
-        if (iterator.next > this.today) {
-          this.workTarget.push(iterator);
-        }
-      }
+      this.initialized = this.today;
     }
   }
 
@@ -372,6 +375,27 @@ export class UserService {
     };
   }
 
+  private GetBaseDate(today?: number, offsetDay?: number): Date {
+    const base = new Date();
+    if (today == null) {
+      today = base.getDate();
+    }
+    if (offsetDay == null) {
+      offsetDay = 0;
+    }
+
+    base.setDate(today + offsetDay);
+    if (base.getHours() < this.refreshTime) {
+      base.setDate(base.getDate() - 1);
+    }
+    base.setHours(this.refreshTime);
+    base.setMinutes(0);
+    base.setSeconds(0);
+    base.setMilliseconds(0);
+
+    return base;
+  }
+
   private GetWorkData(
     cycleNodeViewModel: ICycleNodeViewModel,
     inputSubjects: ISubject[],
@@ -393,22 +417,10 @@ export class UserService {
       randomDay = intarval.day;
     }
 
-    const refreshTime = 4;
-    const now = new Date();
-    now.setMilliseconds(0);
-    now.setSeconds(0);
-    now.setMinutes(0);
-    now.setHours(refreshTime);
-    now.setDate(now.getDate());
-    if (now.getHours() < refreshTime) {
-      now.setDate(now.getDate() - 1);
-    }
-    const nextDate = new Date();
-    nextDate.setMilliseconds(0);
-    nextDate.setSeconds(0);
-    nextDate.setMinutes(0);
-    nextDate.setHours(refreshTime);
+    const now = this.GetBaseDate();
+    const nextDate = new Date(now);
     nextDate.setDate(now.getDate() + randomDay);
+
     // const nextDate = new Date(now.setDate(now.getDate() + randomDay));
     const uid = this.auth.TryGetUID();
     const registorData: IWork = {
@@ -421,13 +433,14 @@ export class UserService {
       maxPoint: maxPointData,
       subjectAreaID: subjectArea.id,
       subjectID: subjectIDs,
-      registrationDate: new Date().toString(),
-      next: nextDate.toString(),
+      registrationDate: new Date().getTime(),
+      next: nextDate.getTime(),
       result: [{
-        date: now.toString(),
+        date: now.getTime(),
         rate: 0,
       }],
       resultOffset: 0,
+      upDate: new Date().getTime(),
     };
     return registorData;
   }

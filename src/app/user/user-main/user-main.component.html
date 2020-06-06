@@ -150,8 +150,8 @@
         <mat-card class="cardStyle">
           <mat-card-header>
             <div mat-card-avatar>
-              <mat-icon *ngIf="item.next<user.today" color="accent">update</mat-icon>
-              <mat-icon *ngIf="item.next>=user.today" color="primary">done</mat-icon>
+              <mat-icon *ngIf="item.next<=user.today" color="accent">update</mat-icon>
+              <mat-icon *ngIf="item.next>user.today" color="primary">done</mat-icon>
             </div>
             <mat-card-title>
               {{item.data.overview}}
@@ -172,8 +172,8 @@
               <mat-expansion-panel>
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    <span *ngIf="menuControl.pcMode">復習回数：{{item.data.result.length-1}}</span>
-                    <span *ngIf="!menuControl.pcMode">回数：{{item.data.result.length-1}}</span>
+                    <span *ngIf="menuControl.pcMode">学習回数：{{item.data.result.length}}</span>
+                    <span *ngIf="!menuControl.pcMode">回数：{{item.data.result.length}}</span>
                   </mat-panel-title>
                   <mat-panel-description>
                     <span *ngIf="menuControl.pcMode">前回：{{item.last | date:"yyyy/MM/dd"}}</span>
@@ -228,14 +228,14 @@
             </mat-accordion>
           </mat-card-content>
           <mat-card-actions>
-            <div *ngIf="item.next<user.today">
+            <div *ngIf="item.next<=user.today">
               <mat-form-field>
                 <mat-label>Point</mat-label>
                 <input matInput type="number" min="0" [max]="item.data.maxPoint">
               </mat-form-field>/{{item.data.maxPoint}}
               <button mat-button>LIKE</button>
             </div>
-            <div *ngIf="item.next>=user.today">
+            <div *ngIf="item.next>user.today">
               <span>項目数: {{item.data.maxPoint}}</span>
               <span style="float: right;">次回: {{item.data.next | date:"yyyy/MM/dd"}}</span>
             </div>

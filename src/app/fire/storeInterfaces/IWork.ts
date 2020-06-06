@@ -5,7 +5,7 @@ import { IStoreDocument } from './IStoreDocument';
  * @export
  * @interface IWork
  */
-export interface IWork extends IStoreDocument{
+export interface IWork extends IStoreDocument {
   id: string;
 
 
@@ -36,18 +36,18 @@ export interface IWork extends IStoreDocument{
   /**
    * 登録日
    *
-   * @type {string}
+   * @type {number}
    * @memberof IWork
    */
-  registrationDate: string;
+  registrationDate: number;
 
   /**
    * 次回学習日
    *
-   * @type {string}
+   * @type {number}
    * @memberof IWork
    */
-  next: string;
+  next: number;
 
   /**
    * 学習結果
@@ -64,6 +64,8 @@ export interface IWork extends IStoreDocument{
    * @memberof IWork
    */
   resultOffset: number;
+
+  upDate: number;
 }
 
 
@@ -79,10 +81,10 @@ export interface IWorkResult {
   /**
    * 復習日
    *
-   * @type {string}
+   * @type {number}
    * @memberof IWorkResult
    */
-  date: string;
+  date: number;
 
 
   /**

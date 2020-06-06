@@ -1,6 +1,7 @@
 import { IWork, IWorkResult } from '../storeInterfaces/IWork';
 import { AUserDocumentManagerCore } from './AUserDocumentManagerCore';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { firestore } from 'firebase';
 
 export class WorkDocumentManager extends AUserDocumentManagerCore {
 
@@ -21,6 +22,7 @@ export class WorkDocumentManager extends AUserDocumentManagerCore {
 
   Load(
     userID: string,
+    toDayTime: number,
     observer: ((readValue: IWork) => void)
   ): any {
     if (this.defaultCollectionName !== null) {
@@ -28,7 +30,13 @@ export class WorkDocumentManager extends AUserDocumentManagerCore {
       const worksRef = this.angularFireStore.collection(this.defaultCollectionName);
 
       return this.angularFireStore
-        .collection(this.defaultCollectionName, ref => ref.where('author', '==', userID))
+        .collection(
+          this.defaultCollectionName,
+          ref => (
+            ref.where('author', '==', userID).where('upDate', '>', toDayTime).orderBy('upDate', 'desc') ||
+            ref.where('author', '==', userID).where('upDate', '<=', toDayTime).orderBy('upDate', 'desc').where('next', '<=', toDayTime)
+          )
+        )
         .get()
         .subscribe(
           snapshot => {
@@ -41,4 +49,5 @@ export class WorkDocumentManager extends AUserDocumentManagerCore {
           });
     }
   }
+
 }

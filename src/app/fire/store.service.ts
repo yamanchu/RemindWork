@@ -58,13 +58,16 @@ export class StoreService {
 
   Load(
     userID: string,
+    toDayTime: number,
     cycleObserver: ((cycles: ICycles) => void),
     tagObserver: ((subjectAreas: ISubjectAreas) => void),
     workObserver: ((work: IWork) => void),
     readFinishObserver: (() => void)
   ) {
 
-    const wait1 = this.workManager.Load(userID, workObserver);
+    const wait0 = this.GetDefaultCycles(cycleObserver);
+
+    const wait1 = this.workManager.Load(userID, toDayTime, workObserver);
 
     this.angularFireStore
       .collection('users', ref => ref.where('author', '==', userID))
@@ -76,7 +79,7 @@ export class StoreService {
             this.userDocument = snapshot.docs[0].data() as UserDocument;
             const wait2 = this.cycleManager.Load(this.userDocument.cycles, cycleObserver);
             const wait3 = this.tagManager.Load(this.userDocument.subjectAreas, tagObserver);
-            Promise.all([wait1, wait2, wait3]).then((ret) => {
+            Promise.all([wait0, wait1, wait2, wait3]).then((ret) => {
               readFinishObserver();
             });
           }
