@@ -91,11 +91,11 @@
                       </marker>
                       <!-- simple dot marker definition -->
                       <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
-                        <circle cx="5" cy="5" r="4" fill="red" />
+                        <circle cx="5" cy="5" r="4" fill="#ff4081" />
                       </marker>
                     </defs>
-                    <line x1="0" y1="0" x2="400" y2="100" stroke-width="2" stroke="#ff4081" />
-                    <path d="M0 0 C 100 0 100 100 400 100" fill="transparent" stroke-width="2" stroke="#ff4081" />
+                    <!--line x1="0" y1="0" x2="400" y2="100" stroke-width="2" stroke="#ff4081" /-->
+                    <!--path d="M0 0 C 100 0 100 100 400 100" fill="transparent" stroke-width="2" stroke="#ff4081" /-->
                     <line [attr.x1]="user.GetView(item).viewOutline.start.x-1"
                       [attr.y1]="user.GetView(item).viewOutline.start.y"
                       [attr.x2]="user.GetView(item).viewOutline.end.x"
@@ -111,17 +111,23 @@
                       [attr.x2]="user.GetView(item).viewOutline.end.x"
                       [attr.y2]="user.GetView(item).convertToDrawY(item.data.maxPoint)" stroke-width="1"
                       stroke="#ffffffd6" stroke-linejoin="round" /-->
-                    <path [attr.d]="user.GetView(item).pointPath(item.data.maxPoint)" fill="transparent"
-                      stroke-width="0.75" stroke="#ffffff" />
+                    <path [attr.d]="user.GetView(item).pointPath(1)" fill="transparent" stroke-width="0.75"
+                      stroke="#ffffff" />
                     <path [attr.d]="user.GetView(item).endDayDrawPath()" fill="transparent" stroke-width="0.5"
                       stroke="#ffffff" />
-                    <text [attr.x]="user.GetView(item).endDayDrawX" [attr.y]="user.GetView(item).viewOutline.start.y"
+                    <text [attr.x]="user.GetView(item).endDayDrawX" [attr.y]="user.GetView(item).viewOutline.start.y+2"
                       font-size="20" text-anchor="middle" fill="white" font-weight="100"
                       dominant-baseline="text-before-edge">{{user.GetView(item).endDate| date:"M/d"}}</text>
                     <text [attr.x]="user.GetView(item).convertDateNumberToDrawX(item.data.result[0].date)"
-                      [attr.y]="user.GetView(item).viewOutline.start.y" font-size="20" text-anchor="start" fill="white"
-                      font-weight="100"
+                      [attr.y]="user.GetView(item).viewOutline.start.y+2" font-size="20" text-anchor="start"
+                      fill="white" font-weight="100"
                       dominant-baseline="text-before-edge">{{item.data.result[0].date| date:"M/d"}}</text>
+                    <line *ngFor="let resultItem of item.data.result"
+                      [attr.x1]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
+                      [attr.y1]="user.GetView(item).convertToDrawY(resultItem.rate)"
+                      [attr.x2]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
+                      [attr.y2]="user.GetView(item).convertToDrawY(1)" stroke-width="2" stroke="#ff4081"
+                      marker-start="url(#dot)" />
                   </svg>
                 </div>
               </mat-expansion-panel>

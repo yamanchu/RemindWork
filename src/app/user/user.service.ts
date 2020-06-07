@@ -129,8 +129,8 @@ export class UserService {
       const checkDay = viewmsec / 1000 / 60 / 60 / 24;
       const viewDay = Math.ceil(checkDay);
 
-      const viewPoint = workNodeViewModel.data.maxPoint;
-      const graph = new ViewGraph(startDay, endDate, viewPoint);
+      // const viewPoint = workNodeViewModel.data.maxPoint;
+      const graph = new ViewGraph(startDay, endDate, 1);
 
       this._viewGraph.set(workNodeViewModel, graph);
     }

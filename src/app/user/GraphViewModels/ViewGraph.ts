@@ -17,7 +17,7 @@ export class ViewGraph extends ViewCore {
     if (this._drawBox === null) {
       this._drawBox = new DrawBox();
       this._drawBox.start = new Point2D(-10, -10);
-      this._drawBox.end = new Point2D(610, 170);
+      this._drawBox.end = new Point2D(610, 174);
     }
     return this._drawBox;
   }
