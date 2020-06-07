@@ -8,9 +8,10 @@ export class ViewGraph extends ViewCore {
   private _drawBox: DrawBox = null;
 
   // tslint:disable-next-line: variable-name
-  private _viewDay: number;
+  // private _viewDay: number;
 
-  viewDate: Date;
+  startDate: Date;
+  endDate: Date;
 
   get drawBax(): DrawBox {
     if (this._drawBox === null) {
@@ -43,19 +44,36 @@ export class ViewGraph extends ViewCore {
     return ret;
   }
 
-  constructor(viewDate: Date, viewDay: number, viewPoint: number) {
-    super(new Point2D(viewDay * 2.5, viewPoint * 1.15));
-    this._viewDay = viewDay;
-    this.viewDate = viewDate;
+  constructor(startDate: Date, endDate: Date, viewPoint: number) {
+    super();
+
+    const viewmsec = endDate.getTime() - startDate.getTime();
+    const endDay = Math.ceil(viewmsec / 1000 / 60 / 60 / 24);
+
+    this.startDate = startDate;
+    this.endDate = endDate;
+
+    this._range = new Point2D(endDay * 2.71828, viewPoint * 1.15);
   }
 
-  get checkDate(): number {
-    const ret = this.convertToDrawX(this._viewDay);
+  convertDateNumberToDrawX(dateNumber: number): number {
+    const date = new Date(dateNumber);
+    return this.convertDateToDrawX(date);
+  }
+
+  convertDateToDrawX(date: Date): number {
+    const viewmsec = date.getTime() - this.startDate.getTime();
+    const day = Math.ceil(viewmsec / 1000 / 60 / 60 / 24);
+    const ret = this.convertToDrawX(day);
     return ret;
   }
 
-  checkDatePath(): string {
-    const startX = this.checkDate;
+  get endDayDrawX(): number {
+    return this.convertDateToDrawX(this.endDate);
+  }
+
+  endDayDrawPath(): string {
+    const startX = this.endDayDrawX;
     const startY = this._viewOutline.start.y;
     const endX = startX;
     const endY = this._viewOutline.end.y;

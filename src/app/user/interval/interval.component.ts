@@ -35,7 +35,7 @@ export class IntervalComponent implements OnInit {
 
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
-      this.user.LoadData();
+      // this.user.LoadData();
     }
     else {
       this.user.routerNavigate('');

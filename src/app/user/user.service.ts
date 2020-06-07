@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 /* service */
 import { AuthService } from '../fire/auth.service';
 import { StoreService } from '../fire/store.service';
-import { ICycles, ICycleNode } from '../fire/storeInterfaces/ICycles';
+import { ICycles, ICycleNode, IIntarvalNode } from '../fire/storeInterfaces/ICycles';
 import { ISubjectAreas, ISubjectArea, ISubject } from '../fire/storeInterfaces/ITags';
 import { IWork, IWorkResult } from '../fire/storeInterfaces/IWork';
 import { ViewGraph } from './GraphViewModels/ViewGraph';
@@ -39,12 +39,18 @@ export interface IWorkNodeViewModel {
   // toDayFinished: boolean;
   next: Date;
   last: Date;
+  memoLink: string[];
+  gotoInterval: IIntarvalNode;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+
+  get debugMode(): boolean {
+    return !environment.production;
+  }
 
   private get refreshTime(): number {
     return 4;
@@ -112,19 +118,20 @@ export class UserService {
 
     if (!this._viewGraph.has(workNodeViewModel)) {
       const startDay = new Date(workNodeViewModel.data.registrationDate);
-      const endDay = new Date(workNodeViewModel.data.next);
+      const nextDay = new Date(workNodeViewModel.data.next);
       const today = new Date();
 
-      let viewDate = endDay;
-      if (endDay < today) {
-        viewDate = this.GetBaseDate(today.getDate(), 1);
+      let endDate = nextDay;
+      if (nextDay < today) {
+        endDate = this.GetBaseDate(today.getDate(), 1);
       }
-      const viewmsec = viewDate.getTime() - startDay.getTime();
+      const viewmsec = endDate.getTime() - startDay.getTime();
       const checkDay = viewmsec / 1000 / 60 / 60 / 24;
       const viewDay = Math.ceil(checkDay);
 
       const viewPoint = workNodeViewModel.data.maxPoint;
-      const graph = new ViewGraph(viewDate, viewDay, viewPoint);
+      const graph = new ViewGraph(startDay, endDate, viewPoint);
+
       this._viewGraph.set(workNodeViewModel, graph);
     }
 
@@ -166,6 +173,11 @@ export class UserService {
     }
   }
 
+  AutoLink(text: string) {
+    const reg = new RegExp('((https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+))');
+    return text.replace(reg, '<a href=\'$1\' target=\'_blank\'>$1</a>');
+  }
+
   private setWorkViewModel(work: IWork): void {
 
     /*
@@ -184,7 +196,21 @@ export class UserService {
         }
       }
     }
-*/
+  */
+    const cycle = this.GetCycleFromWork(work);
+
+    let memo: string[];
+    if (work.memo != null) {
+      if (work.memo.indexOf('\n') < 0) {
+        memo = [work.memo];
+      }
+      else {
+        memo = work.memo.split('\n');
+      }
+    }
+    else {
+      memo = new Array(0);
+    }
     const workNodeViewModel: IWorkNodeViewModel = {
       data: work,
       subjectArea: null,
@@ -192,6 +218,8 @@ export class UserService {
       // toDayFinished: false,
       next: new Date(work.next),
       last: new Date(work.result[work.result.length - 1].date),
+      memoLink: memo,
+      gotoInterval: this.GetGoToInterval(cycle, work.result),
     };
 
     // this.workAll.push(workNodeViewModel);
@@ -365,6 +393,21 @@ export class UserService {
     const work = this.GetWorkData(cycleNodeViewModel, inputSubjects, subjectArea, newID, overviewData, memoData, maxPointData);
     this.store.AddWork(work);
 
+    const cycle = this.GetCycleFromWork(work);
+
+    let memo: string[];
+    if (work.memo != null) {
+      if (work.memo.indexOf('\n') < 0) {
+        memo = [work.memo];
+      }
+      else {
+        memo = work.memo.split('\n');
+      }
+    }
+    else {
+      memo = new Array(0);
+    }
+
     return {
       data: work,
       subjectArea,
@@ -372,6 +415,8 @@ export class UserService {
       // toDayFinished: true,
       next: new Date(work.next),
       last: new Date(work.result[work.result.length - 1].date),
+      memoLink: memo,
+      gotoInterval: this.GetGoToInterval(cycle, work.result),
     };
   }
 
@@ -410,16 +455,8 @@ export class UserService {
     for (const iterator of inputSubjects) {
       subjectIDs.push(iterator.id);
     }
-    const intarval = newRegistorDataCycle.data.intarval[0];
-    let randomDay = Math.ceil(intarval.day
-      + (Math.random() - 1.0) * 2.0 * intarval.margin);
-    if (randomDay < 1) {
-      randomDay = intarval.day;
-    }
 
-    const now = this.GetBaseDate();
-    const nextDate = new Date(now);
-    nextDate.setDate(now.getDate() + randomDay);
+    const nextDate = this.GetNextDate(newRegistorDataCycle.data.intarval[0]);
 
     // const nextDate = new Date(now.setDate(now.getDate() + randomDay));
     const uid = this.auth.TryGetUID();
@@ -436,13 +473,70 @@ export class UserService {
       registrationDate: new Date().getTime(),
       next: nextDate.getTime(),
       result: [{
-        date: now.getTime(),
+        date: this.today.getTime(),
         rate: 0,
       }],
       resultOffset: 0,
       upDate: new Date().getTime(),
     };
     return registorData;
+  }
+
+  private GetNextDate(intarval: IIntarvalNode): Date {
+    let randomDay = Math.ceil(intarval.day
+      + (Math.random() - 1.0) * 2.0 * intarval.margin);
+    if (randomDay < 1) {
+      randomDay = intarval.day;
+    }
+
+    const now = this.GetBaseDate();
+    const nextDate = new Date(now);
+    nextDate.setDate(now.getDate() + randomDay);
+    return nextDate;
+  }
+
+  private GetGoToInterval(cycle: ICycleNode, result: IWorkResult[]): IIntarvalNode {
+    // const list: IIntarvalNode[] = new Array(0);
+
+    let count = 0;
+    const ret = cycle.intarval.find(item => {
+      count += item.repeat;
+      return (count >= result.length);
+    });
+
+    return ret;
+  }
+
+  private GetCycleFromWork(work: IWork): ICycleNode {
+    let cycleIndex = this.cycleNodeViewModel.findIndex(item => item.data.id === work.cycleID);
+    if (cycleIndex < 0) {
+      cycleIndex = 0;
+    }
+    return this.cycleNodeViewModel[cycleIndex].data;
+  }
+
+  registerResult(work: IWorkNodeViewModel, point: number): number {
+
+    const current = new Date(this.today.getTime());
+
+    const max = work.data.maxPoint;
+    work.data.result.push({
+      date: current.getTime(),
+      rate: point / max,
+    });
+    const nextdate = this.GetNextDate(work.gotoInterval);
+    work.data.next = nextdate.getTime();
+    work.data.upDate = new Date().getTime();
+
+    this.store.AddWork(work.data);
+
+    work.last = current;
+    work.next = nextdate;
+
+    const cycle = this.GetCycleFromWork(work.data);
+    work.gotoInterval = this.GetGoToInterval(cycle, work.data.result);
+
+    return this.workTarget.indexOf(work);
   }
 
   /*GetWork(observer: ((readValue: IWork) => void)

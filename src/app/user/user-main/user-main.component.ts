@@ -1,18 +1,20 @@
-import { Component, OnInit, HostListener, Input, ElementRef, ViewChild } from '@angular/core';
-import { UserService, ICycleNodeViewModel, IWorkNodeViewModel } from '../user.service';
-import { MenuControlService } from 'src/app/menu-control.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatCard } from '@angular/material/card';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-import { v4 as UUID } from 'uuid';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable, from } from 'rxjs';
-import { map, startWith, find, findIndex, tap } from 'rxjs/operators';
-import { ISubjectArea, ISubject } from '../../fire/storeInterfaces/ITags';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSidenavContent } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { MenuControlService } from 'src/app/menu-control.service';
+import { v4 as UUID } from 'uuid';
+import { ISubject, ISubjectArea } from '../../fire/storeInterfaces/ITags';
+import { IWorkNodeViewModel, UserService } from '../user.service';
 import { SubjectAreaDialogComponent, SubjectAreaDialogData } from './subject-area-dialog/subject-area-dialog.component';
 import { SubjectDialogComponent, SubjectDialogData } from './subject-dialog/subject-dialog.component';
-import { IWork, IWorkResult } from '../../fire/storeInterfaces/IWork';
+
+
 /*
 export interface IviewSubjectArea {
   id: string;
@@ -31,15 +33,18 @@ export interface IviewSubject {
   templateUrl: './user-main.component.html',
   styleUrls: ['./user-main.component.css']
 })
-export class UserMainComponent implements OnInit {
+export class UserMainComponent implements OnInit, AfterViewChecked {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   newWorkInputGroupe: FormGroup;
+  resultFormGroupMap: Map<IWorkNodeViewModel, FormGroup>;
   selectableSubject: Observable<ISubject[]>;
   // selectableSubjectSrc: ISubject[];
   inputSubject: ISubject[];
 
-
+  // sidenavContent
   @ViewChild('subjectInput') subjectInput: ElementRef<HTMLInputElement>;
+  @ViewChild('sidenavContent') sidenavContent: MatSidenavContent;
+  @ViewChild('editCard') editCard: MatCard;
 
   constructor(
     private dialog: MatDialog,
@@ -57,10 +62,19 @@ export class UserMainComponent implements OnInit {
       newSubject: [''],
       memo: [''],
     });
+
+    this.resultFormGroupMap = new Map<IWorkNodeViewModel, FormGroup>();
+
+    /*
+    this.resultGroupe = this.formBuilder.group({
+      // point: this.formBuilder.array(
+      //  [this.formBuilder.control(null, [Validators.required, Validators.min(1)])])
+      points: this.formBuilder.array(null)
+    });*/
   }
 
   addMode = false;
-
+  addScroll = false;
 
   ngOnInit() {
     if (this.user.hasLoginUser) {
@@ -70,6 +84,16 @@ export class UserMainComponent implements OnInit {
     else {
       this.user.routerNavigate('');
     }
+  }
+
+  GetResultFormGroup(workNodeViewModel: IWorkNodeViewModel): FormGroup {
+    if (!this.resultFormGroupMap.has(workNodeViewModel)) {
+      const newFormGroup = this.formBuilder.group({
+        point: [null, [Validators.required, Validators.min(0), Validators.max(workNodeViewModel.data.maxPoint)]]
+      });
+      this.resultFormGroupMap.set(workNodeViewModel, newFormGroup);
+    }
+    return this.resultFormGroupMap.get(workNodeViewModel);
   }
 
   subjectAreaEdit() {
@@ -234,10 +258,18 @@ export class UserMainComponent implements OnInit {
       this.newWorkInputGroupe.get('point').value);
 
     // this.user.workAll.unshift(newTarget);
-    this.user.workTarget.unshift(newTarget);
+    this.user.workTarget.push(newTarget);
     this.addMode = false;
   }
 
+  registerResult(work: IWorkNodeViewModel) {
+    const point = this.GetResultFormGroup(work).get('point').value as number;
+    const workTargetIndex = this.user.registerResult(work, point);
+    if (workTargetIndex >= 0 && workTargetIndex < this.user.workTarget.length - 1) {
+      this.user.workTarget.splice(workTargetIndex, 1);
+      this.user.workTarget.push(work);
+    }
+  }
   /*
   private GetWork(subjectArea: ISubjectArea): IWork {
     const newRegistorDataID = UUID();
@@ -298,8 +330,28 @@ export class UserMainComponent implements OnInit {
 
       this.inputSubject.splice(0);
 
+      this.addScroll = false;
       this.addMode = true;
+    }
+  }
 
+  ngAfterViewChecked() {
+    if (!this.addScroll &&
+      this.addMode &&
+      this.sidenavContent.getElementRef() != null &&
+      this.sidenavContent.getElementRef().nativeElement != null) {
+      this.addScroll = true;
+      const elementHtml = document.documentElement;
+      const bottom = elementHtml.scrollHeight - elementHtml.clientHeight;
+
+      const cliantBottom =
+        this.sidenavContent.getElementRef().nativeElement.scrollHeight
+        - this.sidenavContent.getElementRef().nativeElement.clientHeight;
+
+      setTimeout(() => {
+        window.scroll(0, bottom);
+        this.sidenavContent.scrollTo({ top: cliantBottom });
+      });
     }
   }
 }

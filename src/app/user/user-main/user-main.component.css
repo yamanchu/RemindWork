@@ -66,14 +66,6 @@
   grid-column: 3 / 4;
 }
 
-.done-icon {
-  color: lime;
-}
-/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
-.done-icon svg {
-  fill: lime;
-}
-
 .example-header-image {
   background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
   background-size: cover;

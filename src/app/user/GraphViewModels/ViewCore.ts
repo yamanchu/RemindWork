@@ -3,12 +3,11 @@ import { DrawBox } from './DrawBox';
 
 export abstract class ViewCore {
 
-  constructor(range: Point2D) {
-    this._range = range;
+  constructor() {
   }
 
   // tslint:disable-next-line: variable-name
-  _range: Point2D;
+  protected _range: Point2D;
 
 
   abstract get drawBax(): DrawBox;
