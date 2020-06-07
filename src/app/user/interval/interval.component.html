@@ -33,7 +33,7 @@
     <div class="mainSection">
       <mat-accordion>
         <ng-container *ngFor="let item of user.cycleNodeViewModel">
-          <mat-expansion-panel [(expanded)]="item.openView">
+          <mat-expansion-panel [(expanded)]="item.openView" class="dp3BackColor">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 {{item.data.name}}
@@ -44,7 +44,7 @@
             </mat-expansion-panel-header>
             <span>説明: {{item.data.description}}</span>
 
-            <table mat-table [dataSource]="item.data.intarval" class="tableStyle mat-elevation-z4">
+            <table mat-table [dataSource]="item.data.intarval" class="tableStyle mat-elevation-z4 dp3BackColor">
 
               <!-- day Column -->
               <ng-container matColumnDef="day">
@@ -79,7 +79,7 @@
           </mat-expansion-panel>
         </ng-container>
         <ng-container *ngIf="addMode">
-          <mat-expansion-panel [expanded]="addMode">
+          <mat-expansion-panel [expanded]="addMode" class="dp3BackColor">
             <mat-expansion-panel-header>
               <mat-panel-title>新規登録</mat-panel-title>
             </mat-expansion-panel-header>
@@ -106,7 +106,7 @@
               </button>
             </form>
             <form [formGroup]="cycleGroupe" style="width: 100%;" name="newCycleDetailInput">
-              <table mat-table [dataSource]="intervalIndex" class="tableStyle mat-elevation-z4"
+              <table mat-table [dataSource]="intervalIndex" class="tableStyle mat-elevation-z4 dp3BackColor"
                 style="table-layout: fixed;">
 
                 <!-- day Column -->
