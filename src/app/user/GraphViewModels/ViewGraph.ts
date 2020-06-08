@@ -1,6 +1,9 @@
 import { Point2D } from './Point2D';
 import { ViewCore } from './ViewCore';
 import { DrawBox } from './DrawBox';
+import { IWorkResult } from '../../fire/storeInterfaces/IWork';
+
+import { from } from 'rxjs';
 
 export class ViewGraph extends ViewCore {
 
@@ -61,6 +64,7 @@ export class ViewGraph extends ViewCore {
     return this.convertDateToDrawX(date);
   }
 
+
   convertDateToDrawX(date: Date): number {
     const viewmsec = date.getTime() - this.startDate.getTime();
     const day = Math.ceil(viewmsec / 1000 / 60 / 60 / 24);
@@ -80,5 +84,56 @@ export class ViewGraph extends ViewCore {
 
     const ret = 'M ' + startX.toString() + ' ' + startY.toString() + ' L ' + endX.toString() + ' ' + endY.toString();
     return ret;
+  }
+
+  drawRealForgetCurve(allResult: IWorkResult[], result: IWorkResult): boolean {
+    const index = allResult.indexOf(result);
+    if (index > 0) {
+      const before = this.convertDateNumberToDrawX(allResult[index - 1].date);
+      const current = this.convertDateNumberToDrawX(allResult[index].date);
+      const diff = current - before;
+      return (diff > 2);
+    }
+    else {
+      return false;
+    }
+  }
+
+  getDrawRealForgetCurve(allResult: IWorkResult[], result: IWorkResult): string {
+    const index = allResult.indexOf(result);
+    if (index > 0) {
+      const s = allResult[index - 1];
+      const e = result;
+
+      const x = this.convertDateNumberToDrawX(s.date);
+      const y = this.convertToDrawY(1);
+      const y0 = this.convertToDrawY(0);
+
+      const ymax = y0 - y;
+      const ex = this.convertDateNumberToDrawX(e.date);
+      const ey = this.convertToDrawY(e.rate);
+
+      // const rate = this.convertToDrawX(1000 * 24 * 60 * 60);
+      const t = ex - x;
+      const alfa = - t / Math.log(1 - (y0 - ey) / ymax); // -t / Math.log(1 - e.rate);
+
+      const dx = ymax * Math.exp(-t / alfa) / alfa;
+      const dx2 = x - ex;
+      const dy2 = dx2 * dx;
+
+      const y2 = ey + dy2;
+      const ret =
+        'M ' + x + ' ' + y +
+        ' C ' + x + ' ' + y + ', ' +
+        x + ' ' + y2 + ', ' +
+        ex + ' ' + ey;
+      return ret;
+    }
+    else {
+      return '';
+    }
+    // d="M10 10 C 20 20, 40 20, 50 10"
+    // M x y
+    // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
   }
 }

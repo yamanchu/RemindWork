@@ -36,7 +36,7 @@
   <!-- メイン コンテンツ -->
   <mat-sidenav-content #sidenavContent>
     <div class="mainSection">
-      <ng-container *ngFor="let item of user.workTarget let i = index">
+      <ng-container *ngFor="let item of user.workTarget index as i">
         <mat-card class="cardStyle">
           <mat-card-header>
             <div mat-card-avatar>
@@ -48,16 +48,20 @@
             <mat-card-title>
               {{item.data.overview}}
             </mat-card-title>
-            <mat-card-subtitle *ngIf="item.subjectArea!=null && item.subjectArea.name !== '' ">
-              <span>{{item.subjectArea.name}}</span>
-              <span *ngIf="item.subject!=null && item.subject.length>0">
-                <ng-container *ngFor="let subject of item.subject index as i">
-                  <ng-container *ngIf="i===0"> : </ng-container>
-                  <ng-container *ngIf="i!==0"> / </ng-container>
-                  {{subject.name}}
-                </ng-container>
-              </span>
+            <mat-card-subtitle>
+              <ng-container *ngIf="item.subjectArea!=null && item.subjectArea.name !== '' ">
+                <span>{{item.subjectArea.name}}</span>
+                <span *ngIf="item.subject!=null && item.subject.length>0">
+                  <ng-container *ngFor="let subject of item.subject index as j">
+                    <ng-container *ngIf="j===0"> : </ng-container>
+                    <ng-container *ngIf="j!==0"> / </ng-container>
+                    {{subject.name}}
+                  </ng-container>
+                </span>
+              </ng-container>
             </mat-card-subtitle>
+            <span *ngIf="menuControl.pcMode" style="margin-left: auto; margin-right: 0;">復習間隔：{{item.cycle.name}}</span>
+            <span *ngIf="!menuControl.pcMode" style="margin-left: auto; margin-right: 0;">[{{item.cycle.name}}]</span>
           </mat-card-header>
           <mat-card-content>
             <mat-accordion>
@@ -81,16 +85,17 @@
                   <svg [attr.viewBox]="user.GetView(item).drawBax.area">
                     <defs>
                       <!-- arrowhead marker definition -->
-                      <marker id="arrowY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
-                        orient="270deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                      <marker [attr.id]="'arrowY_'+i" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4"
+                        markerHeight="4" orient="270deg" fill="transparent" stroke="#ffffff" stroke-width="2">
                         <path d="M 0 1 L 10 5 L 0 9" />
                       </marker>
-                      <marker id="arrowX" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4"
-                        orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                      <marker [attr.id]="'arrowX_'+i" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4"
+                        markerHeight="4" orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
                         <path d="M 0 1 L 10 5 L 0 9" />
                       </marker>
                       <!-- simple dot marker definition -->
-                      <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+                      <marker [attr.id]="'dotPoint_'+i" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4"
+                        markerHeight="4">
                         <circle cx="5" cy="5" r="4" fill="#ff4081" />
                       </marker>
                     </defs>
@@ -100,12 +105,12 @@
                       [attr.y1]="user.GetView(item).viewOutline.start.y"
                       [attr.x2]="user.GetView(item).viewOutline.end.x"
                       [attr.y2]="user.GetView(item).viewOutline.start.y" stroke-width="2" stroke="#ffffff"
-                      marker-end="url(#arrowX)" />
+                      [attr.marker-end]="'url(#arrowX_'+i+')'" />
                     <line [attr.x1]="user.GetView(item).viewOutline.start.x"
                       [attr.y1]="user.GetView(item).viewOutline.start.y+1"
                       [attr.x2]="user.GetView(item).viewOutline.start.x"
                       [attr.y2]="user.GetView(item).viewOutline.end.y" stroke-width="2" stroke="#ffffff"
-                      marker-end="url(#arrowY)" />
+                      [attr.marker-end]="'url(#arrowY_'+i+')'" />
                     <!--line [attr.x1]="user.GetView(item).viewOutline.start.x"
                       [attr.y1]="user.GetView(item).convertToDrawY(item.data.maxPoint)"
                       [attr.x2]="user.GetView(item).viewOutline.end.x"
@@ -122,12 +127,16 @@
                       [attr.y]="user.GetView(item).viewOutline.start.y+2" font-size="20" text-anchor="start"
                       fill="white" font-weight="100"
                       dominant-baseline="text-before-edge">{{item.data.result[0].date| date:"M/d"}}</text>
-                    <line *ngFor="let resultItem of item.data.result"
-                      [attr.x1]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
-                      [attr.y1]="user.GetView(item).convertToDrawY(resultItem.rate)"
-                      [attr.x2]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
-                      [attr.y2]="user.GetView(item).convertToDrawY(1)" stroke-width="2" stroke="#ff4081"
-                      marker-start="url(#dot)" />
+                    <ng-container *ngFor="let resultItem of item.data.result">
+                      <line [attr.x1]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
+                        [attr.y1]="user.GetView(item).convertToDrawY(resultItem.rate)"
+                        [attr.x2]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
+                        [attr.y2]="user.GetView(item).convertToDrawY(1)" stroke-width="2" stroke="#ff4081"
+                        [attr.marker-start]="'url(#dotPoint_'+i+')'" />
+                      <path *ngIf="user.GetView(item).drawRealForgetCurve(item.data.result,resultItem)"
+                        [attr.d]="user.GetView(item).getDrawRealForgetCurve(item.data.result,resultItem)"
+                        fill="transparent" stroke-width="2" stroke="#ff4081" />
+                    </ng-container>
                   </svg>
                 </div>
               </mat-expansion-panel>

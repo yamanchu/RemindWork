@@ -41,6 +41,7 @@ export interface IWorkNodeViewModel {
   last: Date;
   memoLink: string[];
   gotoInterval: IIntarvalNode;
+  cycle: ICycleNode;
 }
 
 @Injectable({
@@ -211,6 +212,7 @@ export class UserService {
     else {
       memo = new Array(0);
     }
+
     const workNodeViewModel: IWorkNodeViewModel = {
       data: work,
       subjectArea: null,
@@ -220,6 +222,7 @@ export class UserService {
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
       gotoInterval: this.GetGoToInterval(cycle, work.result),
+      cycle,
     };
 
     // this.workAll.push(workNodeViewModel);
@@ -417,6 +420,7 @@ export class UserService {
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
       gotoInterval: this.GetGoToInterval(cycle, work.result),
+      cycle,
     };
   }
 
