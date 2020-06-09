@@ -128,9 +128,7 @@ export class UserService {
       }
       const viewmsec = endDate.getTime() - startDay.getTime();
       const checkDay = viewmsec / 1000 / 60 / 60 / 24;
-      const viewDay = Math.ceil(checkDay);
 
-      // const viewPoint = workNodeViewModel.data.maxPoint;
       const graph = new ViewGraph(startDay, endDate, 1);
 
       this._viewGraph.set(workNodeViewModel, graph);
@@ -198,7 +196,6 @@ export class UserService {
       }
     }
   */
-    const cycle = this.GetCycleFromWork(work);
 
     let memo: string[];
     if (work.memo != null) {
@@ -221,8 +218,8 @@ export class UserService {
       next: new Date(work.next),
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
-      gotoInterval: this.GetGoToInterval(cycle, work.result),
-      cycle,
+      gotoInterval: null, // this.GetGoToInterval(cycle, work.result),
+      cycle: null,
     };
 
     // this.workAll.push(workNodeViewModel);
@@ -254,6 +251,11 @@ export class UserService {
 
       workNodeViewModel.subjectArea = subjectArea;
       workNodeViewModel.subject = subject;
+
+
+      const cycle = this.GetCycleFromWork(work);
+      workNodeViewModel.gotoInterval = this.GetGoToInterval(cycle, work.result);
+      workNodeViewModel.cycle = cycle;
     }
   }
 
@@ -505,7 +507,7 @@ export class UserService {
     let count = 0;
     const ret = cycle.intarval.find(item => {
       count += item.repeat;
-      return (count >= result.length);
+      return (count > result.length);
     });
 
     return ret;

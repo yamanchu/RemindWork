@@ -56,7 +56,7 @@ export class ViewGraph extends ViewCore {
     this.startDate = startDate;
     this.endDate = endDate;
 
-    this._range = new Point2D(endDay * 2.71828, viewPoint * 1.15);
+    this._range = new Point2D(endDay * Math.exp(1), viewPoint * 1.15);
   }
 
   convertDateNumberToDrawX(dateNumber: number): number {
@@ -105,9 +105,6 @@ export class ViewGraph extends ViewCore {
       const s = allResult[index - 1];
       const e = result;
 
-      const z = s.rate;
-      const beta = 1 * Math.exp(1.25 * (index - 1));
-
       const x = this.convertDateNumberToDrawX(s.date);
       const y = this.convertToDrawY(1);
       const y0 = this.convertToDrawY(0);
@@ -117,15 +114,10 @@ export class ViewGraph extends ViewCore {
       const ey = this.convertToDrawY(e.rate);
 
       const t = (e.date - s.date) / 1000 / 24 / 60 / 60;
-      const M = z * Math.exp(-t / beta);
-
-      const alfa = - t / Math.log((e.rate - M) / (1 - M)); // -t / Math.log(1 - e.rate);
+      const alfa = - t / Math.log(e.rate); // -t / Math.log(1 - e.rate);
 
       const day1 = this.convertToDrawX(1);
-      const dxdy =
-        -z * Math.exp(-t / beta) / beta
-        - Math.exp(-t / alfa) / alfa
-        + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
+      const dxdy = - Math.exp(-t / alfa) / alfa;
 
       const dx = dxdy * ymax / day1;
       const dx2 = ex - x;
@@ -142,6 +134,61 @@ export class ViewGraph extends ViewCore {
     else {
       return '';
     }
+    // d="M10 10 C 20 20, 40 20, 50 10"
+    // M x y
+    // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
+  }
+
+  getDrawImageForgetCurve(allResult: IWorkResult[]): string {
+    const count = allResult.length - 1;
+    const s = allResult[count];
+    // const e = result;
+
+    const z = s.rate;
+    const beta = Math.exp(1.25 * count);
+    let alfa = 1;
+    if (count > 0) {
+      alfa += Math.exp(1 / 0.000223) / Math.exp(count / 2.1857);
+    }
+    const x = this.convertDateNumberToDrawX(s.date);
+    const y = this.convertToDrawY(1);
+    const y0 = this.convertToDrawY(0);
+
+    const ymax = y0 - y;
+    const ex = this.viewOutline.end.x; // this.convertDateNumberToDrawX(e.date);
+    // const ey = this.convertToDrawY(e.rate);
+
+    const t = this.convertToObjectX(ex - x);
+    const M = z * Math.exp(-t / beta);
+
+    const ey = this.convertToDrawY(M + (1 - M) * Math.exp(-t / alfa));
+
+    const day1 = this.convertToDrawX(1);
+    const dxdy =
+      -z * Math.exp(-t / beta) / beta
+      - Math.exp(-t / alfa) / alfa
+      + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
+
+    const basedxdy =
+      -z * Math.exp(-alfa / beta) / beta
+      - Math.exp(-alfa / alfa) / alfa
+      + z * Math.exp(-alfa * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
+    const baseM = z * Math.exp(-alfa / beta);
+
+
+    const basey = this.convertToDrawY(baseM + (1 - baseM) * Math.exp(-alfa / alfa));
+    const y1d = basey + alfa * basedxdy * ymax / day1;
+    const dx = dxdy * ymax / day1;
+    const dx2 = this.convertToDrawX(alfa); //;ex - x;
+    const dy2 = dx2 * dx;
+
+    const y2 = ey + dy2;
+    const ret =
+      'M ' + x + ' ' + y +
+      ' C ' + x + ' ' + y1d + ', ' +
+      x + ' ' + y2 + ', ' +
+      ex + ' ' + ey;
+    return ret;
     // d="M10 10 C 20 20, 40 20, 50 10"
     // M x y
     // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)

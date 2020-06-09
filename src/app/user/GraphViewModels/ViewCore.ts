@@ -16,15 +16,19 @@ export abstract class ViewCore {
 
   protected get rnage() { return this._range; }
 
+  convertToObjectX(drawValue: number): number {
+    const objectValue = (drawValue - this.viewOutline.start.x) / (this.viewOutline.size.x / this.rnage.x);
+    return objectValue;
+  }
+
   convertToDrawX(objectValue: number): number {
-    const ret = this.viewOutline.start.x +
-      objectValue * (this.viewOutline.size.x / this.rnage.x);
-    return ret;
+    const drawValue = this.viewOutline.start.x + objectValue * (this.viewOutline.size.x / this.rnage.x);
+    return drawValue;
   }
 
   convertToDrawY(objectValue: number): number {
-    const ret = this.viewOutline.start.y +
+    const drawValue = this.viewOutline.start.y +
       objectValue * (this.viewOutline.size.y / this.rnage.y);
-    return ret;
+    return drawValue;
   }
 }
