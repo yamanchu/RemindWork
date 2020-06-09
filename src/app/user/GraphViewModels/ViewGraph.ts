@@ -92,13 +92,62 @@ export class ViewGraph extends ViewCore {
       const before = this.convertDateNumberToDrawX(allResult[index - 1].date);
       const current = this.convertDateNumberToDrawX(allResult[index].date);
       const diff = current - before;
-      return (diff > 2);
+      return (diff > 4);
     }
     else {
       return false;
     }
   }
 
+  getDrawRealForgetCurve(allResult: IWorkResult[], result: IWorkResult): string {
+    const index = allResult.indexOf(result);
+    if (index > 0) {
+      const s = allResult[index - 1];
+      const e = result;
+
+      const z = s.rate;
+      const beta = 1 * Math.exp(1.25 * (index - 1));
+
+      const x = this.convertDateNumberToDrawX(s.date);
+      const y = this.convertToDrawY(1);
+      const y0 = this.convertToDrawY(0);
+
+      const ymax = y0 - y;
+      const ex = this.convertDateNumberToDrawX(e.date);
+      const ey = this.convertToDrawY(e.rate);
+
+      const t = (e.date - s.date) / 1000 / 24 / 60 / 60;
+      const M = z * Math.exp(-t / beta);
+
+      const alfa = - t / Math.log((e.rate - M) / (1 - M)); // -t / Math.log(1 - e.rate);
+
+      const day1 = this.convertToDrawX(1);
+      const dxdy =
+        -z * Math.exp(-t / beta) / beta
+        - Math.exp(-t / alfa) / alfa
+        + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
+
+      const dx = dxdy * ymax / day1;
+      const dx2 = ex - x;
+      const dy2 = dx2 * dx;
+
+      const y2 = ey + dy2;
+      const ret =
+        'M ' + x + ' ' + y +
+        ' C ' + x + ' ' + y + ', ' +
+        x + ' ' + y2 + ', ' +
+        ex + ' ' + ey;
+      return ret;
+    }
+    else {
+      return '';
+    }
+    // d="M10 10 C 20 20, 40 20, 50 10"
+    // M x y
+    // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
+  }
+
+  /*
   getDrawRealForgetCurve(allResult: IWorkResult[], result: IWorkResult): string {
     const index = allResult.indexOf(result);
     if (index > 0) {
@@ -135,5 +184,5 @@ export class ViewGraph extends ViewCore {
     // d="M10 10 C 20 20, 40 20, 50 10"
     // M x y
     // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
-  }
+  }*/
 }
