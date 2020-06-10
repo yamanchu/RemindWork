@@ -89,7 +89,8 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
   GetResultFormGroup(workNodeViewModel: IWorkNodeViewModel): FormGroup {
     if (!this.resultFormGroupMap.has(workNodeViewModel)) {
       const newFormGroup = this.formBuilder.group({
-        point: [null, [Validators.required, Validators.min(0), Validators.max(workNodeViewModel.data.maxPoint)]]
+        point: [null, [Validators.required, Validators.min(0), Validators.max(workNodeViewModel.data.maxPoint)]],
+        apply: ['next', Validators.required]
       });
       this.resultFormGroupMap.set(workNodeViewModel, newFormGroup);
     }
@@ -264,7 +265,7 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
 
   registerResult(work: IWorkNodeViewModel) {
     const point = this.GetResultFormGroup(work).get('point').value as number;
-    const workTargetIndex = this.user.registerResult(work, point);
+    const workTargetIndex = this.user.registerResult(work, point, 0);
     if (workTargetIndex >= 0 && workTargetIndex < this.user.workTarget.length - 1) {
       this.user.workTarget.splice(workTargetIndex, 1);
       this.user.workTarget.push(work);

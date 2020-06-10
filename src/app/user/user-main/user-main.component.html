@@ -62,7 +62,8 @@
             </mat-card-subtitle>
             <span *ngIf="menuControl.pcMode && item.cycle!=null"
               style="margin-left: auto; margin-right: 0;">復習間隔：{{item.cycle.name}}</span>
-            <span *ngIf="!menuControl.pcMode && item.cycle!=null" style="margin-left: auto; margin-right: 0;">[{{item.cycle.name}}]</span>
+            <span *ngIf="!menuControl.pcMode && item.cycle!=null"
+              style="margin-left: auto; margin-right: 0;">[{{item.cycle.name}}]</span>
           </mat-card-header>
           <mat-card-content>
             <mat-accordion>
@@ -157,16 +158,14 @@
 
                 <!--button mat-raised-button color="primary" style="float: right; margin-top: 8px;">次回:
                 {{item.data.next | date:"yyyy/MM/dd"}}</button-->
-                <div style=" float: right; margin-left: auto; margin-right: 8px; margin-top: 8px; width: max-content;">
+                <div style=" float: right; margin-left: auto; margin-right: 8px; margin-top: 0px; width: max-content;">
                   <span>
-                    <button [disabled]="GetResultFormGroup(item).invalid" mat-mini-fab color="primary"
-                      style="margin-right: 16px;">
+                    <button mat-icon-button color="primary" style="margin-right: 16px;">
                       <mat-icon>history</mat-icon>
                     </button>
                     <button [disabled]="GetResultFormGroup(item).invalid" mat-mini-fab color="primary"
                       (mouseup)="registerResult(item)">
-                      <mat-icon *ngIf="item.gotoInterval!=null">done</mat-icon>
-                      <mat-icon *ngIf="item.gotoInterval==null">done_all</mat-icon>
+                      <mat-icon>done</mat-icon>
                     </button>
                   </span>
                 </div>

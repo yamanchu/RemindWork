@@ -8,7 +8,7 @@
   </div>
   <mat-radio-group aria-labelledby="subject area radio" class="subjectArea-radio-group" [(ngModel)]="selectedItem">
     <ng-container *ngFor="let item of data.subjectAreaNodeViewModel">
-      <div style="width: 100%;" *ngIf="item.data.name.length>0">
+      <div style="width: 100%;" *ngIf="item.data.name!=null && item.data.name!=='' ">
         <mat-radio-button class="subjectArea-radio-button" [value]="item"
           [disabled]="data.deleteItems.includes(item.data)">
           {{item.data.name}}

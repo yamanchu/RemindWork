@@ -40,7 +40,8 @@ export interface IWorkNodeViewModel {
   next: Date;
   last: Date;
   memoLink: string[];
-  gotoInterval: IIntarvalNode;
+  // gotoInterval: IIntarvalNode;
+  cycleCount: number;
   cycle: ICycleNode;
 }
 
@@ -218,7 +219,7 @@ export class UserService {
       next: new Date(work.next),
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
-      gotoInterval: null, // this.GetGoToInterval(cycle, work.result),
+      cycleCount: Number.MAX_VALUE, // this.GetGoToInterval(cycle, work.result),
       cycle: null,
     };
 
@@ -254,7 +255,7 @@ export class UserService {
 
 
       const cycle = this.GetCycleFromWork(work);
-      workNodeViewModel.gotoInterval = this.GetGoToInterval(cycle, work.result);
+      workNodeViewModel.cycleCount = this.GetCycleCount(cycle);
       workNodeViewModel.cycle = cycle;
     }
   }
@@ -421,7 +422,7 @@ export class UserService {
       next: new Date(work.next),
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
-      gotoInterval: this.GetGoToInterval(cycle, work.result),
+      cycleCount: this.GetCycleCount(cycle),
       cycle,
     };
   }
@@ -501,13 +502,21 @@ export class UserService {
     return nextDate;
   }
 
-  private GetGoToInterval(cycle: ICycleNode, result: IWorkResult[]): IIntarvalNode {
-    // const list: IIntarvalNode[] = new Array(0);
+  private GetCycleCount(cycle: ICycleNode) {
+    let ret = 0;
+    for (const iterator of cycle.intarval) {
+      ret += iterator.repeat;
+    }
+    return ret;
+  }
+
+  private GetGoToInterval(cycle: ICycleNode, result: IWorkResult[], offset: number): IIntarvalNode {
 
     let count = 0;
+    const times = result.length - offset;
     const ret = cycle.intarval.find(item => {
       count += item.repeat;
-      return (count > result.length);
+      return (count > times);
     });
 
     return ret;
@@ -521,7 +530,7 @@ export class UserService {
     return this.cycleNodeViewModel[cycleIndex].data;
   }
 
-  registerResult(work: IWorkNodeViewModel, point: number): number {
+  registerResult(work: IWorkNodeViewModel, point: number, offset: number): number {
 
     const current = new Date(this.today.getTime());
 
@@ -530,7 +539,13 @@ export class UserService {
       date: current.getTime(),
       rate: point / max,
     });
-    const nextdate = this.GetNextDate(work.gotoInterval);
+
+    work.data.resultOffset += offset;
+    const gotoInterval =
+      this.GetGoToInterval(work.cycle, work.data.result, work.data.resultOffset);
+
+
+    const nextdate = this.GetNextDate(gotoInterval);
     work.data.next = nextdate.getTime();
     work.data.upDate = new Date().getTime();
 
@@ -538,9 +553,6 @@ export class UserService {
 
     work.last = current;
     work.next = nextdate;
-
-    const cycle = this.GetCycleFromWork(work.data);
-    work.gotoInterval = this.GetGoToInterval(cycle, work.data.result);
 
     return this.workTarget.indexOf(work);
   }
