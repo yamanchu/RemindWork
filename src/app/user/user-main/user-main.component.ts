@@ -265,9 +265,10 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
 
   registerResult(work: IWorkNodeViewModel) {
     const point = this.GetResultFormGroup(work).get('point').value as number;
-    const workTargetIndex = this.user.registerResult(work, point, 0);
+    const workTargetIndex = this.user.workTarget.indexOf(work);
     if (workTargetIndex >= 0 && workTargetIndex < this.user.workTarget.length - 1) {
       this.user.workTarget.splice(workTargetIndex, 1);
+      this.user.registerResult(work, point, 0);
       this.user.workTarget.push(work);
     }
   }

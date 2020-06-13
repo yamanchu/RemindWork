@@ -139,8 +139,10 @@
                         [attr.d]="user.GetView(item).getDrawRealForgetCurve(item.data.result,resultItem)"
                         fill="transparent" stroke-width="2" stroke="#ff4081" />
                     </ng-container>
-                    <path [attr.d]="user.GetView(item).getDrawImageForgetCurve(item.data.result)" fill="transparent"
-                      stroke-width="1" stroke="#ff4081" />
+                    <path [attr.d]="user.GetView(item).getDrawImageForgetCurveFront(item.data.result,item.data.next)"
+                      fill="transparent" stroke-width="1" stroke="#ff4081" stroke-dasharray="4 2" />
+                      <path [attr.d]="user.GetView(item).getDrawImageForgetCurveRear(item.data.result,item.data.next)"
+                      fill="transparent" stroke-width="1" stroke="#ff4081" stroke-dasharray="4 2" />
                   </svg>
                 </div>
               </mat-expansion-panel>

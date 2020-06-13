@@ -4,6 +4,9 @@ import { DrawBox } from './DrawBox';
 import { IWorkResult } from '../../fire/storeInterfaces/IWork';
 
 import { from } from 'rxjs';
+import { Point } from 'src/app/Geometry/Point';
+import { Vector } from 'src/app/Geometry/Vector';
+import { Line } from 'src/app/Geometry/Line';
 
 export class ViewGraph extends ViewCore {
 
@@ -68,6 +71,9 @@ export class ViewGraph extends ViewCore {
   convertDateToDrawX(date: Date): number {
     const viewmsec = date.getTime() - this.startDate.getTime();
     const day = Math.ceil(viewmsec / 1000 / 60 / 60 / 24);
+    if (day == null) {
+      console.log(day);
+    }
     const ret = this.convertToDrawX(day);
     return ret;
   }
@@ -139,7 +145,8 @@ export class ViewGraph extends ViewCore {
     // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
   }
 
-  getDrawImageForgetCurve(allResult: IWorkResult[]): string {
+  getDrawImageForgetCurveFront(allResult: IWorkResult[], next: number): string {
+
     const count = allResult.length - 1;
     const s = allResult[count];
     // const e = result;
@@ -147,89 +154,108 @@ export class ViewGraph extends ViewCore {
     const z = s.rate;
     const beta = Math.exp(1.25 * count);
     let alfa = 1;
+
     if (count > 0) {
-      alfa += Math.exp(1 / 0.000223) / Math.exp(count / 2.1857);
+      // const alfac = z; // / 0.000223;
+      // const alfam = Math.pow(count, 2.1857);
+      // alfa += Math.exp(alfac / alfam);
+      alfa += Math.pow(count, 2.1857);
     }
-    const x = this.convertDateNumberToDrawX(s.date);
-    const y = this.convertToDrawY(1);
-    const y0 = this.convertToDrawY(0);
 
-    const ymax = y0 - y;
-    const ex = this.viewOutline.end.x; // this.convertDateNumberToDrawX(e.date);
-    // const ey = this.convertToDrawY(e.rate);
-
-    const t = this.convertToObjectX(ex - x);
+    const t = (next - s.date) / 1000 / 24 / 60 / 60;
     const M = z * Math.exp(-t / beta);
+    const Qn = M + (1 - M) * Math.exp(-t / alfa);
 
-    const ey = this.convertToDrawY(M + (1 - M) * Math.exp(-t / alfa));
-
-    const day1 = this.convertToDrawX(1);
     const dxdy =
       -z * Math.exp(-t / beta) / beta
       - Math.exp(-t / alfa) / alfa
       + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
 
-    const basedxdy =
-      -z * Math.exp(-alfa / beta) / beta
-      - Math.exp(-alfa / alfa) / alfa
-      + z * Math.exp(-alfa * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
-    const baseM = z * Math.exp(-alfa / beta);
+    const p = Point.Create(t, Qn, 0);
+    const v = Vector.Create(1, dxdy, 0);
+    v.TryNormalization();
+    const l = Line.Create(p, v);
+    const ly = Line.Create(Point.Po(), Vector.UnitY());
+    const cp = ly.TryGetCrossPoints(l);
+    const x = this.convertDateNumberToDrawX(s.date);
+    const y = this.convertToDrawY(1);
 
+    const y2 = this.convertToDrawY(cp.y);
+    const ex = this.convertDateNumberToDrawX(next);
+    const ey = this.convertToDrawY(Qn);
 
-    const basey = this.convertToDrawY(baseM + (1 - baseM) * Math.exp(-alfa / alfa));
-    const y1d = basey + alfa * basedxdy * ymax / day1;
-    const dx = dxdy * ymax / day1;
-    const dx2 = this.convertToDrawX(alfa); //;ex - x;
-    const dy2 = dx2 * dx;
-
-    const y2 = ey + dy2;
     const ret =
       'M ' + x + ' ' + y +
-      ' C ' + x + ' ' + y1d + ', ' +
+      ' C ' + x + ' ' + y + ', ' +
       x + ' ' + y2 + ', ' +
       ex + ' ' + ey;
     return ret;
-    // d="M10 10 C 20 20, 40 20, 50 10"
-    // M x y
-    // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
+
   }
 
-  /*
-  getDrawRealForgetCurve(allResult: IWorkResult[], result: IWorkResult): string {
-    const index = allResult.indexOf(result);
-    if (index > 0) {
-      const s = allResult[index - 1];
-      const e = result;
+  getDrawImageForgetCurveRear(allResult: IWorkResult[], next: number): string {
 
-      const x = this.convertDateNumberToDrawX(s.date);
-      const y = this.convertToDrawY(1);
-      const y0 = this.convertToDrawY(0);
+    const count = allResult.length - 1;
+    const s = allResult[count];
+    // const e = result;
 
-      const ymax = y0 - y;
-      const ex = this.convertDateNumberToDrawX(e.date);
-      const ey = this.convertToDrawY(e.rate);
+    const z = s.rate;
+    const beta = Math.exp(1.25 * count);
+    let alfa = 1;
 
-      // const rate = this.convertToDrawX(1000 * 24 * 60 * 60);
-      const t = ex - x;
-      const alfa = - t / Math.log(1 - (y0 - ey) / ymax); // -t / Math.log(1 - e.rate);
-
-      const dx = ymax * Math.exp(-t / alfa) / alfa;
-      const dx2 = x - ex;
-      const dy2 = dx2 * dx;
-
-      const y2 = ey + dy2;
-      const ret =
-        'M ' + x + ' ' + y +
-        ' C ' + x + ' ' + y + ', ' +
-        x + ' ' + y2 + ', ' +
-        ex + ' ' + ey;
-      return ret;
+    if (count > 0) {
+      // const alfac = z; // / 0.000223;
+      // const alfam = Math.pow(count, 2.1857);
+      // alfa += Math.exp(alfac / alfam);
+      alfa += Math.pow(count, 2.1857);
     }
-    else {
-      return '';
-    }
-    // d="M10 10 C 20 20, 40 20, 50 10"
-    // M x y
-    // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
-  }*/
+
+    const t = (next - s.date) / 1000 / 24 / 60 / 60;
+    const M = z * Math.exp(-t / beta);
+    const Qn = M + (1 - M) * Math.exp(-t / alfa);
+
+    const dxdy =
+      -z * Math.exp(-t / beta) / beta
+      - Math.exp(-t / alfa) / alfa
+      + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
+
+
+    const endDay = this.convertToObjectX(this.viewOutline.end.x);
+
+    const et = endDay;
+    const eM = z * Math.exp(-et / beta);
+    const eQn = eM + (1 - eM) * Math.exp(-et / alfa);
+
+    const edxdy =
+      -z * Math.exp(-et / beta) / beta
+      - Math.exp(-et / alfa) / alfa
+      + z * Math.exp(-et * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
+
+    const p = Point.Create(t, Qn, 0);
+    const v = Vector.Create(1, dxdy, 0);
+    v.TryNormalization();
+    const l = Line.Create(p, v);
+
+    const ep = Point.Create(et, eQn, 0);
+    const ev = Vector.Create(1, edxdy, 0);
+    ev.TryNormalization();
+    const ly = Line.Create(ep, ev);
+    const cp = ly.TryGetCrossPoints(l);
+    const x = this.convertDateNumberToDrawX(next);
+    const y = this.convertToDrawY(Qn);
+
+    const x2 = this.convertToDrawX(cp.x) +
+      this.convertDateNumberToDrawX(s.date);
+    const y2 = this.convertToDrawY(cp.y);
+    const ex = this.viewOutline.end.x;
+    const ey = this.convertToDrawY(eQn);
+
+    const ret =
+      'M ' + x + ' ' + y +
+      ' C ' + x2 + ' ' + y2 + ', ' +
+      ex + ' ' + ey + ', ' +
+      ex + ' ' + ey;
+    return ret;
+
+  }
 }

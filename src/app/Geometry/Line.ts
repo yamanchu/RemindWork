@@ -12,6 +12,14 @@ export class Line {
   constructor() {
   }
 
+
+  static Create(p: Point, v: Vector): Line {
+    const ret = new Line();
+    ret._p = p;
+    ret._v = v;
+    return ret;
+  }
+
   SameAs(other: Line) {
     if (this.p.SameAs(other.p) &&
       this.v.SameAs(other.v)) {
