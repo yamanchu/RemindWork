@@ -12,6 +12,7 @@ export class ViewGraph extends ViewCore {
 
   // tslint:disable-next-line: variable-name
   private _drawBox: DrawBox = null;
+  private marjinPoint = 0.37;
 
   // tslint:disable-next-line: variable-name
   // private _viewDay: number;
@@ -105,9 +106,30 @@ export class ViewGraph extends ViewCore {
     }
   }
 
-  getDrawRealForgetCurve(allResult: IWorkResult[], result: IWorkResult): string {
+  private getRealRate(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): number {
     const index = allResult.indexOf(result);
     if (index > 0) {
+      const m = this.marjinPoint / index;
+      const min = 1 / (maxPoint + m) / 2;
+      const rate = min + (maxPoint * result.rate) / (maxPoint + m);
+      return rate;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  getDrawRealForgetPoint(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): number {
+    const rate = this.getRealRate(maxPoint, allResult, result);
+    const ey = this.convertToDrawY(rate);
+    return ey;
+  }
+
+  getDrawRealForgetCurve(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): string {
+    const index = allResult.indexOf(result);
+    if (index > 0) {
+
+      const rate = this.getRealRate(maxPoint, allResult, result);
       const s = allResult[index - 1];
       const e = result;
 
@@ -117,10 +139,10 @@ export class ViewGraph extends ViewCore {
 
       const ymax = y0 - y;
       const ex = this.convertDateNumberToDrawX(e.date);
-      const ey = this.convertToDrawY(e.rate);
+      const ey = this.convertToDrawY(rate);
 
       const t = (e.date - s.date) / 1000 / 24 / 60 / 60;
-      const alfa = - t / Math.log(e.rate); // -t / Math.log(1 - e.rate);
+      const alfa = - t / Math.log(1 - rate); // -t / Math.log(1 - e.rate);
 
       const day1 = this.convertToDrawX(1);
       const dxdy = - Math.exp(-t / alfa) / alfa;
@@ -153,7 +175,7 @@ export class ViewGraph extends ViewCore {
 
     const z = s.rate;
     const beta = Math.exp(1.25 * count);
-    let alfa = 1;
+    let alfa = 0.64;
 
     if (count > 0) {
       // const alfac = z; // / 0.000223;
@@ -201,7 +223,7 @@ export class ViewGraph extends ViewCore {
 
     const z = s.rate;
     const beta = Math.exp(1.25 * count);
-    let alfa = 1;
+    let alfa = 0.64;
 
     if (count > 0) {
       // const alfac = z; // / 0.000223;

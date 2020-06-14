@@ -47,6 +47,7 @@ import { UserMainComponent } from './user/user-main/user-main.component';
 import { IntervalComponent } from './user/interval/interval.component';
 import { AnalysisComponent } from './user/analysis/analysis.component';
 import { SubjectDialogComponent } from './user/user-main/subject-dialog/subject-dialog.component';
+import { SelectNextNextToGoDialogComponent } from './user/user-main/select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
 
 const routes: Routes = [
   { path: '', component: TopComponent },
@@ -67,6 +68,7 @@ const routes: Routes = [
     MessageDialogComponent,
     SubjectAreaDialogComponent,
     SubjectDialogComponent,
+    SelectNextNextToGoDialogComponent,
   ],
   imports: [
     RouterModule.forRoot(

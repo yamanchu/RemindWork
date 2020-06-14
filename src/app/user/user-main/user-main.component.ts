@@ -6,14 +6,14 @@ import { MatCard } from '@angular/material/card';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { MenuControlService } from 'src/app/menu-control.service';
 import { v4 as UUID } from 'uuid';
 import { ISubject, ISubjectArea } from '../../fire/storeInterfaces/ITags';
-import { IWorkNodeViewModel, UserService } from '../user.service';
+import { IWorkNodeViewModel, UserService, NextToGo } from '../user.service';
 import { SubjectAreaDialogComponent, SubjectAreaDialogData } from './subject-area-dialog/subject-area-dialog.component';
 import { SubjectDialogComponent, SubjectDialogData } from './subject-dialog/subject-dialog.component';
-
+import { SelectNextNextToGoDialogComponent, SelectNextNextToGoDialogData } from './select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
 
 /*
 export interface IviewSubjectArea {
@@ -75,6 +75,7 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
 
   addMode = false;
   addScroll = false;
+  listType = NextToGo;
 
   ngOnInit() {
     if (this.user.hasLoginUser) {
@@ -355,5 +356,35 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
         this.sidenavContent.scrollTo({ top: cliantBottom });
       });
     }
+  }
+
+  selectNextNextToGo(workNodeViewModel: IWorkNodeViewModel) {
+    const dialog = this.dialog.open(SelectNextNextToGoDialogComponent, {
+      data: {
+        title: '次の予定を選択',
+        nextDisable: false,
+        model: workNodeViewModel,
+        result: false,
+      },
+      width: '300px',
+      height: 'auto',
+      maxHeight: this.menuControl.ViewHeight,
+      disableClose: false,
+      /*position: {
+        bottom: posY,
+        left: posX,
+      },*/
+    });
+
+    /*
+    dialog.afterClosed().subscribe((ret: SelectNextNextToGoDialogData) => {
+      if (ret.result) {
+        if (ret.selectedItem != null) {
+          this.newWorkInputGroupe
+            .get('newSubjectAreas')
+            .setValue(ret.selected.data.name);
+        }
+      }
+    });*/
   }
 }

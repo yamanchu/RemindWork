@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+  <div style="display: flex;">
+    <div style="width: max-content; margin-right: 8px;">
+      <div class="radio-image-group">
+        <mat-icon class="radio-image-button" color="primary">schedule</mat-icon>
+        <mat-icon class="radio-image-button" color="primary">repeat_one</mat-icon>
+        <mat-icon class="radio-image-button" color="primary">reply_all</mat-icon>
+        <mat-icon class="radio-image-button" color="primary">thumb_up</mat-icon>
+      </div>
+    </div>
+    <div style="width: max-content;">
+      <mat-radio-group aria-labelledby="subject area radio" class="radio-group" [(ngModel)]="selectedItem">
+        <mat-radio-button class="radio-button" [value]="listType.Next" [disabled]="data.nextDisable">次へ
+        </mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="listType.Repeat">もう一度</mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="listType.ReStart">最初から</mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="listType.Finish">終わり</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div style="width: max-content; margin-left: auto; margin-right: 16px;">
+    <button mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
+      style="margin-left: auto; margin-right: 16px;">キャンセル</button>
+    <button mat-raised-button color="primary" (mouseup)="onOkClick()">OK</button>
+  </div>
+</mat-dialog-actions>

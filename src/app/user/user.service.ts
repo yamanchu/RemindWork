@@ -26,6 +26,10 @@ export interface ISubjectAreaNodeViewModel {
   data: ISubjectArea;
 }
 
+export enum NextToGo {
+  Next, Repeat, ReStart, Finish
+}
+
 /**
  *
  *
@@ -43,6 +47,7 @@ export interface IWorkNodeViewModel {
   // gotoInterval: IIntarvalNode;
   cycleCount: number;
   cycle: ICycleNode;
+  nextToGo: NextToGo;
 }
 
 @Injectable({
@@ -125,7 +130,7 @@ export class UserService {
 
       let endDate = nextDay;
       if (nextDay < today) {
-        endDate = this.GetBaseDate(today.getDate(), 1);
+        endDate = this.GetBaseDate(today.getDate(), 0);
       }
       const viewmsec = endDate.getTime() - startDay.getTime();
       const checkDay = viewmsec / 1000 / 60 / 60 / 24;
@@ -221,6 +226,7 @@ export class UserService {
       memoLink: memo,
       cycleCount: Number.MAX_VALUE, // this.GetGoToInterval(cycle, work.result),
       cycle: null,
+      nextToGo: NextToGo.Next,
     };
 
     // this.workAll.push(workNodeViewModel);
@@ -424,6 +430,7 @@ export class UserService {
       memoLink: memo,
       cycleCount: this.GetCycleCount(cycle),
       cycle,
+      nextToGo: NextToGo.Next,
     };
   }
 
@@ -516,7 +523,7 @@ export class UserService {
     const times = result.length - offset;
     const ret = cycle.intarval.find(item => {
       count += item.repeat;
-      return (count > times);
+      return (count >= times);
     });
 
     return ret;
@@ -531,6 +538,10 @@ export class UserService {
   }
 
   registerResult(work: IWorkNodeViewModel, point: number, offset: number): number {
+
+    if (this._viewGraph.has(work)) {
+      this._viewGraph.delete(work);
+    }
 
     const current = new Date(this.today.getTime());
 
