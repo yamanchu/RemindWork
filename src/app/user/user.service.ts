@@ -48,6 +48,7 @@ export interface IWorkNodeViewModel {
   cycleCount: number;
   cycle: ICycleNode;
   nextToGo: NextToGo;
+  isLastWork: boolean;
 }
 
 @Injectable({
@@ -124,7 +125,7 @@ export class UserService {
     }
 
     if (!this._viewGraph.has(workNodeViewModel)) {
-      const startDay = new Date(workNodeViewModel.data.registrationDate);
+      const startDay = this.GetBaseDate(new Date(workNodeViewModel.data.registrationDate).getDate(), 0);
       const nextDay = new Date(workNodeViewModel.data.next);
       const today = new Date();
 
@@ -215,22 +216,28 @@ export class UserService {
     else {
       memo = new Array(0);
     }
+    let next: Date = null;
+    if (work.next != null) {
+      next = new Date(work.next);
+    }
 
     const workNodeViewModel: IWorkNodeViewModel = {
       data: work,
       subjectArea: null,
       subject: null,
       // toDayFinished: false,
-      next: new Date(work.next),
+      next,
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
       cycleCount: Number.MAX_VALUE, // this.GetGoToInterval(cycle, work.result),
       cycle: null,
       nextToGo: NextToGo.Next,
+      isLastWork: false,
     };
 
     // this.workAll.push(workNodeViewModel);
-    if (workNodeViewModel.next <= this.today || workNodeViewModel.last.getTime() === this.today.getTime() /*|| !environment.production*/) {
+    if (((workNodeViewModel.next != null) && workNodeViewModel.next <= this.today)
+      || (workNodeViewModel.last.getTime() === this.today.getTime())) {
       this.workTarget.push(workNodeViewModel);
     }
   }
@@ -263,6 +270,12 @@ export class UserService {
       const cycle = this.GetCycleFromWork(work);
       workNodeViewModel.cycleCount = this.GetCycleCount(cycle);
       workNodeViewModel.cycle = cycle;
+
+      const nextInterval = this.GetGoToInterval(cycle, workNodeViewModel.data.result, workNodeViewModel.data.resultOffset);
+      workNodeViewModel.isLastWork = (nextInterval == null);
+      if (workNodeViewModel.isLastWork) {
+        workNodeViewModel.nextToGo = NextToGo.Finish;
+      }
     }
   }
 
@@ -431,6 +444,7 @@ export class UserService {
       cycleCount: this.GetCycleCount(cycle),
       cycle,
       nextToGo: NextToGo.Next,
+      isLastWork: false,
     };
   }
 
@@ -509,7 +523,7 @@ export class UserService {
     return nextDate;
   }
 
-  private GetCycleCount(cycle: ICycleNode) {
+  private GetCycleCount(cycle: ICycleNode): number {
     let ret = 0;
     for (const iterator of cycle.intarval) {
       ret += iterator.repeat;
@@ -523,7 +537,7 @@ export class UserService {
     const times = result.length - offset;
     const ret = cycle.intarval.find(item => {
       count += item.repeat;
-      return (count >= times);
+      return (count > times);
     });
 
     return ret;
@@ -555,15 +569,20 @@ export class UserService {
     const gotoInterval =
       this.GetGoToInterval(work.cycle, work.data.result, work.data.resultOffset);
 
-
-    const nextdate = this.GetNextDate(gotoInterval);
-    work.data.next = nextdate.getTime();
+    if (gotoInterval != null) {
+      const nextdate = this.GetNextDate(gotoInterval);
+      work.data.next = nextdate.getTime();
+      work.next = nextdate;
+    }
+    else {
+      work.data.next = null;
+      work.next = null;
+    }
     work.data.upDate = new Date().getTime();
 
     this.store.AddWork(work.data);
 
     work.last = current;
-    work.next = nextdate;
 
     return this.workTarget.indexOf(work);
   }

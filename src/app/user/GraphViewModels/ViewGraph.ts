@@ -7,12 +7,12 @@ import { from } from 'rxjs';
 import { Point } from 'src/app/Geometry/Point';
 import { Vector } from 'src/app/Geometry/Vector';
 import { Line } from 'src/app/Geometry/Line';
+import { stat } from 'fs';
 
 export class ViewGraph extends ViewCore {
 
   // tslint:disable-next-line: variable-name
   private _drawBox: DrawBox = null;
-  private marjinPoint = 0.37;
 
   // tslint:disable-next-line: variable-name
   // private _viewDay: number;
@@ -106,18 +106,22 @@ export class ViewGraph extends ViewCore {
     }
   }
 
+
+  // private marjinPoint = 0.05;
   private getRealRate(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): number {
     const index = allResult.indexOf(result);
     if (index > 0) {
-      const m = this.marjinPoint / index;
-      const min = 1 / (maxPoint + m) / 2;
-      const rate = min + (maxPoint * result.rate) / (maxPoint + m);
-      return rate;
+      // const m = this.marjinPoint / index;
+      // const min = 1 / (maxPoint + m) / 2;
+      // const rate = min + (maxPoint * result.rate) / (maxPoint + m);
+      // return rate;
+      return result.rate;
     }
     else {
       return 0;
     }
   }
+
 
   getDrawRealForgetPoint(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): number {
     const rate = this.getRealRate(maxPoint, allResult, result);
@@ -167,7 +171,11 @@ export class ViewGraph extends ViewCore {
     // C x1 y1, x2 y2, x y (or c dx1 dy1, dx2 dy2, dx dy)
   }
 
-  getDrawImageForgetCurveFront(allResult: IWorkResult[], next: number): string {
+  getDrawImageForgetCurveFront(allResult: IWorkResult[], next?: number): string {
+
+    if (next == null) {
+      next = this.startDate.getTime() + this.convertToObjectX(this.viewOutline.end.x) * 1000 * 24 * 60 * 60;
+    }
 
     const count = allResult.length - 1;
     const s = allResult[count];
@@ -215,7 +223,7 @@ export class ViewGraph extends ViewCore {
 
   }
 
-  getDrawImageForgetCurveRear(allResult: IWorkResult[], next: number): string {
+  getDrawImageForgetCurveRear(allResult: IWorkResult[], next?: number): string {
 
     const count = allResult.length - 1;
     const s = allResult[count];
@@ -277,7 +285,7 @@ export class ViewGraph extends ViewCore {
       ' C ' + x2 + ' ' + y2 + ', ' +
       ex + ' ' + ey + ', ' +
       ex + ' ' + ey;
-    return ret;
 
+    return ret;
   }
 }

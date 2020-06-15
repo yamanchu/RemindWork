@@ -267,7 +267,7 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
   registerResult(work: IWorkNodeViewModel) {
     const point = this.GetResultFormGroup(work).get('point').value as number;
     const workTargetIndex = this.user.workTarget.indexOf(work);
-    if (workTargetIndex >= 0 && workTargetIndex < this.user.workTarget.length - 1) {
+    if (workTargetIndex >= 0 && workTargetIndex < this.user.workTarget.length) {
       this.user.workTarget.splice(workTargetIndex, 1);
       this.user.registerResult(work, point, 0);
       this.user.workTarget.push(work);
@@ -362,7 +362,7 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
     const dialog = this.dialog.open(SelectNextNextToGoDialogComponent, {
       data: {
         title: '次の予定を選択',
-        nextDisable: false,
+        nextDisable: workNodeViewModel.isLastWork,
         model: workNodeViewModel,
         result: false,
       },

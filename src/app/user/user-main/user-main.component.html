@@ -40,10 +40,19 @@
         <mat-card class="cardStyle">
           <mat-card-header>
             <div mat-card-avatar>
-              <mat-icon *ngIf="item.next<=user.today" color="accent" style="margin-left: 4px;">update
-              </mat-icon>
-              <mat-icon *ngIf="item.next>user.today" color="primary" style="margin-left: 4px;">done
-              </mat-icon>
+              <ng-container *ngIf="item.next!=null">
+                <mat-icon *ngIf="item.next<=user.today" color="accent" style="margin-left: 4px;">
+                  update
+                </mat-icon>
+                <mat-icon *ngIf="item.next>user.today" color="primary" style="margin-left: 4px;">
+                  done
+                </mat-icon>
+              </ng-container>
+              <ng-container *ngIf="item.next==null">
+                <mat-icon color="primary" style="margin-left: 4px;">
+                  done_all
+                </mat-icon>
+              </ng-container>
             </div>
             <mat-card-title>
               {{item.data.overview}}
@@ -122,13 +131,12 @@
                       stroke="#ffffff" />
                     <path [attr.d]="user.GetView(item).endDayDrawPath()" fill="transparent" stroke-width="0.5"
                       stroke="#ffffff" />
-                    <text [attr.x]="user.GetView(item).endDayDrawX" [attr.y]="user.GetView(item).viewOutline.start.y+2"
-                      font-size="20" text-anchor="middle" fill="white" font-weight="100"
-                      dominant-baseline="text-before-edge">{{user.GetView(item).endDate| date:"M/d"}}</text>
+                    <text [attr.x]="user.GetView(item).endDayDrawX" [attr.y]="user.GetView(item).drawBax.end.y-1"
+                      font-size="20" text-anchor="middle" fill="white"
+                      font-weight="100">{{user.GetView(item).endDate| date:"M/d"}}</text>
                     <text [attr.x]="user.GetView(item).convertDateNumberToDrawX(item.data.result[0].date)"
-                      [attr.y]="user.GetView(item).viewOutline.start.y+2" font-size="20" text-anchor="start"
-                      fill="white" font-weight="100"
-                      dominant-baseline="text-before-edge">{{item.data.result[0].date| date:"M/d"}}</text>
+                      [attr.y]="user.GetView(item).drawBax.end.y-1" font-size="20" text-anchor="start" fill="white"
+                      font-weight="100">{{item.data.result[0].date| date:"M/d"}}</text>
                     <ng-container *ngFor="let resultItem of item.data.result">
                       <line [attr.x1]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
                         [attr.y1]="user.GetView(item).getDrawRealForgetPoint(item.data.maxPoint,item.data.result,resultItem)"
@@ -141,7 +149,8 @@
                     </ng-container>
                     <path [attr.d]="user.GetView(item).getDrawImageForgetCurveFront(item.data.result,item.data.next)"
                       fill="transparent" stroke-width="2" stroke="#ff4081" stroke-dasharray="4 3" />
-                    <path [attr.d]="user.GetView(item).getDrawImageForgetCurveRear(item.data.result,item.data.next)"
+                    <path *ngIf="item.data.next!=null"
+                      [attr.d]="user.GetView(item).getDrawImageForgetCurveRear(item.data.result,item.data.next)"
                       fill="transparent" stroke-width="2" stroke="#ff4081" stroke-dasharray="4 3" />
                   </svg>
                 </div>
@@ -149,40 +158,50 @@
             </mat-accordion>
           </mat-card-content>
           <mat-card-actions>
-            <div *ngIf="item.next<=user.today" style="margin-left: 16px;">
-              <form [formGroup]="GetResultFormGroup(item)">
-                <mat-form-field style="width: 72px;">
-                  <mat-label>学習結果</mat-label>
-                  <input matInput type="number" min="0" [max]="item.data.maxPoint" formControlName="point"
-                    required="true" placeholder="例：{{item.data.maxPoint}}">
-                  <mat-error>0～{{item.data.maxPoint}}を入力</mat-error>
-                </mat-form-field>/{{item.data.maxPoint}}
+            <ng-container *ngIf="item.data.next!=null">
+              <div *ngIf="item.next<=user.today" style="margin-left: 16px;">
+                <form [formGroup]="GetResultFormGroup(item)">
+                  <mat-form-field style="width: 72px;">
+                    <mat-label>学習結果</mat-label>
+                    <input matInput type="number" min="0" [max]="item.data.maxPoint" formControlName="point"
+                      required="true" placeholder="例：{{item.data.maxPoint}}">
+                    <mat-error>0～{{item.data.maxPoint}}を入力</mat-error>
+                  </mat-form-field>/{{item.data.maxPoint}}
 
-                <!--button mat-raised-button color="primary" style="float: right; margin-top: 8px;">次回:
+                  <!--button mat-raised-button color="primary" style="float: right; margin-top: 8px;">次回:
                 {{item.data.next | date:"yyyy/MM/dd"}}</button-->
-                <div style=" float: right; margin-left: auto; margin-right: 8px; margin-top: 0px; width: max-content;">
-                  <span>
-                    <button [ngSwitch]="item.nextToGo" (mouseup)="selectNextNextToGo(item)" mat-icon-button
-                      color="primary" style="margin-right: 16px;">
-                      <mat-icon *ngSwitchCase="listType.Next" color="primary">schedule</mat-icon>
-                      <mat-icon *ngSwitchCase="listType.Repeat" color="primary">repeat_one</mat-icon>
-                      <mat-icon *ngSwitchCase="listType.ReStart" color="primary">reply_all</mat-icon>
-                      <mat-icon *ngSwitchCase="listType.Finish" color="primary">thumb_up</mat-icon>
-                      <mat-icon *ngSwitchDefault color="primary">schedule</mat-icon>
-                    </button>
-                    <button [disabled]=" GetResultFormGroup(item).invalid" mat-mini-fab color="primary"
-                      (mouseup)="registerResult(item)">
-                      <mat-icon>done</mat-icon>
-                    </button>
-                  </span>
-                </div>
-              </form>
-            </div>
-            <div *ngIf="item.next>user.today" style="margin-left: 16px; margin-right: 24px;">
-              <span>覚える数: {{item.data.maxPoint}}</span>
-              <span *ngIf="menuControl.pcMode" style="float: right;">次回: {{item.data.next | date:"yyyy/MM/dd"}}</span>
-              <span *ngIf="!menuControl.pcMode" style="float: right;">次回: {{item.data.next | date:"MM/dd"}}</span>
-            </div>
+                  <div
+                    style=" float: right; margin-left: auto; margin-right: 8px; margin-top: 0px; width: max-content;">
+                    <span>
+                      <button [ngSwitch]="item.nextToGo" (mouseup)="selectNextNextToGo(item)" mat-icon-button
+                        color="primary" style="margin-right: 16px;">
+                        <mat-icon *ngSwitchCase="listType.Next" color="primary">schedule</mat-icon>
+                        <mat-icon *ngSwitchCase="listType.Repeat" color="primary">repeat_one</mat-icon>
+                        <mat-icon *ngSwitchCase="listType.ReStart" color="primary">reply_all</mat-icon>
+                        <mat-icon *ngSwitchCase="listType.Finish" color="primary">thumb_up</mat-icon>
+                        <mat-icon *ngSwitchDefault color="primary">schedule</mat-icon>
+                      </button>
+                      <button [disabled]=" GetResultFormGroup(item).invalid" mat-mini-fab color="primary"
+                        (mouseup)="registerResult(item)">
+                        <mat-icon>done</mat-icon>
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </div>
+              <div *ngIf="item.next>user.today" style="margin-left: 16px; margin-right: 24px;">
+                <span>覚える数: {{item.data.maxPoint}}</span>
+                <ng-container>
+                  <span *ngIf="menuControl.pcMode" style="float: right;">次回:
+                    {{item.data.next | date:"yyyy/MM/dd"}}</span>
+                  <span *ngIf="!menuControl.pcMode" style="float: right;">次回: {{item.data.next | date:"MM/dd"}}</span>
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="item.data.next==null">
+              <span>覚えた数: {{item.data.maxPoint}}</span>
+              <span style="float: right;">終わり</span>
+            </ng-container>
           </mat-card-actions>
         </mat-card>
       </ng-container>
