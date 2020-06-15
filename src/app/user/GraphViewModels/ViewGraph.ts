@@ -170,8 +170,9 @@ export class ViewGraph extends ViewCore {
 
   getDrawImageForgetCurveFront(allResult: IWorkResult[], next?: number): string {
 
-    if (next == null) {
-      next = this.startDate.getTime() + this.convertToObjectX(this.viewOutline.end.x) * 1000 * 24 * 60 * 60;
+    if (next == null ||
+      next === Number.MAX_SAFE_INTEGER) {
+      next = allResult[0].date + this.convertToObjectX(this.viewOutline.end.x) * 1000 * 24 * 60 * 60;
     }
 
     const count = allResult.length - 1;
@@ -221,6 +222,11 @@ export class ViewGraph extends ViewCore {
   }
 
   getDrawImageForgetCurveRear(allResult: IWorkResult[], next?: number): string {
+
+    if (next == null ||
+      next === Number.MAX_SAFE_INTEGER) {
+      next = allResult[0].date + this.convertToObjectX(this.viewOutline.end.x) * 1000 * 24 * 60 * 60;
+    }
 
     const count = allResult.length - 1;
     const s = allResult[count];

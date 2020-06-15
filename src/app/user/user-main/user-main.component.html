@@ -40,7 +40,7 @@
         <mat-card class="cardStyle">
           <mat-card-header>
             <div mat-card-avatar>
-              <ng-container *ngIf="item.next!=null">
+              <ng-container *ngIf="user.hasNextDate(item)">
                 <mat-icon *ngIf="item.next<=user.today" color="accent" style="margin-left: 4px;">
                   update
                 </mat-icon>
@@ -48,7 +48,7 @@
                   done
                 </mat-icon>
               </ng-container>
-              <ng-container *ngIf="item.next==null">
+              <ng-container *ngIf="!user.hasNextDate(item)">
                 <mat-icon color="primary" style="margin-left: 4px;">
                   thumb_up
                 </mat-icon>
@@ -149,7 +149,7 @@
                     </ng-container>
                     <path [attr.d]="user.GetView(item).getDrawImageForgetCurveFront(item.data.result,item.data.next)"
                       fill="transparent" stroke-width="2" stroke="#ff4081" stroke-dasharray="4 3" />
-                    <path *ngIf="item.data.next!=null"
+                    <path *ngIf="user.hasNextDate(item)"
                       [attr.d]="user.GetView(item).getDrawImageForgetCurveRear(item.data.result,item.data.next)"
                       fill="transparent" stroke-width="2" stroke="#ff4081" stroke-dasharray="4 3" />
                   </svg>
@@ -158,7 +158,7 @@
             </mat-accordion>
           </mat-card-content>
           <mat-card-actions>
-            <ng-container *ngIf="item.data.next!=null">
+            <ng-container *ngIf="user.hasNextDate(item)">
               <div *ngIf="item.next<=user.today" style="margin-left: 16px;">
                 <form [formGroup]="GetResultFormGroup(item)">
                   <mat-form-field style="width: 72px;">
@@ -198,10 +198,10 @@
                 </ng-container>
               </div>
             </ng-container>
-            <ng-container *ngIf="item.data.next==null">
+            <div *ngIf="!user.hasNextDate(item)" style="margin-left: 16px; margin-right: 24px;">
               <span>覚えた数: {{item.data.maxPoint}}</span>
               <span style="float: right;">終わり</span>
-            </ng-container>
+            </div>
           </mat-card-actions>
         </mat-card>
       </ng-container>

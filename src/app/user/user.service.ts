@@ -119,6 +119,15 @@ export class UserService {
   private _viewGraph: Map<IWorkNodeViewModel, ViewGraph> = null;
 
 
+  hasNextDate(workNodeViewModel: IWorkNodeViewModel): boolean {
+    if (workNodeViewModel.data.next != null) {
+      return (workNodeViewModel.data.next !== Number.MAX_SAFE_INTEGER);
+    }
+    else {
+      return false;
+    }
+  }
+
   GetView(workNodeViewModel: IWorkNodeViewModel): ViewGraph {
     if (this._viewGraph == null) {
       this._viewGraph = new Map<IWorkNodeViewModel, ViewGraph>();
@@ -126,12 +135,15 @@ export class UserService {
 
     if (!this._viewGraph.has(workNodeViewModel)) {
       const startDay = this.GetBaseDateFromNumber(workNodeViewModel.data.registrationDate);
-      const nextDay = new Date(workNodeViewModel.data.next);
       const today = new Date();
 
-      let endDate = nextDay;
-      if (nextDay < today) {
-        endDate = this.GetBaseDate(today.getDate(), 0);
+      const nextDay = new Date(workNodeViewModel.data.next);
+
+
+      let endDate = this.GetBaseDate(today.getDate(), 0);
+      if (this.hasNextDate(workNodeViewModel) &&
+        (nextDay >= today)) {
+        endDate = new Date(workNodeViewModel.data.next);
       }
       const viewmsec = endDate.getTime() - startDay.getTime();
       const checkDay = viewmsec / 1000 / 60 / 60 / 24;
@@ -216,8 +228,12 @@ export class UserService {
     else {
       memo = new Array(0);
     }
+
     let next: Date = null;
-    if (work.next != null) {
+    if (work.next == null) {
+      work.next = Number.MAX_SAFE_INTEGER;
+    }
+    if (work.next !== Number.MAX_SAFE_INTEGER) {
       next = new Date(work.next);
     }
 
@@ -229,7 +245,7 @@ export class UserService {
       next,
       last: new Date(work.result[work.result.length - 1].date),
       memoLink: memo,
-      cycleCount: Number.MAX_VALUE, // this.GetGoToInterval(cycle, work.result),
+      cycleCount: Number.MAX_SAFE_INTEGER, // this.GetGoToInterval(cycle, work.result),
       cycle: null,
       nextToGo: NextToGo.Next,
       isLastWork: false,
@@ -588,8 +604,8 @@ export class UserService {
       work.next = nextdate;
     }
     else {
-      work.data.next = null;
-      work.next = null;
+      work.data.next = Number.MAX_SAFE_INTEGER;
+      work.next = new Date(work.data.next);
     }
     work.data.upDate = new Date().getTime();
 
