@@ -125,7 +125,7 @@ export class UserService {
     }
 
     if (!this._viewGraph.has(workNodeViewModel)) {
-      const startDay = this.GetBaseDate(new Date(workNodeViewModel.data.registrationDate).getDate(), 0);
+      const startDay = this.GetBaseDateFromNumber(workNodeViewModel.data.registrationDate);
       const nextDay = new Date(workNodeViewModel.data.next);
       const today = new Date();
 
@@ -446,6 +446,19 @@ export class UserService {
       nextToGo: NextToGo.Next,
       isLastWork: false,
     };
+  }
+
+  private GetBaseDateFromNumber(num: number): Date {
+    const base = new Date(num);
+    if (base.getHours() < this.refreshTime) {
+      base.setDate(base.getDate() - 1);
+    }
+    base.setHours(this.refreshTime);
+    base.setMinutes(0);
+    base.setSeconds(0);
+    base.setMilliseconds(0);
+
+    return base;
   }
 
   private GetBaseDate(today?: number, offsetDay?: number): Date {

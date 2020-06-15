@@ -13,6 +13,7 @@ export class ViewGraph extends ViewCore {
 
   // tslint:disable-next-line: variable-name
   private _drawBox: DrawBox = null;
+  private marjinPoint = 0.14;
 
   // tslint:disable-next-line: variable-name
   // private _viewDay: number;
@@ -106,22 +107,18 @@ export class ViewGraph extends ViewCore {
     }
   }
 
-
-  // private marjinPoint = 0.05;
   private getRealRate(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): number {
     const index = allResult.indexOf(result);
     if (index > 0) {
-      // const m = this.marjinPoint / index;
-      // const min = 1 / (maxPoint + m) / 2;
-      // const rate = min + (maxPoint * result.rate) / (maxPoint + m);
-      // return rate;
-      return result.rate;
+      const m = this.marjinPoint / index;
+      const min = 1 / (maxPoint + m) / 2;
+      const rate = min + (maxPoint * result.rate) / (maxPoint + m);
+      return rate;
     }
     else {
       return 0;
     }
   }
-
 
   getDrawRealForgetPoint(maxPoint: number, allResult: IWorkResult[], result: IWorkResult): number {
     const rate = this.getRealRate(maxPoint, allResult, result);

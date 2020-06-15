@@ -268,8 +268,27 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
     const point = this.GetResultFormGroup(work).get('point').value as number;
     const workTargetIndex = this.user.workTarget.indexOf(work);
     if (workTargetIndex >= 0 && workTargetIndex < this.user.workTarget.length) {
-      this.user.workTarget.splice(workTargetIndex, 1);
-      this.user.registerResult(work, point, 0);
+      const view = this.user.workTarget.splice(workTargetIndex, 1);
+      let offset = 0;
+      const target = view[0];
+      switch (target.nextToGo) {
+        case NextToGo.Next:
+          offset = 0;
+          break;
+        case NextToGo.Repeat:
+          offset = -1;
+          break;
+        case NextToGo.ReStart:
+          offset = -target.data.result.length;
+          break;
+        case NextToGo.Finish:
+          offset = target.cycleCount - target.data.result.length;
+          break;
+        default:
+          offset = 0;
+          break;
+      }
+      this.user.registerResult(work, point, offset);
       this.user.workTarget.push(work);
     }
   }
