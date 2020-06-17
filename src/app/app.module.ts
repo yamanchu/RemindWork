@@ -49,6 +49,14 @@ import { AnalysisComponent } from './user/analysis/analysis.component';
 import { SubjectDialogComponent } from './user/user-main/subject-dialog/subject-dialog.component';
 import { SelectNextNextToGoDialogComponent } from './user/user-main/select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
 
+// locale
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeJa from '@angular/common/locales/ja';
+import localeJaExtra from '@angular/common/locales/extra/ja';
+
+// registerLocaleData(localeJa, 'ja', localeJaExtra);
+
 const routes: Routes = [
   { path: '', component: TopComponent },
   { path: 'user-main', component: UserMainComponent },
@@ -109,6 +117,8 @@ const routes: Routes = [
   ],
 
   // not singleton Service
+  // providers: [{ provide: LOCALE_ID, useValue: 'ja' }],
+  // providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   providers: [],
 
   // entry point Component

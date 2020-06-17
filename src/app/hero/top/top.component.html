@@ -21,15 +21,18 @@
     <div class="mainTitleBlock">
       <h1 class="centerText mainTitle mat-display-3">Remind Work</h1>
       <div class="startContainer">
-        <button class="startCenter" mat-raised-button color="accent" (mouseup)="GetStart()" matTooltip="無料登録">
-          はじめる
+        <button class="startCenter" mat-raised-button color="accent" (mouseup)="GetStart()" i18n-matTooltip
+          matTooltip="Free" i18n="@@GetStarted">
+          get started
         </button>
       </div>
-      <h2 class="centerText">忘却曲線で効果的な学習</h2>
+      <h2 class="centerText" i18n="@@EffectiveLearningWithTheForgettingCurve">Effective learning with the forgetting
+        curve</h2>
       <div class="centerBlockMin">
-        暗記・学習サイクルのリマインダー。<br>
-        暗記したい項目数を登録して復習結果を記録することで自分の忘却曲線を作成。<br>
-        復習回数に応じて間隔をカスタマイズ可能。<br>
+        <div i18n="@@ApplicationDescription1">Memorization and study cycle reminders.</div>
+        <div i18n="@@ApplicationDescription2">Create your own forgetting curve by registering the number of items you
+          want to memorize and recording your review results.</div>
+        <div i18n="@@ApplicationDescription3">Review intervals can be customized.</div>
       </div><br><br>
       <div style="text-align: right;margin-right: 5%;">
         <a href="https://twitter.com/GuhawYamanchu" target="_blank">@GuhawYamanchu</a>

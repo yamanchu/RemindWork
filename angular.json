@@ -9,6 +9,12 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "ja": "src/locale/messages.ja.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -57,6 +63,13 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "ja": {
+              "outputPath": "dist/ja",
+              "baseHref": "/ja/",
+              "i18nFile": "src/locale/messages.ja.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "ja"
             }
           }
         },
@@ -68,6 +81,10 @@
           "configurations": {
             "production": {
               "browserTarget": "RemindWork:build:production"
+            },
+            "ja": {
+              "browserTarget": "RemindWork:build:ja",
+              "baseHref": "/ja/"
             }
           }
         },

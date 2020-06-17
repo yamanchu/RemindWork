@@ -3,13 +3,8 @@
     <button *ngIf="!menuControl.pcMode" (mouseup)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
       <mat-icon>menu</mat-icon>
     </button>
-    <!--span class="appStyle">{{menuControl.title}}</span-->
     <mat-icon class="hamburgerMargin" matListIcon>view_agenda</mat-icon>
-    <span class="topMenuStyle">復習リスト</span>
-    <!--span class="topMenuStyle" *ngIf="pcMode">{{title}}2</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}3</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}4</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}5</span-->
+    <span class="topMenuStyle" i18n="@@ReviewList">List</span>
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container class="sideNavi-container">
@@ -18,17 +13,17 @@
     <mat-nav-list>
       <mat-list-item routerLink="/user-main">
         <mat-icon matListIcon>view_agenda</mat-icon>
-        <h4 matLine>復習リスト</h4>
+        <h4 matLine i18n="@@ReviewList">List</h4>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item routerLink="/analysis">
         <mat-icon matListIcon>timeline</mat-icon>
-        <h4 matLine>分析</h4>
+        <h4 matLine i18n="@@Analysis">Analysis</h4>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item routerLink="/interval">
         <mat-icon matListIcon>repeat</mat-icon>
-        <h4 matLine>復習間隔</h4>
+        <h4 matLine i18n="@@Interval">Interval</h4>
       </mat-list-item>
       <mat-divider></mat-divider>
     </mat-nav-list>
@@ -69,8 +64,11 @@
                 </span>
               </ng-container>
             </mat-card-subtitle>
-            <span *ngIf="menuControl.pcMode && item.cycle!=null"
-              style="margin-left: auto; margin-right: 0;">復習間隔：{{item.cycle.name}}</span>
+            <span *ngIf="menuControl.pcMode && item.cycle!=null" style="margin-left: auto; margin-right: 0;">
+              <span i18n="@@Interval">Interval</span>
+              <span>&nbsp;:&nbsp;</span>
+              <span>{{item.cycle.name}}</span>
+            </span>
             <span *ngIf="!menuControl.pcMode && item.cycle!=null"
               style="margin-left: auto; margin-right: 0;">[{{item.cycle.name}}]</span>
           </mat-card-header>
@@ -79,12 +77,22 @@
               <mat-expansion-panel class="dp3BackColor">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    <span *ngIf="menuControl.pcMode">学習回数：{{item.data.result.length}}</span>
-                    <span *ngIf="!menuControl.pcMode">回数：{{item.data.result.length}}</span>
+                    <span *ngIf="menuControl.pcMode">
+                      <span i18n="@@LearningCount">Learning count</span>
+                      <span>&nbsp;:&nbsp;</span>
+                      <span>{{item.data.result.length}}</span>
+                    </span>
+                    <span *ngIf="!menuControl.pcMode">
+                      <span i18n="@@Count">Count</span>
+                      <span>&nbsp;:&nbsp;</span>
+                      <span>{{item.data.result.length}}</span>
+                    </span>
                   </mat-panel-title>
                   <mat-panel-description>
-                    <span *ngIf="menuControl.pcMode">前回：{{item.last | date:"yyyy/MM/dd"}}</span>
-                    <span *ngIf="!menuControl.pcMode">前回：{{item.last | date:"MM/dd"}}</span>
+                    <span i18n="@@LastStudyDate">Last</span>
+                    <span>&nbsp;:&nbsp;</span>
+                    <span *ngIf="menuControl.pcMode">{{item.last | date:'longDate'}}</span>
+                    <span *ngIf="!menuControl.pcMode">{{item.last | date:'M/d'}}</span>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
                 <ng-container *ngIf="item.memoLink!=null && item.memoLink.length>0">
@@ -110,8 +118,6 @@
                         <circle cx="5" cy="5" r="4" fill="#ff4081" />
                       </marker>
                     </defs>
-                    <!--line x1="0" y1="0" x2="400" y2="100" stroke-width="2" stroke="#ff4081" /-->
-                    <!--path d="M0 0 C 100 0 100 100 400 100" fill="transparent" stroke-width="2" stroke="#ff4081" /-->
                     <line [attr.x1]="user.GetView(item).viewOutline.start.x-1"
                       [attr.y1]="user.GetView(item).viewOutline.start.y"
                       [attr.x2]="user.GetView(item).viewOutline.end.x"
@@ -122,21 +128,16 @@
                       [attr.x2]="user.GetView(item).viewOutline.start.x"
                       [attr.y2]="user.GetView(item).viewOutline.end.y" stroke-width="2" stroke="#ffffff"
                       [attr.marker-end]="'url(#arrowY_'+i+')'" />
-                    <!--line [attr.x1]="user.GetView(item).viewOutline.start.x"
-                      [attr.y1]="user.GetView(item).convertToDrawY(item.data.maxPoint)"
-                      [attr.x2]="user.GetView(item).viewOutline.end.x"
-                      [attr.y2]="user.GetView(item).convertToDrawY(item.data.maxPoint)" stroke-width="1"
-                      stroke="#ffffffd6" stroke-linejoin="round" /-->
                     <path [attr.d]="user.GetView(item).pointPath(1)" fill="transparent" stroke-width="0.75"
                       stroke="#ffffff" />
                     <path [attr.d]="user.GetView(item).endDayDrawPath()" fill="transparent" stroke-width="0.5"
                       stroke="#ffffff" />
                     <text [attr.x]="user.GetView(item).endDayDrawX" [attr.y]="user.GetView(item).drawBax.end.y-1"
                       font-size="20" text-anchor="middle" fill="white"
-                      font-weight="100">{{user.GetView(item).endDate| date:"M/d"}}</text>
+                      font-weight="100">{{user.GetView(item).endDate| date:'M/d'}}</text>
                     <text [attr.x]="user.GetView(item).convertDateNumberToDrawX(item.data.result[0].date)"
                       [attr.y]="user.GetView(item).drawBax.end.y-1" font-size="20" text-anchor="start" fill="white"
-                      font-weight="100">{{item.data.result[0].date| date:"M/d"}}</text>
+                      font-weight="100">{{item.data.result[0].date| date:'M/d'}}</text>
                     <ng-container *ngFor="let resultItem of item.data.result">
                       <line [attr.x1]="user.GetView(item).convertDateNumberToDrawX(resultItem.date)"
                         [attr.y1]="user.GetView(item).getDrawRealForgetPoint(item.data.maxPoint,item.data.result,resultItem)"
@@ -162,14 +163,11 @@
               <div *ngIf="item.next<=user.today" style="margin-left: 16px;">
                 <form [formGroup]="GetResultFormGroup(item)">
                   <mat-form-field style="width: 72px;">
-                    <mat-label>学習結果</mat-label>
+                    <mat-label i18n="@@ReviewResult">result</mat-label>
                     <input matInput type="number" min="0" [max]="item.data.maxPoint" formControlName="point"
-                      required="true" placeholder="例：{{item.data.maxPoint}}">
-                    <mat-error>0～{{item.data.maxPoint}}を入力</mat-error>
+                      required="true">
+                    <mat-error>0～{{item.data.maxPoint}}</mat-error>
                   </mat-form-field>/{{item.data.maxPoint}}
-
-                  <!--button mat-raised-button color="primary" style="float: right; margin-top: 8px;">次回:
-                {{item.data.next | date:"yyyy/MM/dd"}}</button-->
                   <div
                     style=" float: right; margin-left: auto; margin-right: 8px; margin-top: 0px; width: max-content;">
                     <span>
@@ -190,49 +188,59 @@
                 </form>
               </div>
               <div *ngIf="item.next>user.today" style="margin-left: 16px; margin-right: 24px;">
-                <span>覚える数: {{item.data.maxPoint}}</span>
+                <span>
+                  <span i18n="@@Memorize">Memorize</span>
+                  <span>&nbsp;:&nbsp;</span>
+                  <span>{{item.data.maxPoint}}</span>
+                </span>
                 <ng-container>
-                  <span *ngIf="menuControl.pcMode" style="float: right;">次回:
-                    {{item.data.next | date:"yyyy/MM/dd"}}</span>
-                  <span *ngIf="!menuControl.pcMode" style="float: right;">次回: {{item.data.next | date:"MM/dd"}}</span>
+                  <span *ngIf="menuControl.pcMode" style="float: right;">
+                    <span i18n="@@Next">Next</span>
+                    <span>&nbsp;:&nbsp;</span>
+                    <span>{{item.data.next | date:'longDate'}}</span>
+                  </span>
+                  <span *ngIf="!menuControl.pcMode" style="float: right;">
+                    <span i18n="@@Next">Next</span>
+                    <span>&nbsp;:&nbsp;</span>
+                    <span>{{item.data.next | date:'MMMd'}}</span>
+                  </span>
                 </ng-container>
               </div>
             </ng-container>
             <div *ngIf="!user.hasNextDate(item)" style="margin-left: 16px; margin-right: 24px;">
-              <span>覚えた数: {{item.data.maxPoint}}</span>
-              <span style="float: right;">終わり</span>
+              <span i18n="@@Memorized">Memorized</span>
+              <span>&nbsp;:&nbsp;</span>
+              <span>{{item.data.maxPoint}}</span>
+              <span style="float: right;" i18n="@@Finish">Finish</span>
             </div>
           </mat-card-actions>
         </mat-card>
       </ng-container>
       <mat-card *ngIf="addMode" class="cardStyle" #editCard>
         <mat-card-header>
-          <mat-card-title>
-            新規登録
-          </mat-card-title>
-          <!--mat-card-subtitle>学習内容を登録します。</mat-card-subtitle-->
+          <mat-card-title i18n="@@NewItem">New item</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <form class="maxWidth" [formGroup]="newWorkInputGroupe">
             <div>
               <mat-form-field class="maxWidth">
-                <mat-label>学習概要を入力</mat-label>
-                <input type="text" placeholder="例：単語帳 10～12ページ" aria-label="InputWorkOverview" matInput
-                  formControlName="overview" required="true">
+                <mat-label i18n="@@EnterStudySummary">Enter your study summary</mat-label>
+                <input type="text" i18n-placeholder placeholder="E.g., a vocabulary book.10～12page"
+                  aria-label="InputWorkOverview" matInput formControlName="overview" required="true">
               </mat-form-field>
             </div>
             <div class="pointsCycleContainer">
               <div class="points">
                 <mat-form-field style="width: 72px;">
-                  <mat-label>覚える数</mat-label>
-                  <input matInput type="number" formControlName="point" aria-label="InputWorkPoint" placeholder="例：10"
-                    min="1" required="true">
-                  <mat-error>1以上を入力</mat-error>
+                  <mat-label i18n="@@Memorize">Memorize</mat-label>
+                  <input matInput type="number" formControlName="point" aria-label="InputWorkPoint" i18n-placeholder
+                    placeholder="E.g.,10" min="1" required="true">
+                  <mat-error i18n="@@EnterAtLeastOne">Enter at least 1.</mat-error>
                 </mat-form-field>
               </div>
               <div class="cycle">
                 <mat-form-field>
-                  <mat-label>復習間隔</mat-label>
+                  <mat-label i18n="@@Interval">Interval</mat-label>
                   <mat-select formControlName="cycle">
                     <ng-container *ngFor="let item of user.cycleNodeViewModel">
                       <mat-option [value]="item">{{item.data.name}}</mat-option>
@@ -244,19 +252,21 @@
             <mat-accordion>
               <mat-expansion-panel class="dp3BackColor">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    詳細設定
+                  <mat-panel-title i18n="@@Detailed">
+                    Detailed
                   </mat-panel-title>
                   <mat-panel-description>
-                    (任意)
+                    <span>(</span>
+                    <span i18n="@@Optional">optional</span>
+                    <span>)</span>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="gridContainer">
                   <div class="buttonSportInput">
                     <mat-form-field class="maxWidth">
-                      <mat-label>教科を入力</mat-label>
-                      <input type="text" placeholder="例：英語" aria-label="InputviewSubjectArea " matInput
-                        formControlName="newSubjectAreas">
+                      <mat-label i18n="@@EnterSubjectArea">Enter a subject area</mat-label>
+                      <input type="text" i18n-placeholder placeholder="e.g, English" aria-label="InputviewSubjectArea "
+                        matInput formControlName="newSubjectAreas">
                     </mat-form-field>
                   </div>
                   <div class="inputSelectButton">
@@ -275,16 +285,11 @@
                             <mat-icon matChipRemove>cancel</mat-icon>
                           </mat-chip>
                         </ng-container>
-                        <input placeholder="科目 又は 分類を入力" #subjectInput formControlName='newSubject'
-                          [matChipInputFor]="subjectAreaList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                          [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addSubject($event)">
+                        <input i18n-placeholder placeholder="Enter a subject or category" #subjectInput
+                          formControlName='newSubject' [matChipInputFor]="subjectAreaList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                          (matChipInputTokenEnd)="addSubject($event)">
                       </mat-chip-list>
-                      <!--mat-autocomplete #autoSubject="matAutocomplete" (optionSelected)="selectedSubject($event)">
-                <mat-option *ngFor="let item of selectableSubject | async" [value]="item"
-                  aria-label="selectableSubject item">
-                  {{item.name}}
-                </mat-option>
-              </mat-autocomplete-->
                     </mat-form-field>
                   </div>
                   <div class="inputSelectButton">
@@ -295,7 +300,7 @@
                 </div>
                 <div>
                   <mat-form-field class="maxWidth">
-                    <mat-label>メモ入力</mat-label>
+                    <mat-label i18n="@@EnterMemo">memo entry</mat-label>
                     <textarea matInput formControlName="memo" aria-label="InputWorkDeteil"></textarea>
                   </mat-form-field>
                 </div>
@@ -305,12 +310,13 @@
         </mat-card-content>
         <mat-card-actions>
           <div class="actionButtonContainer">
-            <button class="ClancelButton" color="primary" mat-raised-button (mouseup)="registerWorkCnacel()">
-              キャンセル
+            <button class="ClancelButton" color="primary" mat-raised-button (mouseup)="registerWorkCnacel()"
+              i18n="@@Cancel">
+              Cancel
             </button>
             <button class="OKButton" color="primary" mat-raised-button (mouseup)='registerWork()'
-              [disabled]="newWorkInputGroupe.invalid">
-              登録
+              [disabled]="newWorkInputGroupe.invalid" i18n="@@Register">
+              Register
             </button>
           </div>
         </mat-card-actions>
