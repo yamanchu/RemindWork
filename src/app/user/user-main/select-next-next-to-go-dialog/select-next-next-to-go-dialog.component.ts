@@ -5,7 +5,6 @@ import { FormControl } from '@angular/forms';
 import { from } from 'rxjs';
 
 export interface SelectNextNextToGoDialogData {
-  title: string;
   result: boolean;
   nextDisable: boolean;
   model: IWorkNodeViewModel;

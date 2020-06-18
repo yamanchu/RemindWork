@@ -36,34 +36,69 @@
           <mat-expansion-panel [(expanded)]="item.openView" class="dp3BackColor">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                {{item.data.name}}
+                <ng-container *ngIf="!item.isCustomNode">
+                  <ng-container *ngIf="item.data.name==='default'" i18n="@@CommonCycleDefault">default</ng-container>
+                  <ng-container *ngIf="item.data.name==='default/hard'" i18n="@@CommonCycleDefaultHard">default/hard
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="item.isCustomNode">
+                  {{item.data.name}}
+                </ng-container>
               </mat-panel-title>
               <ng-container *ngIf="item.isCustomNode">
                 <mat-icon color="primary" style="margin-left: auto; margin-right: 16px;">bookmark</mat-icon>
               </ng-container>
             </mat-expansion-panel-header>
-            <span>説明: {{item.data.description}}</span>
+            <span>
+              <span i18n="@@Explanation">Explanation</span>
+              <span>&nbsp;:&nbsp;</span>
+              <span>
+                <ng-container *ngIf="!item.isCustomNode">
+                  <ng-container *ngIf="item.data.name==='default'" i18n="@@CommonCycleDefaultDescription">default cycle
+                  </ng-container>
+                  <ng-container *ngIf="item.data.name==='default/hard'" i18n="@@CommonCycleDefaultHardDescription">
+                    Continuous and Random
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="item.isCustomNode">
+                  {{item.data.description}}
+                </ng-container>
+              </span>
+            </span>
 
             <table mat-table [dataSource]="item.data.intarval" class="tableStyle mat-elevation-z4 dp3BackColor">
 
               <!-- day Column -->
               <ng-container matColumnDef="day">
-                <th class="headerCellStyle" mat-header-cell *matHeaderCellDef>間隔</th>
-                <td class="cellStyle" mat-cell *matCellDef="let node"> {{node.day}} 日</td>
+                <th class="headerCellStyle" mat-header-cell *matHeaderCellDef i18n="@@Intervals">Intervals</th>
+                <td class="cellStyle" mat-cell *matCellDef="let node">
+                  <span>{{node.day}}</span>
+                  <span>&nbsp;</span>
+                  <span i18n="@@UnitDay">{node.day, plural, =0 {day} =1 {day} other {days}}</span>
+                </td>
                 <!--td mat-footer-cell *matFooterCellDef> Total </td-->
               </ng-container>
 
               <!-- margin Column -->
               <ng-container matColumnDef="margin">
-                <th class="headerCellStyle" mat-header-cell *matHeaderCellDef>ばらつき</th>
-                <td class="cellStyle" mat-cell *matCellDef="let node"> {{node.margin}} 日</td>
+                <th class="headerCellStyle" mat-header-cell *matHeaderCellDef i18n="@@Dispersion">Dispersion</th>
+                <td class="cellStyle" mat-cell *matCellDef="let node">
+                  <span>{{node.margin}}</span>
+                  <span>&nbsp;</span>
+                  <span i18n="@@UnitDay">{node.margin, plural, =0 {day} =1 {day} other {days}}</span>
+                </td>
                 <!--td mat-footer-cell *matFooterCellDef> - </td-->
               </ng-container>
 
               <!-- repeat Column -->
               <ng-container matColumnDef="repeat">
-                <th class="headerCellStyle" mat-header-cell *matHeaderCellDef>繰返し</th>
-                <td class="cellStyle" mat-cell *matCellDef="let node"> {{node.repeat}} 回</td>
+                <th class="headerCellStyle" mat-header-cell *matHeaderCellDef i18n="@@Repetition">repetition</th>
+                <td class="cellStyle" mat-cell *matCellDef="let node">
+                  <span>{{node.repeat}}</span>
+                  <span>&nbsp;</span>
+                  <span i18n="@@UnitTime">
+                    {node.repeat, plural, =0 {time} =1 {time} other {times}}</span>
+                </td>
                 <!--td mat-footer-cell *matFooterCellDef> - </td-->
               </ng-container>
 
@@ -81,18 +116,18 @@
         <ng-container *ngIf="addMode">
           <mat-expansion-panel [expanded]="addMode" class="dp3BackColor">
             <mat-expansion-panel-header>
-              <mat-panel-title>新規登録</mat-panel-title>
+              <mat-panel-title i18n="@@NewCycle">New cycle</mat-panel-title>
             </mat-expansion-panel-header>
 
             <form [formGroup]="cycleGroupe" style="width: 100%;" name="newTitleInput">
 
               <mat-form-field class="addFormStyle">
-                <mat-label>名前</mat-label>
+                <mat-label i18n="@@NewCycleName">Cycle name</mat-label>
                 <input matInput type="text" placeholder="My cycle" formControlName="name" required="true">
-                <mat-error>登録名を入力</mat-error>
+                <mat-error i18n="@@EnterNewCycleName">Enter a cycle name</mat-error>
               </mat-form-field>
               <mat-form-field class="addFormStyle">
-                <mat-label>説明文</mat-label>
+                <mat-label i18n="@@ExplanatoryNote">explanatory note</mat-label>
                 <textarea matInput placeholder="The original cycle." formControlName="description"></textarea>
               </mat-form-field>
             </form>
@@ -100,7 +135,11 @@
               <button mat-icon-button color="primary" (mouseup)="removeInterval()">
                 <mat-icon>remove</mat-icon>
               </button>
-              <mat-label style="margin-left: 8px;margin-right: 8px;">登録数 {{intervalIndex.length}}</mat-label>
+              <mat-label style="margin-left: 8px;margin-right: 8px;">
+                <ng-container i18n="@@NumberOfRegistrations">Registrations</ng-container>
+                <ng-container>&nbsp;</ng-container>
+                <ng-container>{{intervalIndex.length}}</ng-container>
+              </mat-label>
               <button mat-icon-button color="primary" (mouseup)="addInterval()">
                 <mat-icon>add</mat-icon>
               </button>
@@ -111,33 +150,33 @@
 
                 <!-- day Column -->
                 <ng-container matColumnDef="day" formArrayName="days">
-                  <th mat-header-cell *matHeaderCellDef>間隔</th>
+                  <th mat-header-cell *matHeaderCellDef i18n="@@Intervals">Intervals</th>
                   <td mat-cell *matCellDef="let node; let i = index">
                     <mat-form-field class="addNumberStyle">
                       <input matInput type="number" [formControlName]="i" required="true">
-                      <mat-error>1以上を入力</mat-error>
+                      <mat-error i18n="@@EnterAtLeastOne">Enter at least 1.</mat-error>
                     </mat-form-field>
                   </td>
                 </ng-container>
 
                 <!-- margin Column -->
                 <ng-container matColumnDef="margin" formArrayName="margins">
-                  <th class="centerAddNumberStyle" mat-header-cell *matHeaderCellDef>ばらつき</th>
+                  <th class="centerAddNumberStyle" mat-header-cell *matHeaderCellDef i18n="@@Dispersion">Dispersion</th>
                   <td mat-cell *matCellDef="let node; let i = index" class="centerAddNumberStyle">
                     <mat-form-field class="addNumberStyle">
                       <input matInput type="number" [formControlName]="i" required="true">
-                      <mat-error>0以上を入力</mat-error>
+                      <mat-error i18n="@@EnterAtLeastZero">Enter at least 0.</mat-error>
                     </mat-form-field>
                   </td>
                 </ng-container>
 
                 <!-- repeat Column -->
                 <ng-container matColumnDef="repeat" formArrayName="repeats">
-                  <th mat-header-cell *matHeaderCellDef>繰返し</th>
+                  <th mat-header-cell *matHeaderCellDef i18n="@@Repetition">repetition</th>
                   <td mat-cell *matCellDef="let node; let i = index">
                     <mat-form-field class="addNumberStyle">
                       <input matInput type="number" [formControlName]="i" required="true">
-                      <mat-error>1以上を入力</mat-error>
+                      <mat-error i18n="@@EnterAtLeastOne">Enter at least 1.</mat-error>
                     </mat-form-field>
                   </td>
                 </ng-container>
@@ -155,8 +194,8 @@
               </div>
               <div class="rightButtonPosition">
                 <button style="margin-top: 4px;" color="primary" mat-raised-button [disabled]="cycleGroupe.invalid"
-                  (mouseup)="AddCustomCycle()">
-                  登録
+                  (mouseup)="AddCustomCycle()" i18n="@@Register">
+                  Register
                 </button>
               </div>
             </div>

@@ -1,9 +1,11 @@
-<h2 mat-dialog-title>{{data.title}}</h2>
+<h2 mat-dialog-title>
+  <ng-container i18n="@@SubjectAreaSelectDialogTittle">Select a subject area</ng-container>
+</h2>
 <mat-dialog-content>
   <div *ngIf="hasData" style="width: max-content; margin-left: auto; margin-right: 0;">
     <mat-slide-toggle labelPosition="before" [(ngModel)]="deleteMode" style="padding-right: 8px;"
-      (change)="deleteModeChange()">
-      削除可能にする
+      (change)="deleteModeChange()" i18n="@@EnableDeletion">
+      Enable deletion
     </mat-slide-toggle>
   </div>
   <mat-radio-group aria-labelledby="subject area radio" class="subjectArea-radio-group" [(ngModel)]="selectedItem">
@@ -24,15 +26,16 @@
       </div>
     </ng-container>
     <ng-container *ngIf="!hasData">
-      <p>登録済みの教科が有りません。</p>
-      <p>入力欄に教科を入力してください</p>
+      <p i18n="@@NoRegisteredSubjectArea">There are no registered subject area.</p>
+      <p i18n="@@EnterSubjectArea">Please enter a subject area in the entry field.</p>
     </ng-container>
   </mat-radio-group>
 </mat-dialog-content>
 <mat-dialog-actions>
   <div style="width: max-content; margin-left: auto; margin-right: 16px;">
     <button *ngIf="hasData" mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
-      style="margin-left: auto; margin-right: 16px;">キャンセル</button>
-    <button mat-raised-button color="primary" (mouseup)="onOkClick()">OK</button>
+      style="margin-left: auto; margin-right: 16px;" i18n="@@Cancel">
+      Cancel</button>
+    <button mat-raised-button color="primary" (mouseup)="onOkClick()" i18n="@@OK">OK</button>
   </div>
 </mat-dialog-actions>

@@ -6,7 +6,6 @@ import { from } from 'rxjs';
 import { ISubject, ISubjectArea } from 'src/app/fire/storeInterfaces/ITags';
 
 export interface SubjectAreaDialogData {
-  title: string;
   selected: ISubjectAreaNodeViewModel;
   subjectAreaNodeViewModel: ISubjectAreaNodeViewModel[];
   deleteItems: ISubjectArea[];

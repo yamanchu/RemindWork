@@ -105,7 +105,6 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
 
     const dialog = this.dialog.open(SubjectAreaDialogComponent, {
       data: {
-        title: '教科を選択',
         selected: selectItem,
         subjectAreaNodeViewModel: this.user.subjectAreaNodeViewModel,
         deleteItems: null,
@@ -140,7 +139,6 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
 
     const dialog = this.dialog.open(SubjectDialogComponent, {
       data: {
-        title: '科目 又は 分類を選択',
         selected: this.inputSubject.slice(),
         subjectAreaNodeViewModel: selectItem,
         deleteItems: null,
@@ -380,7 +378,6 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
   selectNextNextToGo(workNodeViewModel: IWorkNodeViewModel) {
     const dialog = this.dialog.open(SelectNextNextToGoDialogComponent, {
       data: {
-        title: '次の予定を選択',
         nextDisable: workNodeViewModel.isLastWork,
         model: workNodeViewModel,
         result: false,

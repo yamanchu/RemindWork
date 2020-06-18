@@ -2,12 +2,245 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="CreateFreeAccount" datatype="html">
+        <source>Create a free account</source>
+        <target>無料登録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/logintypeSelector.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="EasyRegistrationWithGoogleAccount" datatype="html">
+        <source>Easy registration with a Google account</source>
+        <target>Googleアカウントをお持ちの方はこちらが便利です。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/logintypeSelector.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="CreatedWithGoogleAccount" datatype="html">
+        <source>Created with a Google account</source>
+        <target>Googleアカウントで登録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/logintypeSelector.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="GetStarted" datatype="html">
+        <source>get started</source>
+        <target>登録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/top.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3020849bc1c622a2c4bc1168afae093d44024fa2" datatype="html">
+        <source>Free</source>
+        <target>無料</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/top.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="EffectiveLearningWithTheForgettingCurve" datatype="html">
+        <source>Effective learning with the forgetting
+        curve</source>
+        <target>忘却曲線で効果的な学習</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/top.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ApplicationDescription1" datatype="html">
+        <source>Memorization and study cycle reminders.</source>
+        <target>暗記・復習サイクルの為のリマインダー。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/top.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ApplicationDescription2" datatype="html">
+        <source>Create your own forgetting curve by registering the number of items you
+          want to memorize and recording your review results.</source>
+        <target>復習結果の自己採点を記録して自分の忘却曲線を作成します。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/top.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ApplicationDescription3" datatype="html">
+        <source>Review intervals can be customized.</source>
+        <target>自分の目標に合わせて復習間隔をカスタマイズ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/hero/top/top.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ReviewList" datatype="html">
+        <source>List</source>
+        <target>復習リスト</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/interval/interval.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/analysis/analysis.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Analysis" datatype="html">
+        <source>Analysis</source>
+        <target>分析</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/interval/interval.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/analysis/analysis.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Interval" datatype="html">
+        <source>Interval</source>
+        <target>復習間隔</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">243</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/interval/interval.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/interval/interval.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/analysis/analysis.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="LearningCount" datatype="html">
+        <source>Learning count</source>
+        <target>学習回数</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Count" datatype="html">
+        <source>項目数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="LastStudyDate" datatype="html">
           <source>Last</source>
           <target>前回</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
           <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ReviewResult" datatype="html">
+        <source>result</source>
+        <target>復習結果</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Memorize" datatype="html">
+        <source>Memorize</source>
+        <target>覚える数</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">235</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Next" datatype="html">
+        <source>Next</source>
+        <target>次回</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Memorized" datatype="html">
+        <source>Memorized</source>
+        <target>覚えた数</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Finish" datatype="html">
+        <source>Finish</source>
+        <target>終わり</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="NewItem" datatype="html">
+        <source>New item</source>
+        <target>新規登録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="EnterStudySummary" datatype="html">
+        <source>Enter your study summary</source>
+        <target>学習概要を入力</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d03dfae29830d86e82077ffe6d4c293cfa81c5c" datatype="html">
+        <source>E.g., a vocabulary book.10～12page</source>
+        <target>例 : 単語帳 10～12 ページ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">228</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e18b66f3229d17274d9f58dfdddc91a1f7a0fbb5" datatype="html">
+        <source>E.g.,10</source>
+        <target>例 : 10</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/user-main/user-main.component.html</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
     </body>

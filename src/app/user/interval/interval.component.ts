@@ -63,8 +63,6 @@ export class IntervalComponent implements OnInit {
     // const posY = String(this.menuControl.ViewHeight - eventArgs.clientY) + 'px';
     const dialog = this.dialog.open(MessageDialogComponent, {
       data: {
-        title: '削除確認',
-        message: '復習間隔を削除します。よろしいですか？'
       },
       width: '300px',
       disableClose: false,

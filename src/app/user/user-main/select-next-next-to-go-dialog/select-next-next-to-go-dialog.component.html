@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>{{data.title}}</h2>
+<h2 mat-dialog-title>
+  <ng-container i18n="@@NextToGoSelectDialogTittle">Select your next date</ng-container>
+</h2>
 <mat-dialog-content>
   <div style="display: flex;">
     <div style="width: max-content; margin-right: 8px;">
@@ -11,11 +13,12 @@
     </div>
     <div style="width: max-content;">
       <mat-radio-group aria-labelledby="subject area radio" class="radio-group" [(ngModel)]="selectedItem">
-        <mat-radio-button class="radio-button" [value]="listType.Next" [disabled]="data.nextDisable">次へ
+        <mat-radio-button class="radio-button" [value]="listType.Next" [disabled]="data.nextDisable" i18n="@@ToNext">
+          Next
         </mat-radio-button>
-        <mat-radio-button class="radio-button" [value]="listType.Repeat">もう一度</mat-radio-button>
-        <mat-radio-button class="radio-button" [value]="listType.ReStart">最初から</mat-radio-button>
-        <mat-radio-button class="radio-button" [value]="listType.Finish">終わり</mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="listType.Repeat" i18n="@@Repeat">Repeat</mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="listType.ReStart" i18n="@@ReStart">ReStart</mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="listType.Finish" i18n="@@Finish">Finish</mat-radio-button>
       </mat-radio-group>
     </div>
   </div>
@@ -23,7 +26,8 @@
 <mat-dialog-actions>
   <div style="width: max-content; margin-left: auto; margin-right: 16px;">
     <button mat-raised-button color="primary" (mouseup)="onCancelClick()" cdkFocusInitial
-      style="margin-left: auto; margin-right: 16px;">キャンセル</button>
-    <button mat-raised-button color="primary" (mouseup)="onOkClick()">OK</button>
+      style="margin-left: auto; margin-right: 16px;" i18n="@@Cancel">
+      Cancel</button>
+    <button mat-raised-button color="primary" (mouseup)="onOkClick()" i18n="@@OK">OK</button>
   </div>
 </mat-dialog-actions>

@@ -1,12 +1,15 @@
-<h2 mat-dialog-title>{{data.title}}</h2>
-<mat-dialog-content>
-  {{data.message}}
+<h2 mat-dialog-title>
+  <ng-container i18n="@@DeleteConfirmationDialogTittle">Delete confirmation</ng-container>
+</h2>
+<mat-dialog-content i18n="@@RemoveIntervalMessage">
+  Remove the interval. Are you sure you want to proceed?
 </mat-dialog-content>
 <mat-dialog-actions>
   <div style="width: max-content; margin-left: auto; margin-right: 16px;">
 
     <button mat-raised-button color="primary" [mat-dialog-close]="false" cdkFocusInitial
-      style="margin-left: auto; margin-right: 16px;">キャンセル</button>
-    <button mat-raised-button color="primary" [mat-dialog-close]="true">OK</button>
+      style="margin-left: auto; margin-right: 16px;" i18n="@@Cancel">
+      Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" i18n="@@OK">OK</button>
   </div>
 </mat-dialog-actions>

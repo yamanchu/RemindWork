@@ -7,7 +7,6 @@ import { ISubject } from 'src/app/fire/storeInterfaces/ITags';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 export interface SubjectDialogData {
-  title: string;
   selected: ISubject[];
   subjectAreaNodeViewModel: ISubjectAreaNodeViewModel;
   deleteItems: ISubject[];

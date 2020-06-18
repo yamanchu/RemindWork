@@ -67,10 +67,25 @@
             <span *ngIf="menuControl.pcMode && item.cycle!=null" style="margin-left: auto; margin-right: 0;">
               <span i18n="@@Interval">Interval</span>
               <span>&nbsp;:&nbsp;</span>
-              <span>{{item.cycle.name}}</span>
+              <span>
+                <ng-container *ngIf="item.cycle.name==='default'" i18n="@@CommonCycleDefault">default</ng-container>
+                <ng-container *ngIf="item.cycle.name==='default/hard'" i18n="@@CommonCycleDefaultHard">default/hard
+                </ng-container>
+                <ng-container *ngIf="(item.cycle.name!=='default') && (item.cycle.name!=='default/hard')">
+                  {{item.cycle.name}}
+                </ng-container>
+              </span>
             </span>
-            <span *ngIf="!menuControl.pcMode && item.cycle!=null"
-              style="margin-left: auto; margin-right: 0;">[{{item.cycle.name}}]</span>
+            <span *ngIf="!menuControl.pcMode && item.cycle!=null" style="margin-left: auto; margin-right: 0;">
+              <span>[</span>
+              <ng-container *ngIf="item.cycle.name==='default'" i18n="@@CommonCycleDefault">default</ng-container>
+              <ng-container *ngIf="item.cycle.name==='default/hard'" i18n="@@CommonCycleDefaultHard">default/hard
+              </ng-container>
+              <ng-container *ngIf="(item.cycle.name!=='default') && (item.cycle.name!=='default/hard')">
+                {{item.cycle.name}}
+              </ng-container>
+              <span>]</span>
+            </span>
           </mat-card-header>
           <mat-card-content>
             <mat-accordion>
@@ -243,7 +258,18 @@
                   <mat-label i18n="@@Interval">Interval</mat-label>
                   <mat-select formControlName="cycle">
                     <ng-container *ngFor="let item of user.cycleNodeViewModel">
-                      <mat-option [value]="item">{{item.data.name}}</mat-option>
+                      <mat-option [value]="item">
+                        <ng-container *ngIf="!item.isCustomNode">
+                          <ng-container *ngIf="item.data.name==='default'" i18n="@@CommonCycleDefault">default
+                          </ng-container>
+                          <ng-container *ngIf="item.data.name==='default/hard'" i18n="@@CommonCycleDefaultHard">
+                            default/hard
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="item.isCustomNode">
+                          {{item.data.name}}
+                        </ng-container>
+                      </mat-option>
                     </ng-container>
                   </mat-select>
                 </mat-form-field>

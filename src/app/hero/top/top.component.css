@@ -33,7 +33,7 @@
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 1fr 128px 1fr;
-  grid-template-columns:　1fr max-content 1fr;
+  grid-template-columns: 1fr max-content 1fr;
 
 }
 
