@@ -13,7 +13,7 @@ export class ViewGraph extends ViewCore {
 
   // tslint:disable-next-line: variable-name
   private _drawBox: DrawBox = null;
-  private marjinPoint = 0.14;
+  private marjinPoint = 0.368;
 
   // tslint:disable-next-line: variable-name
   // private _viewDay: number;
@@ -56,12 +56,14 @@ export class ViewGraph extends ViewCore {
     super();
 
     const viewmsec = endDate.getTime() - startDate.getTime();
-    const endDay = Math.ceil(viewmsec / 1000 / 60 / 60 / 24);
+    const endDay = Math.floor(viewmsec / 1000 / 60 / 60 / 24);
 
     this.startDate = startDate;
     this.endDate = endDate;
 
-    this._range = new Point2D(endDay * Math.exp(1), viewPoint * 1.15);
+    this._range = new Point2D(
+      Math.floor(endDay * Math.exp(1)),
+      viewPoint * 1.15);
   }
 
   convertDateNumberToDrawX(dateNumber: number): number {
@@ -111,7 +113,7 @@ export class ViewGraph extends ViewCore {
     const index = allResult.indexOf(result);
     if (index > 0) {
       const m = this.marjinPoint / index;
-      const min = 1 / (maxPoint + m) / 2;
+      const min = m / (maxPoint + m) / 2;
       const rate = min + (maxPoint * result.rate) / (maxPoint + m);
       return rate;
     }
@@ -146,13 +148,20 @@ export class ViewGraph extends ViewCore {
       const alfa = - t / Math.log(1 - rate); // -t / Math.log(1 - e.rate);
 
       const day1 = this.convertToDrawX(1);
-      const dxdy = - Math.exp(-t / alfa) / alfa;
+      let dxdy = - Math.exp(-t / alfa) / alfa;
+      const mindxdy = -(1 - rate) / t;
+      if (dxdy < mindxdy) {
+        dxdy = mindxdy;
+      }
 
-      const dx = dxdy * ymax / day1;
-      const dx2 = ex - x;
-      const dy2 = dx2 * dx;
+      const p = Point.Create(t, rate, 0);
+      const v = Vector.Create(1, dxdy, 0);
+      v.TryNormalization();
+      const l = Line.Create(p, v);
+      const ly = Line.Create(Point.Po(), Vector.UnitY());
+      const cp = ly.TryGetCrossPoints(l);
+      const y2 = this.convertToDrawY(cp.y);
 
-      const y2 = ey + dy2;
       const ret =
         'M ' + x + ' ' + y +
         ' C ' + x + ' ' + y + ', ' +
@@ -194,11 +203,15 @@ export class ViewGraph extends ViewCore {
     const M = z * Math.exp(-t / beta);
     const Qn = M + (1 - M) * Math.exp(-t / alfa);
 
-    const dxdy =
+    let dxdy =
       -z * Math.exp(-t / beta) / beta
       - Math.exp(-t / alfa) / alfa
       + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
 
+    const mindxdy = -(1 - Qn) / t;
+    if (dxdy < mindxdy) {
+      dxdy = mindxdy;
+    }
     const p = Point.Create(t, Qn, 0);
     const v = Vector.Create(1, dxdy, 0);
     v.TryNormalization();
@@ -247,11 +260,15 @@ export class ViewGraph extends ViewCore {
     const M = z * Math.exp(-t / beta);
     const Qn = M + (1 - M) * Math.exp(-t / alfa);
 
-    const dxdy =
+    let dxdy =
       -z * Math.exp(-t / beta) / beta
       - Math.exp(-t / alfa) / alfa
       + z * Math.exp(-t * (1 / beta + 1 / alfa)) * (1 / beta + 1 / alfa);
 
+    const mindxdy = -(1 - Qn) / t;
+    if (dxdy < mindxdy) {
+      dxdy = mindxdy;
+    }
 
     const endDay = this.convertToObjectX(this.viewOutline.end.x);
 

@@ -562,7 +562,7 @@ export class UserService {
 
   private GetGoToInterval(cycle: ICycleNode, result: IWorkResult[], offset: number): IIntarvalNode {
 
-    let count = 0;
+    let count = 1;
     const times = result.length - offset;
     const ret = cycle.intarval.find(item => {
       count += item.repeat;
