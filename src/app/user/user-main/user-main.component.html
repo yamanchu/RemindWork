@@ -112,7 +112,10 @@
                 </mat-expansion-panel-header>
                 <ng-container *ngIf="item.memoLink!=null && item.memoLink.length>0">
                   <ng-container *ngFor="let memoContent of item.memoLink">
-                    <p *ngIf="memoContent.length>0">{{memoContent}}</p>
+                    <ng-container *ngIf="memoContent.length>0">
+                      <p *ngIf="!user.isLinkText(memoContent)">{{memoContent}}</p>
+                      <a *ngIf="user.isLinkText(memoContent)" href={{memoContent}} target="_blank">{{memoContent}}</a>
+                    </ng-container>
                   </ng-container>
                 </ng-container>
                 <div class="primaryBackGrandColor">

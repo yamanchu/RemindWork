@@ -616,6 +616,19 @@ export class UserService {
     return this.workTarget.indexOf(work);
   }
 
+  /*
+  getDivText(text: string): string[] {
+    const regex = /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/;
+    const mached = text.match(regex);
+    return (mached != null);
+  }
+*/
+
+  isLinkText(text: string): boolean {
+    const regex = /^https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/;
+    const mached = text.match(regex);
+    return (mached != null);
+  }
   /*GetWork(observer: ((readValue: IWork) => void)
   ) {
     const userID = this.auth.TryGetUID();
