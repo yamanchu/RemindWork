@@ -37,7 +37,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 // Component.Dialog
 import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
-import { MessageDialogComponent } from './user/message-dialog/message-dialog.component';
+import { MessageDialogComponent } from './ViewItems/message-dialog/message-dialog.component';
 import { SubjectAreaDialogComponent } from './ViewItems/subject-area-dialog/subject-area-dialog.component';
 
 // Component
@@ -59,6 +59,8 @@ import { LearningComponent } from './user/analysis/tabItem/learning/learning.com
 import { FinishedComponent } from './user/analysis/tabItem/finished/finished.component';
 import { WorkItemViewComponent } from './ViewItems/work-item-view/work-item-view.component';
 import { WorkCreateViewComponent } from './ViewItems/work-create-view/work-create-view.component';
+import { IntervalItemViewComponent } from './ViewItems/interval-item-view/interval-item-view.component';
+import { IntervalCreateViewComponent } from './ViewItems/interval-create-view/interval-create-view.component';
 
 // registerLocaleData(localeJa, 'ja', localeJaExtra);
 
@@ -86,6 +88,8 @@ const routes: Routes = [
     FinishedComponent,
     WorkItemViewComponent,
     WorkCreateViewComponent,
+    IntervalItemViewComponent,
+    IntervalCreateViewComponent,
   ],
   imports: [
     RouterModule.forRoot(

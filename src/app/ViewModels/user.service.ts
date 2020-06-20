@@ -56,6 +56,8 @@ export interface IWorkNodeViewModel {
 })
 export class UserService {
 
+  displayedColumns: string[] = ['day', 'margin', 'repeat'];
+
   get debugMode(): boolean {
     return !environment.production;
   }

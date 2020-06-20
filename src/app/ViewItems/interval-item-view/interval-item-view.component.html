@@ -1,0 +1,79 @@
+<mat-expansion-panel [(expanded)]="targetItem.openView" class="dp3BackColor">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <ng-container *ngIf="!targetItem.isCustomNode">
+        <ng-container *ngIf="targetItem.data.name==='default'" i18n="@@CommonCycleDefault">default</ng-container>
+        <ng-container *ngIf="targetItem.data.name==='default/hard'" i18n="@@CommonCycleDefaultHard">default/hard
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="targetItem.isCustomNode">
+        {{targetItem.data.name}}
+      </ng-container>
+    </mat-panel-title>
+    <ng-container *ngIf="targetItem.isCustomNode">
+      <mat-icon color="primary" style="margin-left: auto; margin-right: 16px;">bookmark</mat-icon>
+    </ng-container>
+  </mat-expansion-panel-header>
+  <span>
+    <span i18n="@@Explanation">Explanation</span>
+    <span>&nbsp;:&nbsp;</span>
+    <span>
+      <ng-container *ngIf="!targetItem.isCustomNode">
+        <ng-container *ngIf="targetItem.data.name==='default'" i18n="@@CommonCycleDefaultDescription">default cycle
+        </ng-container>
+        <ng-container *ngIf="targetItem.data.name==='default/hard'" i18n="@@CommonCycleDefaultHardDescription">
+          Continuous and Random
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="targetItem.isCustomNode">
+        {{targetItem.data.description}}
+      </ng-container>
+    </span>
+  </span>
+
+  <table mat-table [dataSource]="targetItem.data.intarval" class="tableStyle mat-elevation-z4 dp3BackColor">
+
+    <!-- day Column -->
+    <ng-container matColumnDef="day">
+      <th class="headerCellStyle" mat-header-cell *matHeaderCellDef i18n="@@Intervals">Intervals</th>
+      <td class="cellStyle" mat-cell *matCellDef="let node">
+        <span>{{node.day}}</span>
+        <span>&nbsp;</span>
+        <span i18n="@@UnitDay">{node.day, plural, =0 {day} =1 {day} other {days}}</span>
+      </td>
+      <!--td mat-footer-cell *matFooterCellDef> Total </td-->
+    </ng-container>
+
+    <!-- margin Column -->
+    <ng-container matColumnDef="margin">
+      <th class="headerCellStyle" mat-header-cell *matHeaderCellDef i18n="@@Dispersion">Dispersion</th>
+      <td class="cellStyle" mat-cell *matCellDef="let node">
+        <span>{{node.margin}}</span>
+        <span>&nbsp;</span>
+        <span i18n="@@UnitDay">{node.margin, plural, =0 {day} =1 {day} other {days}}</span>
+      </td>
+      <!--td mat-footer-cell *matFooterCellDef> - </td-->
+    </ng-container>
+
+    <!-- repeat Column -->
+    <ng-container matColumnDef="repeat">
+      <th class="headerCellStyle" mat-header-cell *matHeaderCellDef i18n="@@Repetition">repetition</th>
+      <td class="cellStyle" mat-cell *matCellDef="let node">
+        <span>{{node.repeat}}</span>
+        <span>&nbsp;</span>
+        <span i18n="@@UnitTime">
+          {node.repeat, plural, =0 {time} =1 {time} other {times}}</span>
+      </td>
+      <!--td mat-footer-cell *matFooterCellDef> - </td-->
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="user.displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: user.displayedColumns;"></tr>
+    <!--tr mat-footer-row *matFooterRowDef="displayedColumns"></tr-->
+  </table>
+  <div *ngIf="targetItem.isCustomNode" style="margin-top: 16px;">
+    <button mat-icon-button (mouseup)="DeleteCycleButtonEventHandler($event,targetItem.data.id)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</mat-expansion-panel>

@@ -12,18 +12,23 @@ import { WorkCreateViewComponent } from '../../ViewItems/work-create-view/work-c
 })
 export class UserMainComponent implements OnInit, AfterViewChecked {
   @ViewChild('sidenavContent') sidenavContent: MatSidenavContent;
-  // @ViewChild('editCard') editCard: MatCard;
+
   /** 子コンポーネントを読み込む */
   @ViewChild(WorkCreateViewComponent)
   private workCreateView: WorkCreateViewComponent;
 
   constructor(
-    public createWorkService: CreateWorkService,
+    protected createWorkService: CreateWorkService,
     public menuControl: MenuControlService,
     public user: UserService) {
   }
 
+  get addMode(): boolean {
+    return this.createWorkService.addMode;
+  }
+
   ngOnInit() {
+    this.createWorkService.addMode = false;
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();
