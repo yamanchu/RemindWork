@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { UserService } from '../user.service';
+import { UserService } from '../../ViewModels/user.service';
 import { MenuControlService } from 'src/app/menu-control.service';
 
 @Component({

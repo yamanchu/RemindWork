@@ -33,11 +33,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 // Component.Dialog
 import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
 import { MessageDialogComponent } from './user/message-dialog/message-dialog.component';
-import { SubjectAreaDialogComponent } from './user/user-main/subject-area-dialog/subject-area-dialog.component';
+import { SubjectAreaDialogComponent } from './ViewItems/subject-area-dialog/subject-area-dialog.component';
 
 // Component
 import { Route } from '@angular/compiler/src/core';
@@ -46,14 +47,18 @@ import { TopComponent } from './hero/top/top.component';
 import { UserMainComponent } from './user/user-main/user-main.component';
 import { IntervalComponent } from './user/interval/interval.component';
 import { AnalysisComponent } from './user/analysis/analysis.component';
-import { SubjectDialogComponent } from './user/user-main/subject-dialog/subject-dialog.component';
-import { SelectNextNextToGoDialogComponent } from './user/user-main/select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
+import { SubjectDialogComponent } from './ViewItems/subject-dialog/subject-dialog.component';
+import { SelectNextNextToGoDialogComponent } from './ViewItems/select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
 
 // locale
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeJa from '@angular/common/locales/ja';
 import localeJaExtra from '@angular/common/locales/extra/ja';
+import { LearningComponent } from './user/analysis/tabItem/learning/learning.component';
+import { FinishedComponent } from './user/analysis/tabItem/finished/finished.component';
+import { WorkItemViewComponent } from './ViewItems/work-item-view/work-item-view.component';
+import { WorkCreateViewComponent } from './ViewItems/work-create-view/work-create-view.component';
 
 // registerLocaleData(localeJa, 'ja', localeJaExtra);
 
@@ -77,6 +82,10 @@ const routes: Routes = [
     SubjectAreaDialogComponent,
     SubjectDialogComponent,
     SelectNextNextToGoDialogComponent,
+    LearningComponent,
+    FinishedComponent,
+    WorkItemViewComponent,
+    WorkCreateViewComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -94,6 +103,7 @@ const routes: Routes = [
     AngularFireAuthModule,
     AngularFirestoreModule,
     // material
+    MatTabsModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatCheckboxModule,

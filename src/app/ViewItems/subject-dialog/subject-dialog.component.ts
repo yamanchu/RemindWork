@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ISubjectAreaNodeViewModel } from '../../user.service';
+import { ISubjectAreaNodeViewModel } from 'src/app/ViewModels/user.service';
 import { FormControl } from '@angular/forms';
 import { from } from 'rxjs';
 import { ISubject } from 'src/app/fire/storeInterfaces/ITags';

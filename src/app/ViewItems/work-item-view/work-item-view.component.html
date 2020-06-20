@@ -1,0 +1,201 @@
+<mat-card class="cardStyle">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <ng-container *ngIf="user.hasNextDate(targetItem)">
+        <mat-icon *ngIf="targetItem.next<=user.today" color="accent" style="margin-left: 4px;">
+          update
+        </mat-icon>
+        <mat-icon *ngIf="targetItem.next>user.today" color="primary" style="margin-left: 4px;">
+          done
+        </mat-icon>
+      </ng-container>
+      <ng-container *ngIf="!user.hasNextDate(targetItem)">
+        <mat-icon color="primary" style="margin-left: 4px;">
+          thumb_up
+        </mat-icon>
+      </ng-container>
+    </div>
+    <mat-card-title>
+      {{targetItem.data.overview}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      <ng-container *ngIf="targetItem.subjectArea!=null && targetItem.subjectArea.name !== '' ">
+        <span>{{targetItem.subjectArea.name}}</span>
+        <span *ngIf="targetItem.subject!=null && targetItem.subject.length>0">
+          <ng-container *ngFor="let subject of targetItem.subject index as j">
+            <ng-container *ngIf="j===0"> : </ng-container>
+            <ng-container *ngIf="j!==0"> / </ng-container>
+            {{subject.name}}
+          </ng-container>
+        </span>
+      </ng-container>
+    </mat-card-subtitle>
+    <span *ngIf="menuControl.pcMode && targetItem.cycle!=null" style="margin-left: auto; margin-right: 0;">
+      <span i18n="@@Interval">Interval</span>
+      <span>&nbsp;:&nbsp;</span>
+      <span>
+        <ng-container *ngIf="targetItem.cycle.name==='default'" i18n="@@CommonCycleDefault">default</ng-container>
+        <ng-container *ngIf="targetItem.cycle.name==='default/hard'" i18n="@@CommonCycleDefaultHard">default/hard
+        </ng-container>
+        <ng-container *ngIf="(targetItem.cycle.name!=='default') && (targetItem.cycle.name!=='default/hard')">
+          {{targetItem.cycle.name}}
+        </ng-container>
+      </span>
+    </span>
+    <span *ngIf="!menuControl.pcMode && targetItem.cycle!=null" style="margin-left: auto; margin-right: 0;">
+      <span>[</span>
+      <ng-container *ngIf="targetItem.cycle.name==='default'" i18n="@@CommonCycleDefault">default</ng-container>
+      <ng-container *ngIf="targetItem.cycle.name==='default/hard'" i18n="@@CommonCycleDefaultHard">default/hard
+      </ng-container>
+      <ng-container *ngIf="(targetItem.cycle.name!=='default') && (targetItem.cycle.name!=='default/hard')">
+        {{targetItem.cycle.name}}
+      </ng-container>
+      <span>]</span>
+    </span>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-accordion>
+      <mat-expansion-panel class="dp3BackColor">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span *ngIf="menuControl.pcMode">
+              <span i18n="@@LearningCount">Learning count</span>
+              <span>&nbsp;:&nbsp;</span>
+              <span>{{targetItem.data.result.length}}</span>
+            </span>
+            <span *ngIf="!menuControl.pcMode">
+              <span i18n="@@Count">Count</span>
+              <span>&nbsp;:&nbsp;</span>
+              <span>{{targetItem.data.result.length}}</span>
+            </span>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span i18n="@@LastStudyDate">Last</span>
+            <span>&nbsp;:&nbsp;</span>
+            <span *ngIf="menuControl.pcMode">{{targetItem.last | date:'longDate'}}</span>
+            <span *ngIf="!menuControl.pcMode">{{targetItem.last | date:'M/d'}}</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="targetItem.memoLink!=null && targetItem.memoLink.length>0">
+          <ng-container *ngFor="let memoContent of targetItem.memoLink">
+            <ng-container *ngIf="memoContent.length>0">
+              <p *ngIf="!user.isLinkText(memoContent)">{{memoContent}}</p>
+              <a *ngIf="user.isLinkText(memoContent)" href={{memoContent}} target="_blank">{{memoContent}}</a>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+        <div class="primaryBackGrandColor">
+          <svg [attr.viewBox]="user.GetView(targetItem).drawBax.area">
+            <defs>
+              <!-- arrowhead marker definition -->
+              <marker [attr.id]="'arrowY_'+ targetIndex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4"
+                markerHeight="4" orient="270deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                <path d="M 0 1 L 10 5 L 0 9" />
+              </marker>
+              <marker [attr.id]="'arrowX_'+ targetIndex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4"
+                markerHeight="4" orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+                <path d="M 0 1 L 10 5 L 0 9" />
+              </marker>
+              <!-- simple dot marker definition -->
+              <marker [attr.id]="'dotPoint_'+ targetIndex" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4"
+                markerHeight="4">
+                <circle cx="5" cy="5" r="4" fill="#ff4081" />
+              </marker>
+            </defs>
+            <line [attr.x1]="user.GetView(targetItem).viewOutline.start.x-1"
+              [attr.y1]="user.GetView(targetItem).viewOutline.start.y"
+              [attr.x2]="user.GetView(targetItem).viewOutline.end.x"
+              [attr.y2]="user.GetView(targetItem).viewOutline.start.y" stroke-width="2" stroke="#ffffff"
+              [attr.marker-end]="'url(#arrowX_'+ targetIndex+')'" />
+            <line [attr.x1]="user.GetView(targetItem).viewOutline.start.x"
+              [attr.y1]="user.GetView(targetItem).viewOutline.start.y+1"
+              [attr.x2]="user.GetView(targetItem).viewOutline.start.x"
+              [attr.y2]="user.GetView(targetItem).viewOutline.end.y" stroke-width="2" stroke="#ffffff"
+              [attr.marker-end]="'url(#arrowY_'+ targetIndex+')'" />
+            <path [attr.d]="user.GetView(targetItem).pointPath(1)" fill="transparent" stroke-width="0.75"
+              stroke="#ffffff" />
+            <path [attr.d]="user.GetView(targetItem).endDayDrawPath()" fill="transparent" stroke-width="0.5"
+              stroke="#ffffff" />
+            <text [attr.x]="user.GetView(targetItem).endDayDrawX" [attr.y]="user.GetView(targetItem).drawBax.end.y-1"
+              font-size="20" text-anchor="middle" fill="white"
+              font-weight="100">{{user.GetView(targetItem).endDate| date:'M/d'}}</text>
+            <text [attr.x]="user.GetView(targetItem).convertDateNumberToDrawX(targetItem.data.result[0].date)"
+              [attr.y]="user.GetView(targetItem).drawBax.end.y-1" font-size="20" text-anchor="start" fill="white"
+              font-weight="100">{{targetItem.data.result[0].date| date:'M/d'}}</text>
+            <ng-container *ngFor="let resultItem of targetItem.data.result">
+              <line [attr.x1]="user.GetView(targetItem).convertDateNumberToDrawX(resultItem.date)"
+                [attr.y1]="user.GetView(targetItem).getDrawRealForgetPoint(targetItem.data.maxPoint,targetItem.data.result,resultItem)"
+                [attr.x2]="user.GetView(targetItem).convertDateNumberToDrawX(resultItem.date)"
+                [attr.y2]="user.GetView(targetItem).convertToDrawY(1)" stroke-width="2" stroke="#ff4081"
+                [attr.marker-start]="'url(#dotPoint_'+ targetIndex+')'" />
+              <path *ngIf="user.GetView(targetItem).drawRealForgetCurve(targetItem.data.result,resultItem)"
+                [attr.d]="user.GetView(targetItem).getDrawRealForgetCurve(targetItem.data.maxPoint,targetItem.data.result,resultItem)"
+                fill="transparent" stroke-width="2" stroke="#ff4081" />
+            </ng-container>
+            <path [attr.d]="user.GetView(targetItem).getDrawImageForgetCurveFront(targetItem.data.result,targetItem.data.next)"
+              fill="transparent" stroke-width="2" stroke="#ff4081" stroke-dasharray="4 3" />
+            <path *ngIf="user.hasNextDate(targetItem)"
+              [attr.d]="user.GetView(targetItem).getDrawImageForgetCurveRear(targetItem.data.result,targetItem.data.next)"
+              fill="transparent" stroke-width="2" stroke="#ff4081" stroke-dasharray="4 3" />
+          </svg>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+  <mat-card-actions>
+    <ng-container *ngIf="user.hasNextDate(targetItem)">
+      <div *ngIf="targetItem.next<=user.today" style="margin-left: 16px;">
+        <form [formGroup]="resultFormGroup">
+          <mat-form-field style="width: 92px;">
+            <mat-label i18n="@@ReviewResult">result</mat-label>
+            <input matInput type="number" min="0" [max]="targetItem.data.maxPoint" formControlName="point"
+              required="true">
+            <mat-error>0～{{targetItem.data.maxPoint}}</mat-error>
+          </mat-form-field>/{{targetItem.data.maxPoint}}
+          <div
+            style=" float: right; margin-left: auto; margin-right: 8px; margin-top: 0px; width: max-content;">
+            <span>
+              <button [ngSwitch]="targetItem.nextToGo" (mouseup)="selectNextNextToGo(targetItem)" mat-icon-button
+                color="primary" style="margin-right: 16px;">
+                <mat-icon *ngSwitchCase="listType.Next" color="primary">schedule</mat-icon>
+                <mat-icon *ngSwitchCase="listType.Repeat" color="primary">repeat_one</mat-icon>
+                <mat-icon *ngSwitchCase="listType.ReStart" color="primary">reply_all</mat-icon>
+                <mat-icon *ngSwitchCase="listType.Finish" color="primary">thumb_up</mat-icon>
+                <mat-icon *ngSwitchDefault color="primary">schedule</mat-icon>
+              </button>
+              <button [disabled]="resultFormGroup.invalid" mat-mini-fab color="primary"
+                (mouseup)="registerResult()">
+                <mat-icon>done</mat-icon>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="targetItem.next>user.today" style="margin-left: 16px; margin-right: 24px;">
+        <span>
+          <span i18n="@@Memorize">Memorize</span>
+          <span>&nbsp;:&nbsp;</span>
+          <span>{{targetItem.data.maxPoint}}</span>
+        </span>
+        <ng-container>
+          <span *ngIf="menuControl.pcMode" style="float: right;">
+            <span i18n="@@Next">Next</span>
+            <span>&nbsp;:&nbsp;</span>
+            <span>{{targetItem.data.next | date:'longDate'}}</span>
+          </span>
+          <span *ngIf="!menuControl.pcMode" style="float: right;">
+            <span i18n="@@Next">Next</span>
+            <span>&nbsp;:&nbsp;</span>
+            <span>{{targetItem.data.next | date:'MMMd'}}</span>
+          </span>
+        </ng-container>
+      </div>
+    </ng-container>
+    <div *ngIf="!user.hasNextDate(targetItem)" style="margin-left: 16px; margin-right: 24px;">
+      <span i18n="@@Memorized">Memorized</span>
+      <span>&nbsp;:&nbsp;</span>
+      <span>{{targetItem.data.maxPoint}}</span>
+      <span style="float: right;" i18n="@@Finish">Finish</span>
+    </div>
+  </mat-card-actions>
+</mat-card>

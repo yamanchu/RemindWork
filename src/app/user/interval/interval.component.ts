@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators, FormControl } from '@angular/forms';
-import { UserService } from '../user.service';
+import { UserService } from 'src/app/ViewModels/user.service';
 import { IIntarvalNode, ICycleNode } from '../../fire/storeInterfaces/ICycles';
 import { MenuControlService } from 'src/app/menu-control.service';
 import { MatDialog } from '@angular/material/dialog';

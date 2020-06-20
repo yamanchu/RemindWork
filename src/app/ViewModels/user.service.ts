@@ -7,13 +7,13 @@ import { StoreService } from '../fire/store.service';
 import { ICycles, ICycleNode, IIntarvalNode } from '../fire/storeInterfaces/ICycles';
 import { ISubjectAreas, ISubjectArea, ISubject } from '../fire/storeInterfaces/ITags';
 import { IWork, IWorkResult } from '../fire/storeInterfaces/IWork';
-import { ViewGraph } from './GraphViewModels/ViewGraph';
+import { ViewGraph } from '../user/GraphViewModels/ViewGraph';
 import { environment } from 'src/environments/environment';
 
 import { interval, from } from 'rxjs';
 import { strict } from 'assert';
 import { database } from 'firebase';
-import { Point2D } from './GraphViewModels/Point2D';
+import { Point2D } from '../user/GraphViewModels/Point2D';
 
 
 export interface ICycleNodeViewModel {

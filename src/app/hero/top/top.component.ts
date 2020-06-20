@@ -10,7 +10,7 @@ import { MenuControlService } from 'src/app/menu-control.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LogintypeSelectorComponent, DialogData } from './logintypeSelector.component';
 
-import { UserService } from '../../user/user.service';
+import { UserService } from 'src/app/ViewModels/user.service';
 
 
 @Component({

@@ -18,7 +18,7 @@
     <mat-nav-list>
       <mat-list-item routerLink="/user-main">
         <mat-icon matListIcon>view_agenda</mat-icon>
-        <h4 matLine i18n="@@ReviewList">Review list</h4>
+        <h4 matLine i18n="@@ReviewList">List</h4>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item routerLink="/analysis">
@@ -36,7 +36,14 @@
   <!-- メイン コンテンツ -->
   <mat-sidenav-content>
     <div class="mainSection">
-      メイン コンテンツ
+      <mat-tab-group mat-align-tabs="start">
+        <mat-tab i18n-label="@@LearningTabName" label="Learning">
+          <app-learning></app-learning>
+        </mat-tab>
+        <mat-tab i18n-label="@@FinishedTabName" label="Finished">
+          <app-finished></app-finished>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

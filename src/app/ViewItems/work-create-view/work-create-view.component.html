@@ -1,0 +1,116 @@
+<mat-card class="cardStyle" #editCard>
+  <mat-card-header>
+    <mat-card-title i18n="@@NewItem">New item</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="maxWidth" [formGroup]="newWorkInputGroupe">
+      <div>
+        <mat-form-field class="maxWidth">
+          <mat-label i18n="@@EnterStudySummary">Enter your study summary</mat-label>
+          <input type="text" i18n-placeholder placeholder="E.g., a vocabulary book.10～12page"
+            aria-label="InputWorkOverview" matInput formControlName="overview" required="true">
+        </mat-form-field>
+      </div>
+      <div class="pointsCycleContainer">
+        <div class="points">
+          <mat-form-field style="width: 92px;">
+            <mat-label i18n="@@Memorize">Memorize</mat-label>
+            <input matInput type="number" formControlName="point" aria-label="InputWorkPoint" i18n-placeholder
+              placeholder="E.g.,10" min="1" required="true">
+            <mat-error i18n="@@EnterAtLeastOne">Enter at least 1.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="cycle">
+          <mat-form-field style="width: 122px;">
+            <mat-label i18n="@@Interval">Interval</mat-label>
+            <mat-select formControlName="cycle">
+              <ng-container *ngFor="let item of user.cycleNodeViewModel">
+                <mat-option [value]="item">
+                  <ng-container *ngIf="!item.isCustomNode">
+                    <ng-container *ngIf="item.data.name==='default'" i18n="@@CommonCycleDefault">default
+                    </ng-container>
+                    <ng-container *ngIf="item.data.name==='default/hard'" i18n="@@CommonCycleDefaultHard">
+                      default/hard
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="item.isCustomNode">
+                    {{item.data.name}}
+                  </ng-container>
+                </mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-accordion>
+        <mat-expansion-panel class="dp3BackColor">
+          <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@Detailed">
+              Detailed
+            </mat-panel-title>
+            <mat-panel-description>
+              <span>(</span>
+              <span i18n="@@Optional">optional</span>
+              <span>)</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="gridContainer">
+            <div class="buttonSportInput">
+              <mat-form-field class="maxWidth">
+                <mat-label i18n="@@EnterSubjectArea">Enter a subject area</mat-label>
+                <input type="text" i18n-placeholder placeholder="e.g, English" aria-label="InputviewSubjectArea "
+                  matInput formControlName="newSubjectAreas">
+              </mat-form-field>
+            </div>
+            <div class="inputSelectButton">
+              <button mat-mini-fab color="primary" aria-label="Subject area select" (mouseup)="subjectAreaEdit()">
+                <mat-icon>list</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="gridContainer">
+            <div class="buttonSportInput">
+              <mat-form-field class="maxWidth">
+                <mat-chip-list #subjectAreaList aria-label="SubjectArea selection">
+                  <ng-container *ngFor="let item of inputSubject">
+                    <mat-chip selected="true" removable="true" (removed)="removeSubject(item)">
+                      {{item.name}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </ng-container>
+                  <input i18n-placeholder placeholder="Enter a subject or category" #subjectInput
+                    formControlName='newSubject' [matChipInputFor]="subjectAreaList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="addSubject($event)">
+                </mat-chip-list>
+              </mat-form-field>
+            </div>
+            <div class="inputSelectButton">
+              <button mat-mini-fab color="primary" aria-label="Subject select" (mouseup)="subjectEdit()">
+                <mat-icon>list</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div>
+            <mat-form-field class="maxWidth">
+              <mat-label i18n="@@EnterMemo">memo entry</mat-label>
+              <textarea matInput formControlName="memo" aria-label="InputWorkDeteil"></textarea>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="actionButtonContainer">
+      <button class="ClancelButton" color="primary" mat-raised-button (mouseup)="registerWorkCnacel()"
+        i18n="@@Cancel">
+        Cancel
+      </button>
+      <button class="OKButton" color="primary" mat-raised-button (mouseup)='registerWork()'
+        [disabled]="newWorkInputGroupe.invalid" i18n="@@Register">
+        Register
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>
