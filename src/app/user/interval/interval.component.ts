@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/ViewModels/user.service';
-import { MenuControlService } from 'src/app/menu-control.service';
+import { MenuControlService } from 'src/app/ViewModels/menu-control.service';
 import { CreateIntervalService } from '../../ViewModels/create-interval.service';
 import { IntervalCreateViewComponent } from '../../ViewItems/interval-create-view/interval-create-view.component';
 

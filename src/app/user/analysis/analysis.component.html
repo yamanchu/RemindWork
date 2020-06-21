@@ -15,23 +15,7 @@
 <mat-sidenav-container class="sideNavi-container">
   <!-- サイドメニュー -->
   <mat-sidenav [mode]="menuControl.sideNaviMode" [(opened)]="menuControl.showSideMenu">
-    <mat-nav-list>
-      <mat-list-item routerLink="/user-main">
-        <mat-icon matListIcon>view_agenda</mat-icon>
-        <h4 matLine i18n="@@ReviewList">List</h4>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item routerLink="/analysis">
-        <mat-icon matListIcon>timeline</mat-icon>
-        <h4 matLine i18n="@@Analysis">Analysis</h4>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item routerLink="/interval">
-        <mat-icon matListIcon>repeat</mat-icon>
-        <h4 matLine i18n="@@Interval">Interval</h4>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-    </mat-nav-list>
+    <app-side-navi-menu current="/analysis"></app-side-navi-menu>
   </mat-sidenav>
   <!-- メイン コンテンツ -->
   <mat-sidenav-content>

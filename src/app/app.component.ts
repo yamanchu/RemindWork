@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MenuControlService } from 'src/app/menu-control.service';
+import { MenuControlService } from 'src/app/ViewModels/menu-control.service';
 
 @Component({
   selector: 'app-root',

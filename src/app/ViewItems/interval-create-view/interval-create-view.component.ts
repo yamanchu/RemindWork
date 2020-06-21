@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/ViewModels/user.service';
-import { MenuControlService } from '../../menu-control.service';
+import { MenuControlService } from '../../ViewModels/menu-control.service';
 import { CreateIntervalService } from '../../ViewModels/create-interval.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { ICycleNode } from '../../fire/storeInterfaces/ICycles';

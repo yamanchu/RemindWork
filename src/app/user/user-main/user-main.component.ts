@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { MenuControlService } from '../../menu-control.service';
+import { MenuControlService } from '../../ViewModels/menu-control.service';
 import { UserService } from '../../ViewModels/user.service';
 import { CreateWorkService } from '../../ViewModels/create-work.service';
 import { WorkCreateViewComponent } from '../../ViewItems/work-create-view/work-create-view.component';

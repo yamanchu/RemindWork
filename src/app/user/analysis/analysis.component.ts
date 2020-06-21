@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { UserService } from '../../ViewModels/user.service';
-import { MenuControlService } from 'src/app/menu-control.service';
+import { MenuControlService } from 'src/app/ViewModels/menu-control.service';
 
 @Component({
   selector: 'app-analysis',

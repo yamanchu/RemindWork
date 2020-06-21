@@ -5,7 +5,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatButton } from '@angular/material/button';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import { MenuControlService } from 'src/app/menu-control.service';
+import { MenuControlService } from 'src/app/ViewModels/menu-control.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { LogintypeSelectorComponent, DialogData } from './logintypeSelector.component';

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ICycleNodeViewModel, UserService } from 'src/app/ViewModels/user.service';
-import { MenuControlService } from '../../menu-control.service';
+import { MenuControlService } from '../../ViewModels/menu-control.service';
 import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { from } from 'rxjs';

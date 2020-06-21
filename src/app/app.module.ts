@@ -61,6 +61,7 @@ import { WorkItemViewComponent } from './ViewItems/work-item-view/work-item-view
 import { WorkCreateViewComponent } from './ViewItems/work-create-view/work-create-view.component';
 import { IntervalItemViewComponent } from './ViewItems/interval-item-view/interval-item-view.component';
 import { IntervalCreateViewComponent } from './ViewItems/interval-create-view/interval-create-view.component';
+import { SideNaviMenuComponent } from './ViewItems/side-navi-menu/side-navi-menu.component';
 
 // registerLocaleData(localeJa, 'ja', localeJaExtra);
 
@@ -90,6 +91,7 @@ const routes: Routes = [
     WorkCreateViewComponent,
     IntervalItemViewComponent,
     IntervalCreateViewComponent,
+    SideNaviMenuComponent,
   ],
   imports: [
     RouterModule.forRoot(

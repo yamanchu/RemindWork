@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IWorkNodeViewModel, UserService, NextToGo } from 'src/app/ViewModels/user.service';
-import { MenuControlService } from '../../menu-control.service';
+import { MenuControlService } from '../../ViewModels/menu-control.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectNextNextToGoDialogComponent, SelectNextNextToGoDialogData } from '../select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
 

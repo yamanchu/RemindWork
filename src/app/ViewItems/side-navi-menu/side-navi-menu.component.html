@@ -1,0 +1,17 @@
+<mat-nav-list>
+  <mat-list-item [routerLink]="userMainLink">
+    <mat-icon matListIcon>view_agenda</mat-icon>
+    <h4 matLine i18n="@@ReviewList">List</h4>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item [routerLink]="analysisLink">
+    <mat-icon matListIcon>timeline</mat-icon>
+    <h4 matLine i18n="@@Analysis">Analysis</h4>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item [routerLink]="intervalLink">
+    <mat-icon matListIcon>repeat</mat-icon>
+    <h4 matLine i18n="@@Interval">Interval</h4>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-nav-list>

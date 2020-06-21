@@ -7,7 +7,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { IWorkNodeViewModel, UserService, NextToGo } from 'src/app/ViewModels/user.service';
 import { CreateWorkService } from '../../ViewModels/create-work.service';
 import { ISubject, ISubjectArea } from '../../fire/storeInterfaces/ITags';
-import { MenuControlService } from '../../menu-control.service';
+import { MenuControlService } from '../../ViewModels/menu-control.service';
 import { SubjectAreaDialogComponent, SubjectAreaDialogData } from '../subject-area-dialog/subject-area-dialog.component';
 import { SubjectDialogComponent, SubjectDialogData } from '../subject-dialog/subject-dialog.component';
 import { Observable, from } from 'rxjs';

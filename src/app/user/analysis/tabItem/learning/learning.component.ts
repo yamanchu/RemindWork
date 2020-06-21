@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/ViewModels/user.service';
-import { MenuControlService } from 'src/app/menu-control.service';
+import { MenuControlService } from 'src/app/ViewModels/menu-control.service';
 
 @Component({
   selector: 'app-learning',
