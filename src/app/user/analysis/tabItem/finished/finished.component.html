@@ -1,1 +1,4 @@
-<p>finished works!</p>
+<ng-container *ngFor="let item of user.workFinish index as i">
+  <app-work-item-view *ngIf="item.data!=null" [targetMode]="user.workViewTo.Finish" [targetItem]="item"
+    [targetIndex]="i"></app-work-item-view>
+</ng-container>

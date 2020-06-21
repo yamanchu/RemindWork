@@ -7,6 +7,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { environment } from 'src/environments/environment';
 
+// locale
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeJa from '@angular/common/locales/ja';
+import localeJaExtra from '@angular/common/locales/extra/ja';
+
+// registerLocaleData(localeJa, 'ja', localeJaExtra);
+
+
 // firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -50,11 +59,6 @@ import { AnalysisComponent } from './user/analysis/analysis.component';
 import { SubjectDialogComponent } from './ViewItems/subject-dialog/subject-dialog.component';
 import { SelectNextNextToGoDialogComponent } from './ViewItems/select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
 
-// locale
-import { LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeJa from '@angular/common/locales/ja';
-import localeJaExtra from '@angular/common/locales/extra/ja';
 import { LearningComponent } from './user/analysis/tabItem/learning/learning.component';
 import { FinishedComponent } from './user/analysis/tabItem/finished/finished.component';
 import { WorkItemViewComponent } from './ViewItems/work-item-view/work-item-view.component';
@@ -63,7 +67,6 @@ import { IntervalItemViewComponent } from './ViewItems/interval-item-view/interv
 import { IntervalCreateViewComponent } from './ViewItems/interval-create-view/interval-create-view.component';
 import { SideNaviMenuComponent } from './ViewItems/side-navi-menu/side-navi-menu.component';
 
-// registerLocaleData(localeJa, 'ja', localeJaExtra);
 
 const routes: Routes = [
   { path: '', component: TopComponent },

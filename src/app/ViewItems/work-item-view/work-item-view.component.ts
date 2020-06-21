@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { IWorkNodeViewModel, UserService, NextToGo } from 'src/app/ViewModels/user.service';
+import { IWorkNodeViewModel, UserService, NextToGo, WorkViewMode } from 'src/app/ViewModels/user.service';
 import { MenuControlService } from '../../ViewModels/menu-control.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectNextNextToGoDialogComponent, SelectNextNextToGoDialogData } from '../select-next-next-to-go-dialog/select-next-next-to-go-dialog.component';
@@ -14,11 +14,11 @@ import { Input } from '@angular/core';
 })
 export class WorkItemViewComponent implements OnInit {
 
-  listType = NextToGo;
   resultFormGroup: FormGroup;
 
   @Input() targetItem: IWorkNodeViewModel;
   @Input() targetIndex: number;
+  @Input() targetMode: WorkViewMode;
 
   constructor(
     private dialog: MatDialog,

@@ -30,6 +30,11 @@ export enum NextToGo {
   Next, Repeat, ReStart, Finish
 }
 
+export enum WorkViewMode {
+  Target, Learning, Finish
+}
+
+
 /**
  *
  *
@@ -57,6 +62,8 @@ export interface IWorkNodeViewModel {
 export class UserService {
 
   displayedColumns: string[] = ['day', 'margin', 'repeat'];
+  workViewTo = WorkViewMode;
+  nextTo = NextToGo;
 
   get debugMode(): boolean {
     return !environment.production;
@@ -72,6 +79,7 @@ export class UserService {
     private store: StoreService) { }
 
   private initialized: Date = null;
+  private initializedFinish: Date = null;
 
   today: Date;
 
@@ -103,6 +111,26 @@ export class UserService {
       this._workTarget = new Array(0);
     }
     return this._workTarget;
+  }
+
+  // tslint:disable-next-line: variable-name
+  private _workFinihsh: IWorkNodeViewModel[] = null;
+
+  get workFinish(): IWorkNodeViewModel[] {
+    if (this._workFinihsh == null) {
+      this._workFinihsh = new Array(0);
+    }
+    return this._workFinihsh;
+  }
+
+  // tslint:disable-next-line: variable-name
+  private _workLearning: IWorkNodeViewModel[] = null;
+
+  get workLearning(): IWorkNodeViewModel[] {
+    if (this._workLearning == null) {
+      this._workLearning = new Array(0);
+    }
+    return this._workLearning;
   }
 
   // tslint:disable-next-line: variable-name
@@ -198,26 +226,7 @@ export class UserService {
     return text.replace(reg, '<a href=\'$1\' target=\'_blank\'>$1</a>');
   }
 
-  private setWorkViewModel(work: IWork): void {
-
-    /*
-    let subjectArea: ISubjectArea = null;
-    const subjectAreaIndex = this.subjectAreaNodeViewModel.findIndex(item => item.data.id === work.subjectAreaID);
-    if (subjectAreaIndex >= 0) {
-      subjectArea = this.subjectAreaNodeViewModel[subjectAreaIndex].data;
-    }
-
-    const subject: ISubject[] = new Array(0);
-    if (subjectArea != null) {
-      for (const iterator of work.subjectID) {
-        const subjectIndex = subjectArea.subjects.findIndex(item => item.id === iterator);
-        if (subjectIndex >= 0) {
-          subject.push(subjectArea.subjects[subjectIndex]);
-        }
-      }
-    }
-  */
-
+  private GetWorkViewModel(work: IWork): IWorkNodeViewModel {
     let memo: string[];
     if (work.memo != null) {
       if (work.memo.indexOf('\n') < 0) {
@@ -252,11 +261,29 @@ export class UserService {
       nextToGo: NextToGo.Next,
       isLastWork: false,
     };
+    return workNodeViewModel;
+  }
+
+  private setWorkViewModel(work: IWork): void {
+
+    const workNodeViewModel = this.GetWorkViewModel(work);
 
     // this.workAll.push(workNodeViewModel);
     if (((workNodeViewModel.next != null) && workNodeViewModel.next <= this.today)
       || (workNodeViewModel.last.getTime() === this.today.getTime())) {
       this.workTarget.push(workNodeViewModel);
+    }
+  }
+
+  private setWorkViewAllhModel(work: IWork): void {
+
+    const workNodeViewModel = this.GetWorkViewModel(work);
+
+    if (workNodeViewModel.next == null || workNodeViewModel.data.next === Number.MAX_SAFE_INTEGER) {
+      this.workFinish.push(workNodeViewModel);
+    }
+    else {
+      this.workLearning.push(workNodeViewModel);
     }
   }
 
@@ -294,6 +321,24 @@ export class UserService {
       if (workNodeViewModel.isLastWork) {
         workNodeViewModel.nextToGo = NextToGo.Finish;
       }
+    }
+  }
+
+  LoadAllData() {
+
+    this.today = this.GetBaseDate();
+
+    if (this.initializedFinish == null || this.initializedFinish < this.today) {
+      this.workFinish.splice(0);
+      this.workLearning.splice(0);
+      // this.store.GetDefaultCycles((cycles) => this.setCycleNodeViewModel(cycles));
+
+      const uid = this.auth.TryGetUID();
+      this.store.LoadAllhWork(uid,
+        this.today.getTime(),
+        (work) => this.setWorkViewAllhModel(work));
+
+      this.initializedFinish = this.today;
     }
   }
 

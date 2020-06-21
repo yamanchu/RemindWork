@@ -17,6 +17,7 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
   @ViewChild(WorkCreateViewComponent)
   private workCreateView: WorkCreateViewComponent;
 
+
   constructor(
     protected createWorkService: CreateWorkService,
     public menuControl: MenuControlService,

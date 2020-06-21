@@ -17,6 +17,7 @@ export class AnalysisComponent implements OnInit {
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();
+      this.user.LoadAllData();
     }
     else {
       this.user.routerNavigate('');

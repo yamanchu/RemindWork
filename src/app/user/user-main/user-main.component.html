@@ -16,7 +16,7 @@
   <mat-sidenav-content #sidenavContent>
     <div class="mainSection">
       <ng-container *ngFor="let item of user.workTarget index as i">
-        <app-work-item-view *ngIf="item.data!=null" [targetItem]="item" [targetIndex]="i"></app-work-item-view>
+        <app-work-item-view *ngIf="item.data!=null" [targetMode]="user.workViewTo.Target" [targetItem]="item" [targetIndex]="i"></app-work-item-view>
       </ng-container>
       <app-work-create-view [hidden]="!addMode"></app-work-create-view>
     </div>

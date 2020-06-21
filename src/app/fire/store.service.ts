@@ -38,11 +38,6 @@ export interface UserDocument extends IStoreDocument, IUserCycleDocument, IUserT
   providedIn: 'root'
 })
 export class StoreService {
-  private userDocumentReference: DocumentReference;
-  private userDocument: UserDocument = null;
-  private cycleManager: CycleDocumentManager;
-  private tagManager: TagDocumentManager;
-  private workManager: WorkDocumentManager;
 
   constructor(private angularFireStore: AngularFirestore) {
     if (this.cycleManager == null) {
@@ -55,7 +50,22 @@ export class StoreService {
       this.workManager = new WorkDocumentManager(angularFireStore);
     }
   }
+  private userDocumentReference: DocumentReference;
+  private userDocument: UserDocument = null;
+  private cycleManager: CycleDocumentManager;
+  private tagManager: TagDocumentManager;
+  private workManager: WorkDocumentManager;
 
+  loadDatas: any[];
+
+  LoadAllhWork(
+    userID: string,
+    toDayTime: number,
+    workObserver: ((work: IWork) => void)) {
+    Promise.all(this.loadDatas).then((ret) => {
+      const wait1 = this.workManager.LoadAll(userID, toDayTime, workObserver);
+    });
+  }
   Load(
     userID: string,
     toDayTime: number,
@@ -64,10 +74,13 @@ export class StoreService {
     workObserver: ((work: IWork) => void),
     readFinishObserver: (() => void)
   ) {
+    this.loadDatas = new Array(0);
 
     const wait0 = this.GetDefaultCycles(cycleObserver);
-
     const wait1 = this.workManager.Load(userID, toDayTime, workObserver);
+
+    this.loadDatas.push(wait0);
+    this.loadDatas.push(wait1);
 
     this.angularFireStore
       .collection('users', ref => ref.where('author', '==', userID))
@@ -79,7 +92,9 @@ export class StoreService {
             this.userDocument = snapshot.docs[0].data() as UserDocument;
             const wait2 = this.cycleManager.Load(this.userDocument.cycles, cycleObserver);
             const wait3 = this.tagManager.Load(this.userDocument.subjectAreas, tagObserver);
-            Promise.all([wait0, wait1, wait2, wait3]).then((ret) => {
+            this.loadDatas.push(wait2);
+            this.loadDatas.push(wait3);
+            Promise.all(this.loadDatas).then((ret) => {
               readFinishObserver();
             });
           }
