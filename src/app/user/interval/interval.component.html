@@ -22,6 +22,7 @@
         <app-interval-create-view [hidden]="!addMode"></app-interval-create-view>
       </mat-accordion>
     </div>
+    <!-- 追加ボタン -->
     <div class="fabPosition" *ngIf="!addMode">
       <button mat-fab mat-elevation-z8 (mouseup)="StartAddMode()">
         <mat-icon>add</mat-icon>
