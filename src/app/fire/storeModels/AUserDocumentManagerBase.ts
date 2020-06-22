@@ -28,9 +28,10 @@ export abstract class AUserDocumentManagerBase<T> extends AUserDocumentManagerCo
 
   GetDefault(
     observer: ((readValue: T) => void)
-  ) {
+  ): any {
+    let ret = null;
     if (this.defaultCollectionName !== '' && this.defaultDocumentionName !== '') {
-      this.angularFireStore
+      ret = this.angularFireStore
         .collection(this.defaultCollectionName)
         .doc(this.defaultDocumentionName)
         .get()
@@ -40,6 +41,7 @@ export abstract class AUserDocumentManagerBase<T> extends AUserDocumentManagerCo
             observer(read);
           });
     }
+    return ret;
   }
 
 }

@@ -1,7 +1,7 @@
 import { Point2D } from './Point2D';
 import { ViewCore } from './ViewCore';
 import { DrawBox } from './DrawBox';
-import { IWorkResult } from '../../fire/storeInterfaces/IWork';
+import { IWorkResult } from '../fire/storeInterfaces/IWork';
 
 import { from } from 'rxjs';
 import { Point } from 'src/app/Geometry/Point';

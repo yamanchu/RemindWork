@@ -29,7 +29,11 @@ export class IntervalComponent implements OnInit {
 
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
-      // this.user.LoadData();
+      this.user.LoadData();
+
+      if (!this.menuControl.pcMode) {
+        this.menuControl.showSideMenu = false;
+      }
     }
     else {
       this.user.routerNavigate('');

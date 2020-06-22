@@ -18,6 +18,10 @@ export class AnalysisComponent implements OnInit {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();
       this.user.LoadAllData();
+
+      if (!this.menuControl.pcMode) {
+        this.menuControl.showSideMenu = false;
+      }
     }
     else {
       this.user.routerNavigate('');

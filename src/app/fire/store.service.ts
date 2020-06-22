@@ -58,6 +58,7 @@ export class StoreService {
 
   loadDatas: any[];
 
+  waitingLoadAllhWork = false;
   LoadAllhWork(
     userID: string,
     toDayTime: number,
@@ -66,6 +67,7 @@ export class StoreService {
       const wait1 = this.workManager.LoadAll(userID, toDayTime, workObserver);
     });
   }
+
   Load(
     userID: string,
     toDayTime: number,
@@ -82,7 +84,7 @@ export class StoreService {
     this.loadDatas.push(wait0);
     this.loadDatas.push(wait1);
 
-    this.angularFireStore
+    const wait4 = this.angularFireStore
       .collection('users', ref => ref.where('author', '==', userID))
       .get()
       .subscribe(
@@ -92,13 +94,14 @@ export class StoreService {
             this.userDocument = snapshot.docs[0].data() as UserDocument;
             const wait2 = this.cycleManager.Load(this.userDocument.cycles, cycleObserver);
             const wait3 = this.tagManager.Load(this.userDocument.subjectAreas, tagObserver);
-            this.loadDatas.push(wait2);
-            this.loadDatas.push(wait3);
-            Promise.all(this.loadDatas).then((ret) => {
+            // this.loadDatas.push(wait2);
+            // this.loadDatas.push(wait3);
+            Promise.all([wait0, wait1, wait2, wait3]).then((ret) => {
               readFinishObserver();
             });
           }
         });
+    this.loadDatas.push(wait4);
   }
 
 
@@ -148,8 +151,8 @@ export class StoreService {
 */
   GetDefaultCycles(
     observer: ((cycles: ICycles) => void)
-  ) {
-    this.cycleManager.GetDefault(observer);
+  ): any {
+    return this.cycleManager.GetDefault(observer);
   }
 
 
