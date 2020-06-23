@@ -276,51 +276,62 @@ export class UserService {
   }
 
   private setWorkViewAllhModel(work: IWork): void {
+    if (work.upDate < this.today.getTime()) {
+      const workNodeViewModel = this.GetWorkViewModel(work);
+      this.setRefData(workNodeViewModel);
 
-    const workNodeViewModel = this.GetWorkViewModel(work);
-
-    if (workNodeViewModel.next == null || workNodeViewModel.data.next === Number.MAX_SAFE_INTEGER) {
-      this.workFinish.push(workNodeViewModel);
+      if (workNodeViewModel.next == null || workNodeViewModel.data.next === Number.MAX_SAFE_INTEGER) {
+        this.workFinish.push(workNodeViewModel);
+      }
+      else {
+        this.workLearning.push(workNodeViewModel);
+      }
     }
-    else {
-      this.workLearning.push(workNodeViewModel);
+  }
+
+  private setRefData(workNodeViewModel: IWorkNodeViewModel) {
+    const work = workNodeViewModel.data;
+
+    let subjectArea: ISubjectArea = null;
+    const subjectAreaIndex = this.subjectAreaNodeViewModel.findIndex(item => item.data.id === work.subjectAreaID);
+    if (subjectAreaIndex >= 0) {
+      subjectArea = this.subjectAreaNodeViewModel[subjectAreaIndex].data;
+    }
+
+    const subject: ISubject[] = new Array(0);
+    if (subjectArea != null) {
+      for (const iterator of work.subjectID) {
+        const subjectIndex = subjectArea.subjects.findIndex(item => item.id === iterator);
+        if (subjectIndex >= 0) {
+          subject.push(subjectArea.subjects[subjectIndex]);
+        }
+      }
+    }
+
+    workNodeViewModel.subjectArea = subjectArea;
+    workNodeViewModel.subject = subject;
+
+
+    const cycle = this.GetCycleFromWork(work);
+    workNodeViewModel.cycleCount = this.GetCycleCount(cycle);
+    workNodeViewModel.cycle = cycle;
+
+    const nextInterval = this.GetGoToInterval(cycle, workNodeViewModel.data.result, workNodeViewModel.data.resultOffset);
+    workNodeViewModel.isLastWork = (nextInterval == null);
+    if (workNodeViewModel.isLastWork) {
+      workNodeViewModel.nextToGo = NextToGo.Finish;
     }
   }
 
   private readFinish() {
     for (const workNodeViewModel of this.workTarget) {
-
-      const work = workNodeViewModel.data;
-
-      let subjectArea: ISubjectArea = null;
-      const subjectAreaIndex = this.subjectAreaNodeViewModel.findIndex(item => item.data.id === work.subjectAreaID);
-      if (subjectAreaIndex >= 0) {
-        subjectArea = this.subjectAreaNodeViewModel[subjectAreaIndex].data;
-      }
-
-      const subject: ISubject[] = new Array(0);
-      if (subjectArea != null) {
-        for (const iterator of work.subjectID) {
-          const subjectIndex = subjectArea.subjects.findIndex(item => item.id === iterator);
-          if (subjectIndex >= 0) {
-            subject.push(subjectArea.subjects[subjectIndex]);
-          }
-        }
-      }
-
-      workNodeViewModel.subjectArea = subjectArea;
-      workNodeViewModel.subject = subject;
-
-
-      const cycle = this.GetCycleFromWork(work);
-      workNodeViewModel.cycleCount = this.GetCycleCount(cycle);
-      workNodeViewModel.cycle = cycle;
-
-      const nextInterval = this.GetGoToInterval(cycle, workNodeViewModel.data.result, workNodeViewModel.data.resultOffset);
-      workNodeViewModel.isLastWork = (nextInterval == null);
-      if (workNodeViewModel.isLastWork) {
-        workNodeViewModel.nextToGo = NextToGo.Finish;
-      }
+      this.setRefData(workNodeViewModel);
+    }
+    for (const workNodeViewModel of this.workLearning) {
+      this.setRefData(workNodeViewModel);
+    }
+    for (const workNodeViewModel of this.workFinish) {
+      this.setRefData(workNodeViewModel);
     }
   }
 

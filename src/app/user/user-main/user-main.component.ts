@@ -29,7 +29,6 @@ export class UserMainComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.createWorkService.addMode = false;
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();

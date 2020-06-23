@@ -1,4 +1,10 @@
-<ng-container *ngFor="let item of user.workLearning index as i">
-  <app-work-item-view *ngIf="item.data!=null" [targetMode]="user.workViewTo.Learning" [targetItem]="item"
-    [targetIndex]="i"></app-work-item-view>
+<ng-container *ngIf="user.workLearning.length>0">
+  <ng-container *ngFor="let item of user.workLearning index as i">
+    <app-work-item-view *ngIf="item.data!=null" [targetMode]="user.workViewTo.Learning" [targetItem]="item"
+      [targetIndex]="i"></app-work-item-view>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="user.workLearning.length===0">
+  <h2 i18n="@@NoLearningWork">There is no work scheduled for after tomorrow.</h2>
+  <p i18n="@@MoveToList">Move to the List page and click on the + button to register your work content.</p>
 </ng-container>

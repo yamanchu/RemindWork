@@ -287,7 +287,10 @@ export class ViewGraph extends ViewCore {
     const l = Line.Create(p, v);
 
     const ep = Point.Create(et, eQn, 0);
-    const ev = Vector.Create(1, edxdy, 0);
+    let ev = Vector.Create(1, edxdy, 0);
+    if (dxdy === mindxdy) {
+      ev = Vector.UnitY();
+    }
     ev.TryNormalization();
     const ly = Line.Create(ep, ev);
     const cp = ly.TryGetCrossPoints(l);
@@ -299,13 +302,24 @@ export class ViewGraph extends ViewCore {
     const y2 = this.convertToDrawY(cp.y);
     const ex = this.viewOutline.end.x;
     const ey = this.convertToDrawY(eQn);
+    if (dxdy === mindxdy) {
+      // x2 = this.viewOutline.end.x;
+      const ret =
+        'M ' + x + ' ' + y +
+        ' C ' + x + ' ' + y + ', ' +
+        x2 + ' ' + y2 + ', ' +
+        x2 + ' ' + y2;
 
-    const ret =
-      'M ' + x + ' ' + y +
-      ' C ' + x2 + ' ' + y2 + ', ' +
-      ex + ' ' + ey + ', ' +
-      ex + ' ' + ey;
+      return ret;
+    }
+    else {
+      const ret =
+        'M ' + x + ' ' + y +
+        ' C ' + x2 + ' ' + y2 + ', ' +
+        ex + ' ' + ey + ', ' +
+        ex + ' ' + ey;
 
-    return ret;
+      return ret;
+    }
   }
 }

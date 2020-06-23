@@ -92,13 +92,13 @@
                 markerWidth="4" markerHeight="4" orient="270deg" fill="transparent" stroke="#ffffff" stroke-width="2">
                 <path d="M 0 1 L 10 5 L 0 9" />
               </marker>
-              <marker [attr.id]="'arrowX_'+ targetMode + targetIndex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4"
-                markerHeight="4" orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
+              <marker [attr.id]="'arrowX_'+ targetMode + targetIndex" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="4" markerHeight="4" orient="0deg" fill="transparent" stroke="#ffffff" stroke-width="2">
                 <path d="M 0 1 L 10 5 L 0 9" />
               </marker>
               <!-- simple dot marker definition -->
-              <marker [attr.id]="'dotPoint_'+ targetMode + targetIndex" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4"
-                markerHeight="4">
+              <marker [attr.id]="'dotPoint_'+ targetMode + targetIndex" viewBox="0 0 10 10" refX="5" refY="5"
+                markerWidth="4" markerHeight="4">
                 <circle cx="5" cy="5" r="4" fill="#ff4081" />
               </marker>
             </defs>
@@ -194,7 +194,7 @@
       <span i18n="@@Memorized">Memorized</span>
       <span>&nbsp;:&nbsp;</span>
       <span>{{targetItem.data.maxPoint}}</span>
-      <span style="float: right;" i18n="@@Finish">Finish</span>
+      <span *ngIf="targetMode!==user.workViewTo.Finish" style="float: right;" i18n="@@Finish">Finish</span>
     </div>
   </mat-card-actions>
 </mat-card>

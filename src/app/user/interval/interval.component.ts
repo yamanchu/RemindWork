@@ -25,8 +25,6 @@ export class IntervalComponent implements OnInit {
 
   ngOnInit() {
 
-    this.createIntervalService.addMode = false;
-
     if (this.user.hasLoginUser) {
       this.onResize(window.innerWidth, window.innerHeight);
       this.user.LoadData();
