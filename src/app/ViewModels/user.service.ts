@@ -196,8 +196,10 @@ export class UserService {
     }
   }
 
-  googleLogin(command: string) {
-    this.auth.googleLogin(command, this.router);
+  login(
+    command: string,
+    authResult: firebase.auth.UserCredential) {
+    this.auth.login(command, this.router, authResult);
   }
 
   private setCycleNodeViewModel(cycles: ICycles): void {

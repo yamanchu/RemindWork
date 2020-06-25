@@ -1,12 +1,12 @@
-<mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
-  <mat-toolbar-row>
+<p>
+  <mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
     <button *ngIf="!menuControl.pcMode" (mouseup)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-icon class="hamburgerMargin" matListIcon>home_work</mat-icon>
     <span class="topMenuStyle" i18n="@@Work">Work</span>
-  </mat-toolbar-row>
-</mat-toolbar>
+  </mat-toolbar>
+</p>
 <mat-sidenav-container class="sideNavi-container">
   <!-- サイドメニュー -->
   <mat-sidenav [mode]="menuControl.sideNaviMode" [(opened)]="menuControl.showSideMenu">
@@ -16,7 +16,8 @@
   <mat-sidenav-content #sidenavContent>
     <div class="mainSection">
       <ng-container *ngFor="let item of user.workTarget index as i">
-        <app-work-item-view *ngIf="item.data!=null" [targetMode]="user.workViewTo.Target" [targetItem]="item" [targetIndex]="i"></app-work-item-view>
+        <app-work-item-view *ngIf="item.data!=null" [targetMode]="user.workViewTo.Target" [targetItem]="item"
+          [targetIndex]="i"></app-work-item-view>
       </ng-container>
       <app-work-create-view [hidden]="!addMode"></app-work-create-view>
     </div>

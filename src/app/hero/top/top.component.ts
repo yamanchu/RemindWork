@@ -12,6 +12,8 @@ import { LogintypeSelectorComponent, DialogData } from './logintypeSelector.comp
 
 import { UserService } from 'src/app/ViewModels/user.service';
 
+// import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
+import { FirebaseUISignInSuccessWithAuthResult, FirebaseUISignInFailure } from 'firebaseui-angular';
 
 @Component({
   selector: 'app-top',
@@ -27,6 +29,39 @@ export class TopComponent implements OnInit {
 
   ngOnInit() {
     this.onResize(window.innerWidth, window.innerHeight);
+
+    /*
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log(user);
+
+      //------------------------------------
+      // 未ログイン状態で訪れた場合
+      //------------------------------------
+      if (user === null) {
+        //showMessage('Not Login', 'ログインが必要な画面です');
+        //return (false);
+      }
+
+      //------------------------------------
+      // メアド確認済み
+      //------------------------------------
+      if (user.emailVerified) {
+        //showMessage('Login Complete!', `${user.displayName}さんがログインしました`);
+      }
+      //------------------------------------
+      // メアド未確認
+      //------------------------------------
+      else {
+        user.sendEmailVerification()
+          .then(() => {
+            //showMessage('Send confirm mail', `${user.email}宛に確認メールを送信しました`);
+          })
+          .catch((error) => {
+            //showMessage('[Error] Can not send mail', `${user.email}宛に確認メールを送信できませんでした: ${error}`);
+          });
+      }
+    });
+*/
 
     /*
     const amap = new Map<string, number>();
@@ -70,17 +105,7 @@ export class TopComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (ret: DialogData) => {
         if (ret.result) {
-          switch (ret.select) {
-            case 0:
-              this.user.googleLogin('user-main');
-              // this.auth.googleLogin([''], this.router);
-              break;
-            case 1:
-              // this.auth.eMailLogin([''], this.router);
-              break;
-            default:
-              break;
-          }
+          this.user.login('user-main', ret.authResult);
         }
       }
     );

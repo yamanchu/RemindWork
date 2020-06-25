@@ -1,12 +1,16 @@
 <h2 i18n="@@CreateFreeAccount">Create a free account</h2>
 <mat-divider></mat-divider>
-<div style="margin-top: 8px; margin-bottom: 8px;">
+<firebase-ui
+  (signInSuccessWithAuthResult)="successCallback($event)"
+  (signInFailure)="errorCallback($event)">
+</firebase-ui>
+<!--div style="margin-top: 8px; margin-bottom: 8px;">
   <p i18n="@@EasyRegistrationWithGoogleAccount">Easy registration with a Google account</p>
   <div class="selectNode" style="width: max-content;">
     <button color="primary" mat-raised-button (mouseup)="googleLogin()" i18n="@@CreatedWithGoogleAccount">Created with a
       Google account</button>
   </div>
-</div>
+</div-->
 <mat-divider></mat-divider>
 <div tyle="margin-top: 8px; margin-bottom: 8px;">
   <!--mat-form-field appearance="fill">
@@ -32,5 +36,5 @@
 <div class="selectGroupe">
   <button color="primary" class="selectNode" mat-raised-button (mouseup)="cancel()" i18n="@@Cancel">
     Cancel</button>
-  <button color="primary" class="selectNode" mat-raised-button (mouseup)="ok()" i18n="@@OK">OK</button>
+  <!--button color="primary" class="selectNode" mat-raised-button (mouseup)="ok()" i18n="@@OK">OK</button-->
 </div>

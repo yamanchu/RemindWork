@@ -13,6 +13,11 @@ export class AuthService {
 
   constructor(private angularFireAuth: AngularFireAuth) {
     // this.loginUser = null;
+    angularFireAuth.authState.subscribe((value) => {
+      if (value != null) {
+        this.loginUser = value;
+      }
+    });
   }
 
   get hasLoginUser(): boolean {
@@ -34,6 +39,15 @@ export class AuthService {
     return ret;
   }
 
+  public login(
+    command: string,
+    route: Router,
+    authResult: firebase.auth.UserCredential) {
+    this.loginUser = authResult.user;
+    route.navigate([command]);
+  }
+
+  /*
   public googleLogin(
     command: string,
     route: Router) {
@@ -69,5 +83,5 @@ export class AuthService {
       route.navigate([command]);
     }
 
-  }
+  }*/
 }

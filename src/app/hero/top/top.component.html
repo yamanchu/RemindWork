@@ -1,16 +1,10 @@
-<mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
-  <mat-toolbar-row>
-    <!--button *ngIf="!menuControl.pcMode" (mouseup)="menuControl.sideMenuToggle()" mat-icon-button aria-label="hamburger">
-      <mat-icon>menu</mat-icon>
-    </button-->
+<p>
+  <mat-toolbar color="primary" mat-scroll-shrink class="toolbar mat-elevation-z8">
     <span class="appStyle">{{menuControl.title}}</span>
-    <!--span class="topMenuStyle" *ngIf="pcMode">{{title}}1</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}2</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}3</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}4</span>
-    <span class="topMenuStyle" *ngIf="pcMode">{{title}}5</span-->
-  </mat-toolbar-row>
-</mat-toolbar>
+    <span style="flex: 1 1 auto;"></span>
+    <app-user-login-state></app-user-login-state>
+  </mat-toolbar>
+</p>
 <mat-sidenav-container class="sideNavi-container">
   <!-- サイドメニュー -->
   <!--mat-sidenav [mode]="menuControl.sideNaviMode" [(opened)]="menuControl.showSideMenu">

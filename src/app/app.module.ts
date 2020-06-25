@@ -17,9 +17,24 @@ import localeJaExtra from '@angular/common/locales/extra/ja';
 
 
 // firebase
+// import { FirebaseUIModule } from 'firebaseui-angular';
+// import * as firebase from 'firebase';
+// import * as firebaseui from 'firebaseui';
+// currently there is a bug while building the app with --prod
+// - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
+// the plugin exposes the two libraries as well. You can use those:
+import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
+
+
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+
+// import * as firebase from 'firebase';
+// import * as firebaseui from 'firebaseui';
+// import { AngularFireModule } from '@angular/fire';
+// import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+// import { FirebaseUIModule, firebaseui, firebase } from 'firebaseui-angular';
 
 // material
 import { MatIconModule } from '@angular/material/icon';
@@ -43,6 +58,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
 
 // Component.Dialog
 import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
@@ -66,6 +82,7 @@ import { WorkCreateViewComponent } from './ViewItems/work-create-view/work-creat
 import { IntervalItemViewComponent } from './ViewItems/interval-item-view/interval-item-view.component';
 import { IntervalCreateViewComponent } from './ViewItems/interval-create-view/interval-create-view.component';
 import { SideNaviMenuComponent } from './ViewItems/side-navi-menu/side-navi-menu.component';
+import { UserLoginStateComponent } from './ViewItems/user-login-state/user-login-state.component';
 
 
 const routes: Routes = [
@@ -74,6 +91,50 @@ const routes: Routes = [
   { path: 'interval', component: IntervalComponent },
   { path: 'analysis', component: AnalysisComponent },
 ];
+
+
+const firebaseUiAuthConfig: firebaseui.auth.Config = {
+  autoUpgradeAnonymousUsers: false, // 匿名認証ユーザー自動アップグレード
+  signInFlow: 'popup', // redirect or popup
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    /*
+    {
+      scopes: [
+        'public_profile',
+        'email',
+        'user_likes',
+        'user_friends'
+      ],
+      customParameters: {
+        auth_type: 'reauthenticate'
+      },
+      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    },
+    */
+
+    // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+
+
+    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    {
+      requireDisplayName: false,
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+    },
+
+
+    // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+  ],
+
+  /*
+  tosUrl: 'aaa',
+  privacyPolicyUrl: 'プライバシーポリシーのURL',
+  signInSuccessUrl: 'https://google.com',
+  credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+  siteName: 'my-app',
+  */
+};
 
 @NgModule({
   // app-xx Component
@@ -95,6 +156,7 @@ const routes: Routes = [
     IntervalItemViewComponent,
     IntervalCreateViewComponent,
     SideNaviMenuComponent,
+    UserLoginStateComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -111,7 +173,10 @@ const routes: Routes = [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),　// FirebaseUI用のモジュール
+
     // material
+    MatMenuModule,
     MatTabsModule,
     MatSelectModule,
     MatSlideToggleModule,

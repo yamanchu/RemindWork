@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogActions } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/form-field';
+import { FirebaseUISignInSuccessWithAuthResult, FirebaseUISignInFailure } from 'firebaseui-angular';
 
 export interface DialogData {
   result: boolean;
-  select: number;
+  authResult: firebase.auth.UserCredential;
 }
 
 @Component({
@@ -20,23 +21,25 @@ export class LogintypeSelectorComponent implements OnInit {
     public data: DialogData) { }
 
   ngOnInit(): void {
-    this.data.select = 0;
     this.data.result = true;
-  }
-
-  googleLogin() {
-    this.data.select = 0;
-    this.data.result = true;
-    this.dialogRef.close(this.data);
-  }
-
-  ok() {
-    this.data.result = true;
-    this.dialogRef.close(this.data);
   }
 
   cancel() {
     this.data.result = false;
+    this.data.authResult = null;
     this.dialogRef.close(this.data);
   }
+
+  // 成功時のコールバック
+  successCallback(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+    this.data.result = true;
+    this.data.authResult = signInSuccessData.authResult;
+    this.dialogRef.close(this.data);
+  }
+
+  // 失敗時のコールバック
+  async errorCallback(errorData: FirebaseUISignInFailure) {
+    //this.cancel();
+  }
+
 }
