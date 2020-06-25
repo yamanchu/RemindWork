@@ -61,7 +61,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 
 // Component.Dialog
-import { LogintypeSelectorComponent } from './hero/top/logintypeSelector.component';
 import { MessageDialogComponent } from './ViewItems/message-dialog/message-dialog.component';
 import { SubjectAreaDialogComponent } from './ViewItems/subject-area-dialog/subject-area-dialog.component';
 
@@ -83,6 +82,7 @@ import { IntervalItemViewComponent } from './ViewItems/interval-item-view/interv
 import { IntervalCreateViewComponent } from './ViewItems/interval-create-view/interval-create-view.component';
 import { SideNaviMenuComponent } from './ViewItems/side-navi-menu/side-navi-menu.component';
 import { UserLoginStateComponent } from './ViewItems/user-login-state/user-login-state.component';
+import { LoginDialogComponent } from './ViewItems/login-dialog/login-dialog.component';
 
 
 const routes: Routes = [
@@ -97,7 +97,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   autoUpgradeAnonymousUsers: false, // 匿名認証ユーザー自動アップグレード
   signInFlow: 'popup', // redirect or popup
   signInOptions: [
+
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+
     /*
     {
       scopes: [
@@ -116,7 +118,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
 
 
-    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+
     {
       requireDisplayName: false,
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
@@ -124,6 +127,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
 
 
     // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+
     // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
   ],
 
@@ -144,7 +148,6 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     UserMainComponent,
     IntervalComponent,
     AnalysisComponent,
-    LogintypeSelectorComponent,
     MessageDialogComponent,
     SubjectAreaDialogComponent,
     SubjectDialogComponent,
@@ -157,6 +160,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     IntervalCreateViewComponent,
     SideNaviMenuComponent,
     UserLoginStateComponent,
+    LoginDialogComponent,
   ],
   imports: [
     RouterModule.forRoot(

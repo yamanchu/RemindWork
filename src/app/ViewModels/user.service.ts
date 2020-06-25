@@ -202,6 +202,10 @@ export class UserService {
     this.auth.login(command, this.router, authResult);
   }
 
+  public signOut() {
+    this.auth.signOut('', this.router);
+  }
+
   private setCycleNodeViewModel(cycles: ICycles): void {
 
     for (const iterator of cycles.cycle) {

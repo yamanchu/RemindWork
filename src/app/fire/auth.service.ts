@@ -47,6 +47,15 @@ export class AuthService {
     route.navigate([command]);
   }
 
+  public signOut(
+    command: string,
+    route: Router) {
+    this.angularFireAuth.signOut().then(
+      () => {
+        this.loginUser = null;
+        route.navigate([command]);
+      });
+  }
   /*
   public googleLogin(
     command: string,

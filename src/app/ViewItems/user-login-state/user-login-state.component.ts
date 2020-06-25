@@ -15,4 +15,8 @@ export class UserLoginStateComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public signOut() {
+    this.user.signOut();
+  }
+
 }

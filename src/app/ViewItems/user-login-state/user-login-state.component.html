@@ -4,7 +4,7 @@
       <mat-icon>lock_open</mat-icon>
     </button>
     <mat-menu #loginUserMenu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (mouseup)="signOut()">
         <mat-icon>lock</mat-icon>
         <span>Logoff</span>
       </button>

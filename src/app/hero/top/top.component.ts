@@ -8,7 +8,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MenuControlService } from 'src/app/ViewModels/menu-control.service';
 
 import { MatDialog } from '@angular/material/dialog';
-import { LogintypeSelectorComponent, DialogData } from './logintypeSelector.component';
+import { LoginDialogComponent, DialogData } from '../../ViewItems/login-dialog/login-dialog.component';
 
 import { UserService } from 'src/app/ViewModels/user.service';
 
@@ -95,7 +95,7 @@ export class TopComponent implements OnInit {
   }
 
   sohwDialog() {
-    const dialogRef = this.dialog.open(LogintypeSelectorComponent,
+    const dialogRef = this.dialog.open(LoginDialogComponent,
       {
         width: '300px',
         data: { result: true, select: 0 }

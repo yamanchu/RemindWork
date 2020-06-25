@@ -1,0 +1,11 @@
+<h2 i18n="@@LoginForFree">Login for free</h2>
+<mat-divider></mat-divider>
+<firebase-ui
+  (signInSuccessWithAuthResult)="successCallback($event)"
+  (signInFailure)="errorCallback($event)">
+</firebase-ui>
+<mat-divider></mat-divider>
+<div class="selectGroupe">
+  <button color="primary" class="selectNode" mat-raised-button (mouseup)="cancel()" i18n="@@Cancel">
+    Cancel</button>
+</div>
